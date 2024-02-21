@@ -1,9 +1,6 @@
 <?php
-require_once('../../vendor/autoload.php');
-
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
-
-$loader = new FilesystemLoader('../Templates');
-$twig = new Environment($loader);
-echo $twig->render('login.twig');
+namespace Exam\Pages;
+if (!session_id()) session_start();
+require_once($_SESSION['rVendor_PATH'] . 'autoload.php');
+use Exam\Pages\twigLoader;
+new twigLoader(__FILE__);

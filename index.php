@@ -1,10 +1,9 @@
 <?php
-require_once('./vendor/autoload.php');
 if (!session_id()) session_start();
-use Exam\Setting\Config;
+require_once('./vendor/autoload.php');
 use Exam\Route\Router;
-use Exam\Utils\Utils;
 new Router;
+use Exam\Utils\Utils;
+use Exam\Pages\twigLoader;
 Utils::GetRoot();
-var_dump($_SESSION);
-echo "<br>" . "WEEEEEEEEEEEEEEEEEEEE" . "<br>";
+new twigLoader(__FILE__);

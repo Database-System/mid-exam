@@ -11,6 +11,7 @@ define("rUtils_PATH", ROOT_PATH . 'src/Utils' . '/');
 define("rRoute_PATH", ROOT_PATH . 'src/Route' . '/');
 define("rSetting_PATH", ROOT_PATH . 'src/Setting' . '/');
 define("rPages_PATH", ROOT_PATH . 'src/Pages' . '/');
+define('rTemplates_PATH', ROOT_PATH . 'src/Templates' . '/');
 //Define web Url
 define('Web_Root_Path', $_SESSION['WEB_ROOT'] .'/'); 
 define('Error_PATH', Web_Root_Path . 'src/Errors' . '/');
