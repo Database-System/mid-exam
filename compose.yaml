@@ -23,7 +23,7 @@ services:
           path: ./
           target: /var/www/html
   db:
-    image: mariadb
+    image: mariadb:lts
     restart: always
     secrets:
       - db-password

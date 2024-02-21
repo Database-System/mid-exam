@@ -1,3 +1,3 @@
 <?php
 
-namespace Exam\Core\Controller;
+namespace Exam\Core;
