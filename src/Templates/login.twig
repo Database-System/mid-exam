@@ -4,22 +4,21 @@
 	<title>Login V1</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" type="image/png" href="../Resource/Images/Login/icons/favicon.ico"/>
-	<link rel="stylesheet" type="text/css" href="../Resource/Css/Login/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="../Resource/Fonts/Login/font-awesome-4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="../Resource/Css/Login/animate/animate.css">
-	<link rel="stylesheet" type="text/css" href="../Resource/Css/Login/css-hamburgers/hamburgers.min.css">
-	<link rel="stylesheet" type="text/css" href="../Resource/Css/Login/select2/select2.min.css">
-	<link rel="stylesheet" type="text/css" href="../Resource/Css/Login/util.css">
-	<link rel="stylesheet" type="text/css" href="../Resource/Css/Login/main.css">
+	<link rel="icon" type="image/png" href="{{ session.Image }}Login/icons/favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="{{ session.Css }}Login/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="{{ session.Fonts }}Login/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="{{ session.Css }}Login/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="{{ session.Css }}Login/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="{{ session.Css }}Login/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="{{ session.Css }}Login/util.css">
+	<link rel="stylesheet" type="text/css" href="{{ session.Css }}Login/main.css">
 </head>
 <body>
-
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
 				<div class="login100-pic js-tilt" data-tilt>
-					<img src="../Resource/Images/Login/img-01.png" alt="IMG">
+					<img src="{{ session.Image }}Login/img-01.png" alt="IMG">
 				</div>
 
 				<form class="login100-form validate-form">
@@ -49,15 +48,6 @@
 						</button>
 					</div>
 
-					<div class="text-center p-t-12">
-						<span class="txt1">
-							Forgot
-						</span>
-						<a class="txt2" href="#">
-							Username / Password?
-						</a>
-					</div>
-
 					<div class="text-center p-t-136">
 						<a class="txt2" href="#">
 							Create your Account
@@ -72,16 +62,16 @@
 
 
 
-	<script src="../Resource/Js/jquery/jquery-3.2.1.min.js"></script>
-	<script src="../Resource/Js/Login/bootstrap/js/popper.js"></script>
-	<script src="../Resource/Js/Login/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../Resource/Js/Login/select2/select2.min.js"></script>
-	<script src="../Resource/Js/Login/tilt/tilt.jquery.min.js"></script>
+	<script src="{{ session.Js }}jquery/jquery-3.2.1.min.js"></script>
+	<script src="{{ session.Js }}Login/bootstrap/js/popper.js"></script>
+	<script src="{{ session.Js }}Login/bootstrap/js/bootstrap.min.js"></script>
+	<script src="{{ session.Js }}Login/select2/select2.min.js"></script>
+	<script src="{{ session.Js }}Login/tilt/tilt.jquery.min.js"></script>
 	<script >
 		$('.js-tilt').tilt({
 			scale: 1.1
 		})
 	</script>
-	<script src="../Resource/Js/Login/main.js"></script>
+	<script src="{{session.Js}}Login/main.js"></script>
 </body>
 </html>
