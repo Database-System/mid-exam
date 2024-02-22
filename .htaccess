@@ -1,9 +1,5 @@
 RewriteEngine On
 RewriteBase /
-
-# 如果请求的不是一个真实文件...
 RewriteCond %{REQUEST_FILENAME} !-f
-# 也不是一个真实目录...
 RewriteCond %{REQUEST_FILENAME} !-d
-# 则将请求重定向到 index.php
 RewriteRule . /index.php [L]
