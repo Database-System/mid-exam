@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>FCU登入進去了</title>
-	</head>
-	<body>
-		<h1>keke</h1>
-	</body>
-</html>
+{% extends "base.twig" %}
+{% block head %}
+	<title>DashBoard</title>
+{% endblock %}
+{% block body %}
+	<h1>Only Login user can see this page.</h1>
+	<a href="/logout">Logout</a>
+{% endblock %}
