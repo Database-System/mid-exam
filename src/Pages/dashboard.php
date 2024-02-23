@@ -3,15 +3,13 @@
 namespace Exam\Pages;
 
 use Exam\Pages\twigLoader;
+use Exam\Utils\Utils;
 
 class Dashboard
 {
     public function __construct()
     {
-        if (!isset($_SESSION['userID'])) {
-            header('Location: /login');
-            exit;
-        }
+        Utils::isLogin();
         new twigLoader(__FILE__);
     }
 }

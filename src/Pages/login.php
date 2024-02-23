@@ -26,7 +26,6 @@ class Login
     {
         $controller = new Controller();
         $data = $controller->check_User($user);
-        //die(var_dump($data));
         if (is_array($data) && password_verify($password, $data['password'])) $this->mark_User($data);
         else header('Location: /login');
     }

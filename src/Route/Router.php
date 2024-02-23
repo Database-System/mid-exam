@@ -73,7 +73,7 @@ class Router
         self::addRoute('/404', 'errors', null, ["404"]);
         self::addRoute("/dashboard", "dashboard");
         self::addRoute("/signup", "register");
-        self::addRoute("/logout","logout");
+        self::addRoute("/logout", "logout");
     }
     public function __construct()
     {

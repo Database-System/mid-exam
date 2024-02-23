@@ -20,7 +20,8 @@ class Register
             header('Location: /login');
         } else new twigLoader(__FILE__, false, $this->OPTIONS);
     }
-    private function register(string $user,string $pass){
+    private function register(string $user, string $pass)
+    {
         $controller = new Controller();
         $password = password_hash($pass, PASSWORD_DEFAULT);
         if (!$controller->check_User($user)) $controller->insert_User($user, $password);

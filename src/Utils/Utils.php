@@ -39,4 +39,11 @@ class Utils
         $link .= "://" . $_SERVER['SERVER_NAME'];
         $_SESSION['WEB_ROOT_URL'] = ($link);
     }
+    public static function isLogin()
+    {
+        if (!isset($_SESSION['userID'])) {
+            header('Location: /login');
+            exit;
+        }
+    }
 }
