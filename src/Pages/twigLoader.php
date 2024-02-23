@@ -7,7 +7,7 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 class TwigLoader{
-    function __construct(string $path,bool $error=false){
+    function __construct(string $path,bool $error=false,array $options=[]){
         $loader = new FilesystemLoader($_SESSION['rTemplates_PATH']);
         $twig = new Environment($loader,['debug'=>true]);
         $twig->addGlobal('session', $_SESSION);
@@ -15,7 +15,7 @@ class TwigLoader{
         if(!isset($path)){
             die('Path is not set');
         }
-        if (!$error) echo $twig->render(basename($path, '.php').'.twig');
+        if (!$error) echo $twig->render(basename($path, '.php').'.twig',$options);
         else echo $twig->render($path.'.twig');
     }
 }
