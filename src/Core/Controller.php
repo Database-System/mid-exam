@@ -33,7 +33,7 @@ class Controller {
         }
     }
     public function check_User(string $user){
-        $sql = "SELECT `username` from `Users` WHERE `username` = ?";
+        $sql = "SELECT * from `Users` WHERE `username` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$user]);
         if (!$ret) return false;

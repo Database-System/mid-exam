@@ -18,12 +18,21 @@ class Login
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $user = $_POST["user"] ?? '';
             $pass = $_POST["password"] ?? '';
-            $this->checkUser($user, $pass);
+            $this->login($user,$pass);
         } else new twigLoader(__FILE__, false, $this->OPTIONS);
+
     }
-    private function checkUser(string $username, string $password)
-    {
-        var_dump($username, $password);
-    }
+
     //TODO 需要添加登入邏輯
+    private function login(string $user, string $password){
+        $controller = new Controller();
+        $data = $controller->check_User($user);
+        //die(var_dump($data));
+        if (password_verify($password , $data['password'])) {
+            echo 'Password is valid!';
+        } else {
+            echo 'Invalid password.';
+        }
+    }
+    
 }
