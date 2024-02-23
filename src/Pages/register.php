@@ -12,7 +12,7 @@ class Register
     ];
     public function __construct()
     {
-        if (isset($_POST["user"]) && isset($_POST["password"])) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $user = $_POST["user"] ?? '';
             $pass = $_POST["password"] ?? '';
             $this->checkUser($user, $pass);
