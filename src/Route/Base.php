@@ -2,8 +2,9 @@
 
 namespace Exam\Route;
 
-class Base {
-    public function __construct(callable $fn) {
-        
+class Base
+{
+    public function __construct(callable $fn)
+    {
     }
 }

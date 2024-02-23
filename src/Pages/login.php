@@ -1,24 +1,29 @@
 <?php
+
 namespace Exam\Pages;
+
 if (!session_id()) session_start();
 
 use Exam\Core\Controller;
 use Exam\Pages\twigLoader;
-class Login {
+
+class Login
+{
     private array $OPTIONS = [
         "title" => "Login",
         "formTitle" => "FCU Test Login"
     ];
-    public function __construct() {
-        if (isset($_POST["user"]) && isset($_POST["password"])){
+    public function __construct()
+    {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $user = $_POST["user"] ?? '';
             $pass = $_POST["password"] ?? '';
             $this->checkUser($user, $pass);
-        }
-        else new twigLoader(__FILE__,false,$this->OPTIONS);
+        } else new twigLoader(__FILE__, false, $this->OPTIONS);
     }
-    private function checkUser(string $username, string $password) {
-        var_dump($username,$password);
+    private function checkUser(string $username, string $password)
+    {
+        var_dump($username, $password);
     }
     //TODO 需要添加登入邏輯
 }

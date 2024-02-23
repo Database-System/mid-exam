@@ -1,10 +1,13 @@
 <?php
+
 namespace Exam\Utils;
+
 if (!session_id()) session_start();
-class Utils {
+class Utils
+{
     public static function StrriposFunction(string $val = "", string $type = ""): string
     {
-        switch ($type){
+        switch ($type) {
             case "1":
                 $fileName = $val;
                 if (false !== $pos = strripos($fileName, '.')) $fileName = substr($fileName, 0, $pos);
@@ -22,17 +25,18 @@ class Utils {
         if (file_exists($path) && is_dir($path)) {
             $result = scandir($path);
             $files = array_diff($result, array('.', '..'));
-            return $files;            
-        } 
-        else die("Error0");
+            return $files;
+        } else die("Error0");
     }
-    public static function GetRoot(){
-        $q = explode('/', $_SERVER['PHP_SELF']);array_pop($q);
+    public static function GetRoot()
+    {
+        $q = explode('/', $_SERVER['PHP_SELF']);
+        array_pop($q);
         $q = implode("/", $q);
         $_SESSION['WEB_ROOT'] = $q;
-        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') $link = "https"; 
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') $link = "https";
         else $link = "http";
-        $link .= "://".$_SERVER['SERVER_NAME'];
+        $link .= "://" . $_SERVER['SERVER_NAME'];
         $_SESSION['WEB_ROOT_URL'] = ($link);
     }
 }

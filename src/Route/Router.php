@@ -1,6 +1,9 @@
 <?php
+
 namespace Exam\Route;
+
 use Exam\Utils\Utils;
+
 Utils::GetRoot();
 define("ROOT_PATH", dirname(dirname(dirname(__FILE__))) . '/');
 define("rVendor_PATH", ROOT_PATH . 'vendor' . '/');
@@ -11,7 +14,7 @@ define("rSetting_PATH", ROOT_PATH . 'src/Setting' . '/');
 define("rPages_PATH", ROOT_PATH . 'src/Pages' . '/');
 define('rTemplates_PATH', ROOT_PATH . 'src/Templates' . '/');
 //Define web Url
-define('Web_Root', $_SESSION['WEB_ROOT'] .'/'); 
+define('Web_Root', $_SESSION['WEB_ROOT'] . '/');
 define('Resource', Web_Root . 'src/Resource' . '/');
 define('Pages', Web_Root . 'src/Pages' . '/');
 //Define Resource Path
@@ -50,28 +53,29 @@ class Router
             $instance = $reflectionClass->newInstanceArgs($route['params']);
             if (!method_exists($instance, $route['method'])) die("Method {$route['method']} not found in class {$route['class']}");
             call_user_func([$instance, $route['method']]);
-        } 
-        else {
+        } else {
             $reflectionClass = new \ReflectionClass($classWithNamespace);
             $instance = $reflectionClass->newInstanceArgs($route['params']);
         }
     }
-    private function init_Session(){
+    private function init_Session()
+    {
         $_SESSION["Config"] = rSetting_PATH . 'config.php';
         $ret = Utils::OutputFiles(rPages_PATH);
         foreach ($ret as $file) {
-            $_SESSION["Route-".Utils::strriposfunction($val=$file,$type="1")] = $file;
+            $_SESSION["Route-" . Utils::strriposfunction($val = $file, $type = "1")] = $file;
         }
-        foreach(get_defined_constants(true)["user"] as $key => $val) {
+        foreach (get_defined_constants(true)["user"] as $key => $val) {
             $_SESSION[$key] = $val;
         }
     }
-    private function init_Routes(){
+    private function init_Routes()
+    {
         self::addRoute('/', 'home');
         self::addRoute('/login', 'login');
-        self::addRoute('/404','errors',null,["404"]);
-        self::addRoute("/dashboard","dashboard");
-        self::addRoute("/signup","register");
+        self::addRoute('/404', 'errors', null, ["404"]);
+        self::addRoute("/dashboard", "dashboard");
+        self::addRoute("/signup", "register");
     }
     public function __construct()
     {
@@ -80,5 +84,3 @@ class Router
         self::dispatch(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     }
 }
-
-
