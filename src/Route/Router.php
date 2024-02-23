@@ -45,9 +45,6 @@ class Router
         }
         $route = self::$ROUTES[$url];
         $classWithNamespace = "\\Exam\\Pages\\" . $route['class'];
-        // $filePath = rPages_PATH . str_replace('\\', '/', $route['class']) . '.php';
-        // if (!file_exists($filePath)) die("File for class {$route['class']} not found");
-        // require_once $filePath;
         if ($route['method']) {
             $reflectionClass = new \ReflectionClass($classWithNamespace);
             $instance = $reflectionClass->newInstanceArgs($route['params']);
