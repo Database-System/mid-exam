@@ -4,7 +4,7 @@
 RewriteEngine On
 RewriteBase /
 
-RewriteCond %{REQUEST_URI} ^/Resource/
+RewriteCond %{REQUEST_URI} ^/src/Resource/
 RewriteRule ^ - [L]
 
 RewriteCond %{REQUEST_URI} ^/src/
