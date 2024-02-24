@@ -3,7 +3,6 @@
 namespace Exam\Route;
 
 use Exam\Utils\Utils;
-
 Utils::GetRoot();
 define("ROOT_PATH", dirname(dirname(dirname(__FILE__))) . '/');
 define("rVendor_PATH", ROOT_PATH . 'vendor' . '/');
@@ -23,7 +22,8 @@ define('Css', Resource . 'Css' . '/');
 define('Fonts', Resource . 'Fonts' . '/');
 define('Js', Resource . 'Js' . '/');
 define('Templates', Web_Root . 'src/Templates' . '/');
-define("Base", rRoute_PATH . 'Base.php');
+define("Logout", '/back/logout');
+
 class Router
 {
     private static $ROUTES = [];
@@ -40,19 +40,31 @@ class Router
     private function dispatch($url)
     {
         if (!array_key_exists($url, self::$ROUTES)) {
-            header('location: /404');
-            die();
-        }
-        $route = self::$ROUTES[$url];
-        $classWithNamespace = "\\Exam\\Pages\\" . $route['class'];
-        if ($route['method']) {
-            $reflectionClass = new \ReflectionClass($classWithNamespace);
-            $instance = $reflectionClass->newInstanceArgs($route['params']);
-            if (!method_exists($instance, $route['method'])) die("Method {$route['method']} not found in class {$route['class']}");
-            call_user_func([$instance, $route['method']]);
+            if (!preg_match("/^\/back(\/.*)?$/", $url,$matches)) {
+                header('Location: /404');
+                die();
+            } else {
+                $url = $matches[1];
+                $classWithNamespace = "\\Exam\\Route\\Back";
+                $reflectionClass = new \ReflectionClass($classWithNamespace);
+                $instance = $reflectionClass->newInstanceArgs([$url]);
+            }
         } else {
-            $reflectionClass = new \ReflectionClass($classWithNamespace);
-            $instance = $reflectionClass->newInstanceArgs($route['params']);
+            $route = self::$ROUTES[$url];
+            $classWithNamespace = "\\Exam\\Pages\\" . $route['class'];
+            if ($route['method']) {
+                $reflectionClass = new \ReflectionClass($classWithNamespace);
+                $instance = $reflectionClass->newInstanceArgs($route['params']);
+                if (!method_exists($instance, $route['method'])) die("Method {$route['method']} not found in class {$route['class']}");
+                call_user_func([$instance, $route['method']]);
+            } else {
+                if ($route['class'] == "Back") {
+                    $classWithNamespace = "\\Exam\\Route\\" . $route['class'];
+                    $route['params'] = ['/'];
+                }
+                $reflectionClass = new \ReflectionClass($classWithNamespace);
+                $instance = $reflectionClass->newInstanceArgs($route['params']);
+            }
         }
     }
     private function init_Session()
@@ -71,9 +83,8 @@ class Router
         self::addRoute('/', 'home');
         self::addRoute('/login', 'login');
         self::addRoute('/404', 'errors', null, ["404"]);
-        self::addRoute("/dashboard", "dashboard");
         self::addRoute("/signup", "register");
-        self::addRoute("/logout", "logout");
+        self::addRoute("/back","Back");
     }
     public function __construct()
     {

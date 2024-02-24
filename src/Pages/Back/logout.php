@@ -1,6 +1,6 @@
 <?php
 
-namespace Exam\Pages;
+namespace Exam\Pages\Back;
 
 if (!session_id()) session_start();
 class Logout

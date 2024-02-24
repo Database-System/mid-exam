@@ -1,6 +1,6 @@
 <?php
 
-namespace Exam\Pages;
+namespace Exam\Pages\Back;
 
 use Exam\Pages\twigLoader;
 use Exam\Utils\Utils;

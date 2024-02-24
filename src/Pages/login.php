@@ -5,7 +5,9 @@ namespace Exam\Pages;
 if (!session_id()) session_start();
 
 use Exam\Core\Controller;
+use Exam\Route\Back;
 use Exam\Pages\twigLoader;
+use Exam\Route\Router;
 
 class Login
 {
@@ -32,6 +34,6 @@ class Login
     private function mark_User(array $data)
     {
         $_SESSION['userID'] = $data["id"];
-        header('Location: /dashboard');
+        header('Location: /back/dashboard');
     }
 }
