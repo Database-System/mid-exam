@@ -9,9 +9,9 @@ class Controller
     private $handler = null;
     private $need_tables = [
         "Users" => "CREATE TABLE Users (`id` INT AUTO_INCREMENT PRIMARY KEY,`username` VARCHAR(50) NOT NULL UNIQUE,`password` VARCHAR(255) NOT NULL)",
-        "Courses" => "CREATE TABLE Courses (`id` INT AUTO_INCREMENT PRIMARY KEY,`C_id` INT NOT NULL UNIQUE,`C_name` VARCHAR(255) NOT NULL,`C_point` INT NOT NULL)",
-        //time table &time slot
-        "Time_slot"=>"CREATE TABLE slot (`id` INT AUTO_INCREMENT PRIMARY KEY, `day` , `start_time` INT NOT NULL, `start_time` INT NOT NULL)",
+        // "Courses" => "CREATE TABLE Courses (`id` INT AUTO_INCREMENT PRIMARY KEY,`C_id` INT NOT NULL UNIQUE,`C_name` VARCHAR(255) NOT NULL,`C_point` INT NOT NULL)",
+        // //time table &time slot
+        // "Time_slot"=>"CREATE TABLE slot (`id` INT AUTO_INCREMENT PRIMARY KEY, `day` , `start_time` INT NOT NULL, `start_time` INT NOT NULL)",
     ];
     public function __construct()
     {
