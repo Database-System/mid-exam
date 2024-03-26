@@ -9,12 +9,12 @@ $(document).ready(function () {
       );
     }
   });
-  $(window).resize(function () {
-    if ($(window).width() > 768) {
-      $(".sidebar").removeAttr("style");
-    }
-  });
+});
+$(window).resize(function () {
+  if ($(window).width() > 768) {
+    $(".sidebar").removeAttr("style");
+  }
 });
 $("#logout").on("click", function () {
-  alert("Handler for `click` called.");
+  window.location.href = "/back/logout";
 });
