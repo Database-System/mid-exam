@@ -11,6 +11,6 @@ class Controller_Test extends PHPUnit\Framework\TestCase
         $controller->display_User_TimeTable('test_user');
         $output = ob_get_clean();
 
-        $this->assertContains('課程名稱', $output); // 假设输出包含课程名称
+        $this->assertContains('課程名稱', $output); 
     }
 }
