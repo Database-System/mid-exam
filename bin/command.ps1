@@ -14,7 +14,7 @@ switch ($args[0]) {
         $dir = Split-Path $script:MyInvocation.MyCommand.Path -Parent
         $dir = Resolve-Path "$dir\.."
         cd $dir
-        docker compose run --build --rm server vendor\bin\phpunit tests\$testName.php
+        docker compose run --build --rm server ./vendor/bin/phpunit tests/${testName}.php
     }
     "composer" {
         $additionalArgs = $args[1..$args.Length] -join " "
