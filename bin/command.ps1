@@ -4,11 +4,11 @@ function Invoke-DockerCompose {
         [string]$additionalArgs = ""
     )
 
-    $dir = Split-Path $script:MyInvocation.MyCommand.Path -Parent
-    $dir = Resolve-Path "$dir\.."
-    Set-Location $dir
+    
+    # Set-Location $dir
 
     docker compose $command $additionalArgs
+    #Write-Host "docker-compose $command $additionalArgs"
 }
 
 $scriptName = $MyInvocation.MyCommand.Name
@@ -24,7 +24,9 @@ switch ($args[0]) {
     }
     "test" {
         $testName = $args[1]
-        Invoke-DockerCompose -command "run --build --rm server ./vendor/bin/phpunit tests/$testName.php"
+        $dir = Split-Path $script:MyInvocation.MyCommand.Path -Parent
+        $dir = Resolve-Path "$dir\.."
+        Invoke-DockerCompose -command "run --build --rm server $dir\vendor\bin\phpunit tests\$testName.php"
     }
     "composer" {
         $additionalArgs = $args[1..$args.Length] -join " "
