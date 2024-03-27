@@ -153,7 +153,51 @@ class Controller
         if (!$ret) return false;
         return $stmt->fetch();
     }
+    
     //update
+    public function update_User_TimeTable($username, $courseID, $timeSlotID){
+        $user = $this->check_User($username);
+        if(!$user) {
+            echo "error";
+            return;
+        }
+    
+        $course = $this->check_Course($courseID);
+        if(!$course) {
+            echo "course error";
+            return;
+        }
+    
+        $timeSlot = $this->check_TimeSlot($timeSlotID);
+        if(!$timeSlot) {
+            echo "time error";
+            return;
+        }
+        //correct
+        $sql = "INSERT INTO TimeTable (course_ID, time_slot_id, user_id) VALUES (?, ?, ?)";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$courseID, $timeSlotID, $user['id']]);
+        if (!$ret) {
+            $errorInfo = $stmt->errorInfo();
+            echo "SQL 错误：" . $errorInfo[2];
+            return;
+        }
+        echo "update";
+    }
+    private function check_Course($courseID){
+        $sql = "SELECT * FROM Course WHERE ID = ?";
+        $stmt = $this->handler->prepare($sql);
+        $stmt->execute([$courseID]);
+        return $stmt->fetch();
+    }
+    private function check_TimeSlot($timeSlotID){       
+        $sql = "SELECT * FROM TimeSlot WHERE time_slot_id = ?";
+        $stmt = $this->handler->prepare($sql);
+        $stmt->execute([$timeSlotID]);
+        return $stmt->fetch();
+    }
+
+    //search
     public function display_User_TimeTable($username){
         $sql = "SELECT Course.Name, TimeSlot.day, TimeSlot.start_time, TimeSlot.end_time
                 FROM Users
@@ -161,13 +205,12 @@ class Controller
                 INNER JOIN Course ON TimeTable.course_ID = Course.ID
                 INNER JOIN TimeSlot ON TimeTable.time_slot_id = TimeSlot.time_slot_id
                 WHERE Users.username = ?";
-        
         $stmt = $this->handler->prepare($sql);
         $stmt->execute([$username]);
         $result = $stmt->fetchAll();
 
         if ($result) {
-            echo "<h2>课程表</h2>";
+            echo "功課表";
             echo "<table border='1'>";
             echo "<tr><th>课程名稱</th><th>星期</th><th>開始時間</th><th>結束時間</th></tr>";
             foreach ($result as $row) {
@@ -183,7 +226,4 @@ class Controller
             echo "沒課";
         }
     }
-    //search
-
-
 }
