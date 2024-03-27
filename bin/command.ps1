@@ -1,19 +1,33 @@
+function Invoke-DockerCompose {
+    param (
+        [string]$command,
+        [string]$additionalArgs = ""
+    )
+
+    
+    # Set-Location $dir
+
+    # docker compose $command $additionalArgs
+    Write-Host "docker-compose $command $additionalArgs"
+}
+
 $scriptName = $MyInvocation.MyCommand.Name
 switch ($args[0]) {
     "start" {
-        docker compose up --build -d
+        Invoke-DockerCompose -command "up --build -d"
     }
     "stop" {
-        docker compose down
+        Invoke-DockerCompose -command "down"
     }
     "restart" {
-        docker compose restart
+        Invoke-DockerCompose -command "restart"
     }
     "test" {
         $testName = $args[1]
         $dir = Split-Path $script:MyInvocation.MyCommand.Path -Parent
         $dir = Resolve-Path "$dir\.."
-        docker compose run --build --rm server ${dir}\vendor\bin\phpunit tests\${testName}.php
+        cd $dir
+        Invoke-DockerCompose -command "run --build --rm server .\vendor\bin\phpunit tests\$testName.php"
     }
     "composer" {
         $additionalArgs = $args[1..$args.Length] -join " "
@@ -22,10 +36,10 @@ switch ($args[0]) {
         docker run --rm -it -v "${dir}:/app" composer $additionalArgs
     }
     "watch" {
-        docker compose watch
+        Invoke-DockerCompose -command "watch"
     }
     "ps" {
-        docker compose ps
+        Invoke-DockerCompose -command "ps"
     }
     default {
         Write-Host "Usage: $scriptName {start|stop|restart|test|composer|watch|ps}"
