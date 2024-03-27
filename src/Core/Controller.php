@@ -49,6 +49,58 @@ class Controller
             FOREIGN KEY (`user_id`) REFERENCES `Users`(`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;"
     ];
+
+    private function insert_Courses(){
+        $sql = "INSERT INTO Course (ID, Name, Credits) VALUES 
+            (1312, '系統程式', 3),
+            (1314, '機率與統計', 3),
+            (1313, '資料庫系統', 3),
+            (2864, '日文(一)', 2),
+            (1311, '班級活動', 0),
+            (1324, 'Web程式設計', 3),
+            (2990, '漢字之美', 2),
+            (1365, '程式設計與問題解決', 2),
+            (2809, '華語教材教法', 2),
+            (3320, '大學精進英文(二)中級', 2)";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute();
+        if (!$ret) {
+            $errorInfo = $stmt->errorInfo();
+            die("SQL 錯誤：" . $errorInfo[2]);
+        }
+    }
+
+    private function users(){
+        $sql = "INSERT INTO Users (id,username) VALUES 
+            (0001, 'test_user')";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute();
+        if (!$ret) {
+            $errorInfo = $stmt->errorInfo();
+            die("SQL 錯誤：" . $errorInfo[2]);
+        }
+    }
+
+    private function insert_timeslot(){
+        $sql = "INSERT INTO TimeSlot (time_slot_id, day, start_time,end_time) VALUES 
+            (1312, '星期一', '10:10:00', '12:00:00'),
+            (1314, '星期一', '13:10:00', '15:00:00'),
+            (1313, '星期一', '15:10:00', '17:00:00'),
+            (2864, '星期二', '13:10:00', '15:00:00'),
+            (1311, '星期二', '16:10:00', '17:00:00'),
+            (1324, '星期三', '08:10:00', '11:00:00'),
+            (2990, '星期四', '10:10:00', '12:00:00'),
+            (1365, '星期四', '13:10:00', '15:00:00'),
+            (2809, '星期四', '18:30:00', '20:15:00'),
+            (3320, '星期五', '08:10:00', '10:00:00')";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute();
+        if (!$ret) {
+            $errorInfo = $stmt->errorInfo();
+            die("SQL 錯誤：" . $errorInfo[2]);
+        }
+    }
+
     public function __construct()
     {
         $connect = new Connect();
@@ -87,4 +139,35 @@ class Controller
         if (!$ret) return false;
         return $stmt->fetch();
     }
+    public function display_User_TimeTable($username){
+        $sql = "SELECT Course.Name, TimeSlot.day, TimeSlot.start_time, TimeSlot.end_time
+                FROM Users
+                INNER JOIN TimeTable ON Users.id = TimeTable.user_id
+                INNER JOIN Course ON TimeTable.course_ID = Course.ID
+                INNER JOIN TimeSlot ON TimeTable.time_slot_id = TimeSlot.time_slot_id
+                WHERE Users.username = ?";
+        
+        $stmt = $this->handler->prepare($sql);
+        $stmt->execute([$username]);
+        $result = $stmt->fetchAll();
+
+        if ($result) {
+            echo "<h2>课程表</h2>";
+            echo "<table border='1'>";
+            echo "<tr><th>课程名稱</th><th>星期</th><th>開始時間</th><th>結束時間</th></tr>";
+            foreach ($result as $row) {
+                echo "<tr>";
+                echo "<td>" . $row['Name'] . "</td>";
+                echo "<td>" . $row['day'] . "</td>";
+                echo "<td>" . $row['start_time'] . "</td>";
+                echo "<td>" . $row['end_time'] . "</td>";
+                echo "</tr>";
+            }
+            echo "</table>";
+        } else {
+            echo "沒課";
+        }
+    }
+
+
 }
