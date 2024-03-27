@@ -36,3 +36,4 @@ README.md
 src/Setting/password.txt
 README.Docker.md
 command.txt
+!**/tests

@@ -3,6 +3,7 @@ services:
   server:
     build:
       context: .
+      target: development
     ports:
       - 9000:80
     depends_on:
@@ -34,6 +35,11 @@ services:
       - MARIADB_DATABASE=website
     expose:
       - 3306
+    healthcheck:
+      test:  ["CMD", "/usr/local/bin/healthcheck.sh", "--su-mysql", "--connect",  "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   phpmyadmin:
     image: phpmyadmin
     ports:

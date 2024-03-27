@@ -1,0 +1,34 @@
+#!/bin/bash
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+DIR="$PWD"
+NAME=$0
+
+case "$1" in
+    "start")
+        docker compose up --build -d
+    ;;
+    "stop")
+        docker compose down
+    ;;
+    "restart")
+        docker compose restart
+    ;;
+    "test")
+        shift
+        docker compose run --build --rm server ./vendor/bin/phpunit tests/"$1".php
+    ;;
+    "composer")
+        shift
+        docker run --rm -it -v $DIR:/app composer "$@"
+    ;;
+    "watch")
+        docker compose watch
+    ;;
+    "ps")
+        docker compose ps
+    ;;
+    *)
+        echo "Usage: $NAME {start|stop|restart|test|composer|watch|ps}"
+        exit 1
+    ;;
+esac
