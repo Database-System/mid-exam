@@ -16,7 +16,7 @@ class Controller
             PRIMARY KEY (`id`),
             UNIQUE KEY `username_UNIQUE` (`username`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;",
-
+    
         "TimeSlot" => "CREATE TABLE `TimeSlot` (
             `time_slot_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
             `day` VARCHAR(255) NOT NULL,
@@ -24,22 +24,22 @@ class Controller
             `end_time` TIME NOT NULL,
             PRIMARY KEY (`time_slot_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;",
-
+    
         "Course" => "CREATE TABLE `Course` (
             `ID` INT(10) UNSIGNED NOT NULL,
             `Name` VARCHAR(255) NOT NULL,
             `Credits` INT(10) UNSIGNED NOT NULL,
-            PRIMARY KEY (`ID`),
+            PRIMARY KEY (`ID`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;",
-
-        "CourseTimeSlots" => "CREATE TABLE CourseTimeSlots (
-            Course_ID INT(10) UNSIGNED NOT NULL,
-            Time_Slot_ID INT(10) UNSIGNED NOT NULL,
-            PRIMARY KEY (Course_ID, Time_Slot_ID),
-            FOREIGN KEY (Course_ID) REFERENCES Course(ID),
-            FOREIGN KEY (Time_Slot_ID) REFERENCES TimeSlot(time_slot_id)
+    
+        "CourseTimeSlots" => "CREATE TABLE `CourseTimeSlots` (
+            `Course_ID` INT(10) UNSIGNED NOT NULL,
+            `Time_Slot_ID` INT(10) UNSIGNED NOT NULL,
+            PRIMARY KEY (`Course_ID`, `Time_Slot_ID`),
+            FOREIGN KEY (`Course_ID`) REFERENCES `Course`(`ID`),
+            FOREIGN KEY (`Time_Slot_ID`) REFERENCES `TimeSlot`(`time_slot_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;",
-
+    
         "TimeTable" => "CREATE TABLE `TimeTable` (
             `course_ID` INT(10) UNSIGNED NOT NULL,
             `time_slot_id` INT(10) UNSIGNED NOT NULL,
@@ -49,6 +49,7 @@ class Controller
             FOREIGN KEY (`user_id`) REFERENCES `Users`(`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;"
     ];
+    
     public function __construct()
     {
         $connect = new Connect();
@@ -157,4 +158,12 @@ class Controller
             die("SQL 錯誤：" . $errorInfo[2]);
         }
     }
+    public function insertdata(){
+        $this->insert_TimeSlot("Monday","08:00:00","10:00:00");
+        $this->insert_Course(1,"Math",3);
+        $this->insert_CourseTimeSlots(1,1);
+        $this->insert_TimeTable(1,1,1);
+        
+    }
+    
 }
