@@ -128,29 +128,29 @@ class Controller
             die("SQL 錯誤：" . $errorInfo[2]);
         }
     }
-    public function delete_TimeSlot(int $time_slot_id)
-    {
-        $sql = "DELETE from `TimeSlot` WHERE `time_slot_id` = ?";
-        $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$time_slot_id]);
-        if (!$ret) {
-            $errorInfo = $stmt->errorInfo();
-            die("SQL 錯誤：" . $errorInfo[2]);
-        }
-    }
-    public function delete_Course(int $course_id)
-    {
-        $sql = "DELETE from `Course` WHERE `ID` = ?";
-        $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$course_id]);
-        if (!$ret) {
-            $errorInfo = $stmt->errorInfo();
-            die("SQL 錯誤：" . $errorInfo[2]);
-        }
-    }
+    // public function delete_TimeSlot(string $day,string $start_time,string $end_time)
+    // {
+    //     $sql = "DELETE from `TimeSlot` WHERE `day` = ?AND `start_time` = ? AND `end_time` = ?";
+    //     $stmt = $this->handler->prepare($sql);
+    //     $ret = $stmt->execute([$day,$start_time,$end_time]);
+    //     if (!$ret) {
+    //         $errorInfo = $stmt->errorInfo();
+    //         die("SQL 錯誤：" . $errorInfo[2]);
+    //     }
+    // }
+    // public function delete_Course(int $course_id)
+    // {
+    //     $sql = "DELETE from `Course` WHERE `course_id` = ?";
+    //     $stmt = $this->handler->prepare($sql);
+    //     $ret = $stmt->execute([$course_id]);
+    //     if (!$ret) {
+    //         $errorInfo = $stmt->errorInfo();
+    //         die("SQL 錯誤：" . $errorInfo[2]);
+    //     }
+    // }
     public function delete_TimeTable(int $course_id, int $time_slot_id, int $user_id)
     {
-        $sql = "DELETE FROM TimeTable WHERE course_ID = ? AND time_slot_id = ? AND user_id = ?";
+        $sql = "DELETE FROM `TimeTable` WHERE `course_ID` = ? AND `time_slot_id` = ? AND `user_id` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$course_id, $time_slot_id, $user_id]);
         if (!$ret) {
@@ -158,6 +158,15 @@ class Controller
             die("SQL 錯誤：" . $errorInfo[2]);
         }
     }
-    
+    public function delete_CourseTimeSlots(int $course_id, int $time_slot_id)
+    {
+        $sql = "DELETE FROM `CourseTimeSlots` WHERE `course_ID` = ? AND `time_Slot_ID` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$course_id, $time_slot_id]);
+        if (!$ret) {
+            $errorInfo = $stmt->errorInfo();
+            die("SQL 錯誤：" . $errorInfo[2]);
+        }
+    }
     
 }
