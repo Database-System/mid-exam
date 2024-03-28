@@ -158,12 +158,6 @@ class Controller
             die("SQL 錯誤：" . $errorInfo[2]);
         }
     }
-    public function insertdata(){
-        $this->insert_TimeSlot("Monday","08:00:00","10:00:00");
-        $this->insert_Course(1,"Math",3);
-        $this->insert_CourseTimeSlots(1,1);
-        $this->insert_TimeTable(1,1,1);
-        
-    }
+    
     
 }
