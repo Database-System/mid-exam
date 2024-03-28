@@ -1,37 +1,48 @@
 <?php
-require_once './src/Core/Controller.php';
+use PHPUnit\Framework\TestCase;
+use Exam\Core\Controller;
 
-class Insert_Test extends PHPUnit\Framework\TestCase
+class Insert_Test extends TestCase
 {
-   
+    protected static $controller;
+
+    public static function setUpBeforeClass(): void
+    {
+        self::$controller = new Controller();
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        // Clean up any inserted data after all tests in the class have run
+        // This ensures that subsequent test runs are not affected by previous runs
+        self::$controller->cleanupTestData();
+    }
+
     public function testInsertData()
     {
-      $controller = new Controller();
-        $controller->insert_TimeSlot("Monday", "08:00:00", "10:00:00");
-        $controller->insert_Course(1, "Math", 3);
-        $controller->insert_CourseTimeSlots(1, 1);
-        $controller->insert_TimeTable(1, 1, 1);
+        // Insert test data
+        self::$controller->insert_TimeSlot("Monday", "08:00:00", "10:00:00");
+        self::$controller->insert_Course(1, "Math", 3);
+        self::$controller->insert_CourseTimeSlots(1, 1);
+        self::$controller->insert_TimeTable(1, 1, 1);
         
-        // Assertions to verify the expected behavior
-        $stmt = $controller->handler->prepare("SELECT * FROM TimeSlot WHERE day = 'Monday' AND start_time = '08:00:00' AND end_time = '10:00:00'");
-        $stmt->execute();
-        $timeSlot = $stmt->fetch();
+        // Verify the inserted data
+        $timeSlot = self::$controller->getTimeSlot(1);
         $this->assertNotNull($timeSlot);
-    
-        $stmt = $controller->handler->prepare("SELECT * FROM Course WHERE ID = 1 AND Name = 'Math' AND Credits = 3");
-        $stmt->execute();
-        $course = $stmt->fetch();
+        $this->assertEquals("Monday", $timeSlot['day']);
+        $this->assertEquals("08:00:00", $timeSlot['start_time']);
+        $this->assertEquals("10:00:00", $timeSlot['end_time']);
+
+        $course = self::$controller->getCourse(1);
         $this->assertNotNull($course);
-    
-        $stmt = $controller->handler->prepare("SELECT * FROM CourseTimeSlots WHERE Course_ID = 1 AND Time_Slot_ID = 1");
-        $stmt->execute();
-        $courseTimeSlots = $stmt->fetch();
+        $this->assertEquals("Math", $course['Name']);
+        $this->assertEquals(3, $course['Credits']);
+
+        $courseTimeSlots = self::$controller->getCourseTimeSlots(1);
         $this->assertNotNull($courseTimeSlots);
-    
-        $stmt = $controller->handler->prepare("SELECT * FROM TimeTable WHERE course_ID = 1 AND time_slot_id = 1 AND user_id = 1");
-        $stmt->execute();
-        $timeTable = $stmt->fetch();
+
+        $timeTable = self::$controller->getTimeTable(1, 1, 1);
         $this->assertNotNull($timeTable);
     }
-}  
+}
 ?>
