@@ -50,71 +50,6 @@ class Controller
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;"
     ];
 
-    private function insert_Courses(){
-        $sql = "INSERT INTO Course (ID, Name, Credits) VALUES 
-            (1312, '系統程式', 3),
-            (1314, '機率與統計', 3),
-            (1313, '資料庫系統', 3),
-            (2864, '日文(一)', 2),
-            (1311, '班級活動', 0),
-            (1324, 'Web程式設計', 3),
-            (2990, '漢字之美', 2),
-            (1365, '程式設計與問題解決', 2),
-            (2809, '華語教材教法', 2),
-            (3320, '大學精進英文(二)中級', 2)";
-        $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute();
-        if (!$ret) {
-            $errorInfo = $stmt->errorInfo();
-            die("SQL 錯誤：" . $errorInfo[2]);
-        }
-    }
-
-    private function insert_timeslot(){
-        $sql = "INSERT INTO TimeSlot (time_slot_id, day, start_time,end_time) VALUES 
-            (1, '星期一', '10:10:00', '12:00:00'),
-            (2, '星期三', '11:10:00', '12:00:00'),
-            (3, '星期一', '13:10:00', '15:00:00'),
-            (4, '星期二', '11:10:00', '12:00:00'),
-            (5, '星期一', '15:10:00', '17:00:00'),
-            (6, '星期二', '10:10:00', '11:00:00'),
-            (7, '星期二', '13:10:00', '15:00:00'),
-            (8, '星期二', '16:10:00', '17:00:00'),
-            (9, '星期三', '08:10:00', '11:00:00'),
-            (10, '星期四', '10:10:00', '12:00:00'),
-            (11, '星期四', '13:10:00', '15:00:00'),
-            (12, '星期四', '18:30:00', '20:15:00'),
-            (13, '星期五', '08:10:00', '10:00:00')";
-        $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute();
-        if (!$ret) {
-            $errorInfo = $stmt->errorInfo();
-            die("SQL 錯誤：" . $errorInfo[2]);
-        }
-    }
-
-    private function insert_coursetimeslots(){
-        $sql = "INSERT INTO CourseTimeSlots (Course_ID, Time_Slot_ID) VALUES 
-            (1312,1),(1312,2),
-            (1314,3),(1314,4),
-            (1313,5),(1313,6),
-            (2864,7),
-            (1311,8),
-            (1324,9),
-            (2990,10),
-            (1365,11),
-            (2809,12),
-            (3320,13)";
-    }
-
-    private function insert_timetable(){
-        $sql = "INSERT INTO TimeTable (course_ID, time_slot_id, user_id) VALUES 
-            (1312,1,1),(1312,2,1),
-            (2864,7,1),
-            (1311,8,1),
-            (2809,12,1)";
-    }
-
     public function __construct()
     {
         $connect = new Connect();
@@ -157,32 +92,19 @@ class Controller
     //update
     public function update_User_TimeTable($username, $courseID, $timeSlotID){
         $user = $this->check_User($username);
-        if(!$user) {
-            echo "error";
-            return;
-        }
+        if(!$user) return false;
     
         $course = $this->check_Course($courseID);
-        if(!$course) {
-            echo "course error";
-            return;
-        }
+        if(!$course) return false;
     
         $timeSlot = $this->check_TimeSlot($timeSlotID);
-        if(!$timeSlot) {
-            echo "time error";
-            return;
-        }
-        //correct
+        if(!$timeSlot) return false;
+
         $sql = "INSERT INTO TimeTable (course_ID, time_slot_id, user_id) VALUES (?, ?, ?)";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$courseID, $timeSlotID, $user['id']]);
-        if (!$ret) {
-            $errorInfo = $stmt->errorInfo();
-            echo "SQL 错误：" . $errorInfo[2];
-            return;
-        }
-        echo "update";
+        if (!$ret) return false;
+        else return $stmt->fetch();
     }
     private function check_Course($courseID){
         $sql = "SELECT * FROM Course WHERE ID = ?";
@@ -209,21 +131,18 @@ class Controller
         $stmt->execute([$username]);
         $result = $stmt->fetchAll();
 
+        $timetableData =[];
+
         if ($result) {
-            echo "功課表";
-            echo "<table border='1'>";
-            echo "<tr><th>课程名稱</th><th>星期</th><th>開始時間</th><th>結束時間</th></tr>";
-            foreach ($result as $row) {
-                echo "<tr>";
-                echo "<td>" . $row['Name'] . "</td>";
-                echo "<td>" . $row['day'] . "</td>";
-                echo "<td>" . $row['start_time'] . "</td>";
-                echo "<td>" . $row['end_time'] . "</td>";
-                echo "</tr>";
+            foreach($result as $row){
+                $timetableData[]=[
+                    'Name'=>$row['Name'],
+                    'day'=>$row['day'],
+                    'start_time'=>$row['start_time'],
+                    'end_time'=>$row['end_time']
+                ];
             }
-            echo "</table>";
-        } else {
-            echo "沒課";
         }
+        return $timetableData;
     }
 }
