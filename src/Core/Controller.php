@@ -97,7 +97,7 @@ class Controller
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$day,$start_time,$end_time]);
         if (!$ret) return false;
-        return $stmt->fetch();
+        return true;
     }
 
     public function insert_Course(int $ID,string $Name,int $Credits)
@@ -106,7 +106,7 @@ class Controller
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$ID,$Name,$Credits]);
         if (!$ret) return false;
-        return $stmt->fetch();
+        return true;
     }
 
     public function insert_CourseTimeSlots(int $Course_ID,int $Time_Slot_ID)
@@ -115,7 +115,7 @@ class Controller
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$Course_ID,$Time_Slot_ID]);
         if (!$ret) return false;
-        return $stmt->fetch();
+        return true;
     }
 
     public function insert_TimeTable(int $course_ID,int $time_slot_id,int $user_id)
@@ -124,7 +124,7 @@ class Controller
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$course_ID,$time_slot_id,$user_id]);
         if (!$ret) return false;
-        return $stmt->fetch();
+        return true;
     }
 
     public function delete_TimeSlot(string $day, string $start_time, string $end_time)
@@ -133,7 +133,7 @@ class Controller
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$day, $start_time, $end_time]);
         if (!$ret) return false;
-        return $stmt->fetch();
+        return true;
     }
 
     public function delete_Course(int $ID, string $Name, int $Credits)
@@ -142,7 +142,7 @@ class Controller
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$ID, $Name, $Credits]);
         if (!$ret) return false;
-        return $stmt->fetch();
+        return true;
     }
 
 
@@ -152,7 +152,7 @@ class Controller
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$course_id, $time_slot_id, $user_id]);
         if (!$ret) return false;
-        return $stmt->fetch();
+        return true;
     }
 
     public function delete_CourseTimeSlots(int $course_id, int $time_slot_id)
@@ -161,7 +161,7 @@ class Controller
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$course_id, $time_slot_id]);
         if (!$ret) return false;
-        return $stmt->fetch();
+        return true;
     }
     
 }
