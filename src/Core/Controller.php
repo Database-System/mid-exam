@@ -70,11 +70,11 @@ class Controller
         $stmt = $this->handler->query("SHOW TABLES LIKE '$table'");
         return !($stmt->rowCount() == 0);
     }
-    public function insert_User(string $user, string $password)
+    public function insert_User(string $user, string $password,int $id,int $credits)
     {
-        $sql = "INSERT INTO Users (`username`,`password`) VALUES (?,?)";
+        $sql = "INSERT INTO Users (`username`,`password`,id,Total_credits) VALUES (?,?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$user, $password]);
+        $ret = $stmt->execute([$user, $password,$id,$credits]);
         if (!$ret) {
             $errorInfo = $stmt->errorInfo();
             die("SQL 錯誤：" . $errorInfo[2]);
@@ -89,37 +89,35 @@ class Controller
         return $stmt->fetch();
     }
     
-    //update
-    public function update_User_TimeTable($username, $courseID, $timeSlotID){
+    //search
+    public function search_User_TimeTable($username, $courseID){
         $user = $this->check_User($username);
         if(!$user) return false;
     
         $course = $this->check_Course($courseID);
         if(!$course) return false;
-    
-        $timeSlot = $this->check_TimeSlot($timeSlotID);
-        if(!$timeSlot) return false;
 
-        $sql = "INSERT INTO TimeTable (course_ID, time_slot_id, user_id) VALUES (?, ?, ?)";
+        $sql = "SELECT COUNT(*) as count FROM TimeTable WHERE user_id = ? AND course_ID = ?";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$courseID, $timeSlotID, $user['id']]);
-        if (!$ret) return false;
-        else return $stmt->fetch();
+        $stmt->execute([$user['id'], $courseID]);
+        $result = $stmt->fetch();
+    
+        return ($result['count'] > 0);
     }
     private function check_Course($courseID){
         $sql = "SELECT * FROM Course WHERE ID = ?";
         $stmt = $this->handler->prepare($sql);
         $stmt->execute([$courseID]);
         return $stmt->fetch();
+
     }
-    private function check_TimeSlot($timeSlotID){       
-        $sql = "SELECT * FROM TimeSlot WHERE time_slot_id = ?";
+    public function delete_User($username) {
+        $sql = "DELETE FROM Users WHERE username = ?";
         $stmt = $this->handler->prepare($sql);
-        $stmt->execute([$timeSlotID]);
-        return $stmt->fetch();
+        $stmt->execute([$username]);
     }
 
-    //search
+    //update
     public function display_User_TimeTable($username){
         $sql = "SELECT Course.Name, TimeSlot.day, TimeSlot.start_time, TimeSlot.end_time
                 FROM Users

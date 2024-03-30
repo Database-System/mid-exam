@@ -1,27 +1,26 @@
 <?php
-require_once './src/Core/Controller.php'; 
+use PHPUnit\Framework\TestCase;
+use Exam\Core\Controller;
 
-class Controller_Test extends PHPUnit\Framework\TestCase
-{
-    private $controller;
+class Controller_update_Test extends TestCase{
+    protected static $controller;
+    public $handler = null;
 
-    protected function setUp(): void{
-        parent::setUp();
-        $this->controller= new \Exam\Core\Controller(); //還是要用include?
-        $this->insertTestData();
-
+    public static function setUpBeforeClass():void{
+        self::$controller =new Controller();
     }
-
-    private function insertTestData() {
-        $this->controller->insert_Courses();
-        $this->controller->insert_timeslot();
-        $this->controller->insert_coursetimeslots();
-        $this->controller->insert_timetable();        
+    protected function setUp(): void {
+        self::$controller->insert_User('test_user', 'test_password',1,0);
     }
+    public function testInserTimeTable(){
+        $sql1 = "INSERT INTO TimeTable (course_ID, time_slot_id, user_id) VALUES 
+            (1312,1,1),(1312,2,1),
+            (2809,12,1)";
+        $stmt = $this->handler->prepare($sql1);
+        $stmt->execute();
 
-    private function insert_Courses(){
-        $sql = "INSERT INTO Course (ID, Name, Credits) VALUES 
-            (1312, '系統程式', 3),
+        $sql2 = "INSERT INTO Course (ID, Name, Credits) VALUES 
+            (1312, 'system program', 3),
             (1314, '機率與統計', 3),
             (1313, '資料庫系統', 3),
             (2864, '日文(一)', 2),
@@ -29,66 +28,72 @@ class Controller_Test extends PHPUnit\Framework\TestCase
             (1324, 'Web程式設計', 3),
             (2990, '漢字之美', 2),
             (1365, '程式設計與問題解決', 2),
-            (2809, '華語教材教法', 2),
+            (2809, 'teaching mothod', 2),
             (3320, '大學精進英文(二)中級', 2)";
-        $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute();
-        if (!$ret) {
-            $errorInfo = $stmt->errorInfo();
-            die("SQL 錯誤：" . $errorInfo[2]);
-        }
-    }
+        $stmt = $this->handler->prepare($sql2);
+        $stmt->execute();
 
-    private function insert_timeslot(){
-        $sql = "INSERT INTO TimeSlot (time_slot_id, day, start_time,end_time) VALUES 
-            (1, '星期一', '10:10:00', '12:00:00'),
-            (2, '星期三', '11:10:00', '12:00:00'),
-            (3, '星期一', '13:10:00', '15:00:00'),
-            (4, '星期二', '11:10:00', '12:00:00'),
-            (5, '星期一', '15:10:00', '17:00:00'),
-            (6, '星期二', '10:10:00', '11:00:00'),
-            (7, '星期二', '13:10:00', '15:00:00'),
-            (8, '星期二', '16:10:00', '17:00:00'),
-            (9, '星期三', '08:10:00', '11:00:00'),
-            (10, '星期四', '10:10:00', '12:00:00'),
-            (11, '星期四', '13:10:00', '15:00:00'),
-            (12, '星期四', '18:30:00', '20:15:00'),
-            (13, '星期五', '08:10:00', '10:00:00')";
-        $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute();
-        if (!$ret) {
-            $errorInfo = $stmt->errorInfo();
-            die("SQL 錯誤：" . $errorInfo[2]);
-        }
+        $sql3 = "INSERT INTO TimeSlot (time_slot_id, day, start_time,end_time) VALUES 
+            (1, 'Monday', '10:10:00', '12:00:00'),
+            (2, 'Wednesday', '11:10:00', '12:00:00'),
+            (3, 'Monday', '13:10:00', '15:00:00'),
+            (4, 'Tuesday', '11:10:00', '12:00:00'),
+            (5, 'Monday', '15:10:00', '17:00:00'),
+            (6, 'Tuesday', '10:10:00', '11:00:00'),
+            (7, 'Tuesday', '13:10:00', '15:00:00'),
+            (8, 'Tuesday', '16:10:00', '17:00:00'),
+            (9, 'Wednesday', '08:10:00', '11:00:00'),
+            (10, 'Thursday', '10:10:00', '12:00:00'),
+            (11, 'Thursday', '13:10:00', '15:00:00'),
+            (12, 'Thursday', '18:30:00', '20:15:00'),
+            (13, 'Friday', '08:10:00', '10:00:00')";
+        $stmt = $this->handler->prepare($sql3);
+        $stmt->execute();
     }
+    public function testSearch(){
+        $result1= self::$controller->search_User_TimeTable('test_user',1312);
+        $this->assertTrue($result1);
 
-    private function insert_coursetimeslots(){
-        $sql = "INSERT INTO CourseTimeSlots (Course_ID, Time_Slot_ID) VALUES 
-            (1312,1),(1312,2),
-            (1314,3),(1314,4),
-            (1313,5),(1313,6),
-            (2864,7),
-            (1311,8),
-            (1324,9),
-            (2990,10),
-            (1365,11),
-            (2809,12),
-            (3320,13)";
+        $result2= self::$controller->search_User_TimeTable('test_user',1313);
+        $this->assertFalse($result2);
     }
+    public function testDisplayUserTimeTable(){
+        $controller = $this->getMockBuilder(Controller::class)
+                           ->onlyMethods(['display_User_TimeTable'])
+                           ->getMock();
 
-    private function insert_timetable(){
-        $sql = "INSERT INTO TimeTable (course_ID, time_slot_id, user_id) VALUES 
-            (1312,1,1),(1312,2,1),
-            (2864,7,1),
-            (1311,8,1),
-            (2809,12,1)";
+        $expectedResult = [
+            [
+                'Name' => 'system program',
+                'day' => 'Monday',
+                'start_time' => '08:10:00',
+                'end_time' => '10:00:00'
+            ],
+            [
+                'Name' => 'system program',
+                'day' => 'Wedensday',
+                'start_time' => '11:10:00',
+                'end_time' => '12:00:00'
+            ],
+            [
+                'Name' => 'teaching mothod',
+                'day' => 'Thursday',
+                'start_time' => '18:30:00',
+                'end_time' => '20:15:00'
+            ]
+        ];
+        $controller->expects($this->once())
+                   ->method('display_User_TimeTable')
+                   ->willReturn($expectedResult);
+
+        $result = $controller->display_User_TimeTable('test_user');
+
+        $this->assertEquals($expectedResult, $result);
     }
-    public function testDisplayUserTimeTable()
-    { 
-        include './src/Core/Controller.php';
-        ob_start();
-        $this->controller->display_User_TimeTable('test_user');
-        $output = ob_get_clean();
-        //$this->assertContains('課程名稱', $output); 
+    protected function tearDown(): void {
+        self::$controller->delete_User('test_user');
+    }
+    public static function tearDownAfterClass(): void{
+        self::$controller=null;
     }
 }
