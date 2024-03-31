@@ -18,24 +18,16 @@
 			<div class="login-info">
 				<header>登入資訊</header>
 				<div class="info-item">
-					<span>學號:
-					</span>
-					<span>D1109109</span>
+					<span>學號:</span><span>{{ NID }}</span>
 				</div>
 				<div class="info-item">
-					<span>學分上限:
-					</span>
-					<span>25</span>
+					<span>學分上限:</span><span>25</span>
 				</div>
 				<div class="info-item">
-					<span>學分下限:
-					</span>
-					<span>12</span>
+					<span>學分下限:</span><span>12</span>
 				</div>
 				<div class="info-item">
-					<span>已選學分:
-					</span>
-					<span>0</span>
+					<span>已選學分:</span><span>0</span>
 				</div>
 				<button id="logout">登出</button>
 			</div>
@@ -260,7 +252,9 @@
 						<p>查詢結果：</p>
 						<div class="">
 						<!-- 查詢結果放這裡 -->
+						{% if searchResult is defined and searchResult is not null %}
 						{{ dump(searchResult) }}
+						{% endif %}
 
 						</div>
 					</div>

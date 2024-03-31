@@ -4,6 +4,7 @@ namespace Exam\Pages\Back;
 
 use Exam\Pages\twigLoader;
 use Exam\Utils\Utils;
+if (!session_id()) session_start();
 
 class Dashboard
 {
@@ -11,6 +12,7 @@ class Dashboard
     public function __construct()
     {
         Utils::isLogin();
+        $this->options["NID"] = $_SESSION['userID'];
         if ($_SERVER["REQUEST_METHOD"] == "POST") $this->parse_arg();
         $this->renderPage($this->options);
     }
