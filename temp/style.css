@@ -1,0 +1,126 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* ========== 通用 ========== */
+
+body{
+    background: #9255C6;
+    overflow: hidden; 
+}
+
+/* ========== 通用 ========== */
+
+/* ========== Login css ========== */
+
+.login-box{
+    padding:100px 30px 100px 30px;
+    width: 1200px;
+}
+
+#index-title{
+    font-size: 72px;
+    font-weight: bolder;
+}
+
+@media screen and (max-width: 992px){
+    #index-title{
+        font-size: 52px;
+    }
+}
+
+@media screen and (max-width: 768px){
+    #index-title{
+        font-size: 48px;
+    }
+}
+
+#index-button{
+    font-size: 36px;
+    color: #fff;    
+    background: #58B847;
+    border: 0px;
+    font-weight: bolder;
+    cursor: pointer;
+    width: 100%;
+    padding: 8px;
+    max-width: 450px;
+    border-radius: 36px;
+    transition: all ease-in-out 0.1s;
+}
+
+#index-button:hover{
+    background: #eee;
+    color: #000;
+}
+
+#index-button:active{
+    background: #bbb;
+    color: #000;
+    border: 0px;
+}
+
+#login-title{
+    font-size: 48px;
+    font-weight: bolder;
+}
+
+#NID,#password{
+    border-radius: 24px;
+    border: 0px;
+    background-color: #eee;
+    width: 300px;
+    padding: 12px;
+    margin-bottom: 24px;
+}
+
+#login-submit{
+    color: #fff;
+    background: #58B847;
+    font-size: 24px;
+    padding: 6px;
+    border-radius: 24px;
+    width: 300px;
+    font-weight: bolder;    
+    cursor: pointer;
+    border: 0;
+    transition: all ease-in-out 0.1s;   
+}
+
+#login-submit:hover{
+    background: #eee;
+    color: #000;
+}
+
+#login-submit:active{
+    background: #bbb;
+    color: #000;
+    border: 0px;
+}
+
+.input-icon {
+    position: relative;
+}
+.input-icon input {
+    padding-left: 30px; 
+}
+.input-icon i {
+    position: absolute;
+    font-size: 20px;
+    left: 10px;
+    top: 50%; 
+    transform: translateY(-50%);
+    z-index: 1;
+}
+.input-icon .ri-eye {
+    position: absolute;
+    left: 270px;
+    top: 50%; 
+    transform: translateY(-50%);
+    z-index: 1;
+    cursor: pointer;
+}
+
+/* ========== Login css ========== */
