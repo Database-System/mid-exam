@@ -229,41 +229,38 @@
 			</ul>
 			<div class="tab-content" id="myTabContent">
 				<div class="tab-pane fade show active" id="search" role="tabpanel" aria-labelledby="search-tab">
-					<form action="" class="form-box">
+					<form method="post" class="form-box">
 						<p class="form-title mt-4">一、依照開課系所查詢：</p>
 						<div class="row">
-							<p class="col-md-6 col-xl-3 pl-5">學制：<input type="text" class="form-input"></p>
-							<p class="col-md-6 col-xl-3 pl-5">學院：<input type="text" class="form-input"></p>
-							<p class="col-md-6 col-xl-3 pl-5">系所：<input type="text" class="form-input"></p>
-							<p class="col-md-6 col-xl-3 pl-5">班級：<input type="text" class="form-input"></p>
+							<p class="col-md-6 col-xl-3 pl-5">學制：<input type="text" name="degree" class="form-input"></p>
+							<p class="col-md-6 col-xl-3 pl-5">學院：<input type="text" name="deptId" class="form-input"></p>
+							<p class="col-md-6 col-xl-3 pl-5">系所：<input type="text" name="unitId" class="form-input"></p>
+							<p class="col-md-6 col-xl-3 pl-5">班級：<input type="text" name="classId" class="form-input"></p>
 						</div>
 						<input type="submit" value="查詢" class="ml-4 mb-4">
 					</form>
-					<form action="" class="form-box">
+					<form method="post" class="form-box">
 						<p class="form-title mt-4">二、依照輸入條件查詢：</p>
 						<div class="row">
 							<div class="col-xl-6">
-								<p class="pl-4"><input type="checkbox" class="mr-1">選課代碼：<input type="text" class=""></p>
-								<p class="pl-4"><input type="checkbox" class="mr-1">星期：
-									<input type="text" class="w-25">
-									節次：<input type="text" class="w-25"></p>
-								<p class="pl-4"><input type="checkbox" class="mr-1">科目名稱：<input type="text" class=""></p>
+								<p class="pl-4"><input type="checkbox" name="checkcode" class="mr-1">選課代碼：<input type="text" name="code" class=""></p>
+								<p class="pl-4"><input type="checkbox" name="checkweek" class="mr-1">星期：<input type="text" name="week" class="w-25">節次：<input type="text" name="period" class="w-25"></p>
+								<p class="pl-4"><input type="checkbox" name="checkcourse" class="mr-1">科目名稱：<input type="text" name="course" class=""></p>
 
 							</div>
 							<div class="col-xl-6">
-								<p class="pl-4"><input type="checkbox" class="mr-1">開課老師姓名：<input type="text" class=""></p>
-								<p class="pl-4"><input type="checkbox" class="mr-1">授課語言：
-									<input type="text" class=""></p>
-								<p class="pl-4"><input type="checkbox" class="mr-1">特定科目：
-									<input type="text" class=""></p>
+								<p class="pl-4"><input type="checkbox" name="checkteacher" class="mr-1">開課老師姓名：<input type="text" name="teacher" class=""></p>
+								<p class="pl-4"><input type="checkbox" name="checkuseLanguage" class="mr-1">授課語言：<input type="text" name="useLanguage" class=""></p>
+								<p class="pl-4"><input type="checkbox" name="checkspecificSubject" class="mr-1">特定科目：<input type="text" name="specificSubject" class=""></p>
 							</div>
 						</div>
 						<input type="submit" value="查詢" class="ml-4 mb-4">
 					</form>
 					<div id="search-result">
 						<p>查詢結果：</p>
-						<div
-							class=""><!-- 查詢結果放這裡 -->
+						<div class="">
+						<!-- 查詢結果放這裡 -->
+						{{ dump(searchResult) }}
 
 						</div>
 					</div>

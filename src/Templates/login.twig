@@ -1,35 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+	<head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登入</title>
-    <link rel="stylesheet" type="text/css" href="{{ session.Css }}bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ session.Css }}style.css">
-    
-</head>
-<body>
-    
-    <div class="d-flex justify-content-center align-items-center m-auto" style="height: 100vh;">
-        <div class="login-box row bg-white align-items-center" id="login">
-            <div class="col-md-6 justify-content-center d-flex">
-                <img src="{{ session.Image }}/Login/img-01.png" alt="" class="w-75">
-            </div>
-            <div class="col-md-6">
-                <p class="text-center pt-5 pt-md-0" id="login-title">Fcu Test Login</p>
-                <div class="d-flex justify-content-center">
-                    <form method="post">
-                        <input type="text" name="user" placeholder="NID" id="NID" class="d-flex">
-                        <input type="password" name="password" placeholder="Password"  id="password" class="d-flex">
-                        <input type="submit" id="login-submit" value="登入">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>登入</title>
+		<link rel="stylesheet" type="text/css" href="{{ session.Css }}bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
+		<link rel="stylesheet" href="{{ session.Css }}style.css">
+	</head>
+	<body>
 
-    <script src="{{ session.Js }}bootstrap/js/bootstrap.min.js"></script>
+		<div class="d-flex justify-content-center align-items-center m-auto" style="height: 100vh;">
+			<div class="login-box row bg-white align-items-center" id="login">
+				<div class="col-md-6 justify-content-center d-flex">
+					<img src="{{ session.Image }}/Login/img-01.png" alt="" class="w-75">
+				</div>
+				<div class="col-md-6">
+					<p class="text-center pt-5 pt-md-0" id="login-title">Fcu Test Login</p>
+					<div class="d-flex justify-content-center">
+						<form method="post" class="validate-form">
+							<div class="input-icon validate-input">
+								<i class="ri-mail-line"></i>
+								<input type="text" name="user" placeholder="NID" id="NID" class="d-flex input100">
+							</div>
+							<div class="input-icon">
+								<i class="ri-lock-line"></i>
+								<i class="ri-eye-off-line ri-eye"></i>
+								<input type="password" name="password" placeholder="Password" id="password" class="d-flex">
+							</div>
+							<input type="submit" id="login-submit" value="登入">
+							<a href="/signup" class="d-flex justify-content-center text-success pt-3">Create your Account<i class="ri-arrow-right-line pl-1"></i>
+							</a>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 
-</body>
+		<script src="{{ session.Js }}Login/main.js"></script>
+		<script src="{{ session.Js }}jquery/jquery-3.7.1.min.js"></script>
+        <script src="{{ session.Js }}bootstrap/js/popper.js"></script>
+		<script src="{{ session.Js }}bootstrap/js/bootstrap.min.js"></script>
+		<script src="{{ session.Js }}Login/check.js"></script>
+	</body>
 </html>

@@ -73,6 +73,7 @@ body{
     background-color: #eee;
     width: 300px;
     padding: 12px;
+    padding-left: 35px;
     margin-bottom: 24px;
 }
 
@@ -99,4 +100,28 @@ body{
     color: #000;
     border: 0px;
 }
+
+.input-icon {
+    position: relative;
+}
+.input-icon input {
+    padding-left: 30px; 
+}
+.input-icon i {
+    position: absolute;
+    font-size: 20px;
+    left: 10px;
+    top: 50%; 
+    transform: translateY(-50%);
+    z-index: 1;
+}
+.input-icon .ri-eye {
+    position: absolute;
+    left: 270px;
+    top: 50%; 
+    transform: translateY(-50%);
+    z-index: 1;
+    cursor: pointer;
+}
+
 /* ========== Login css ========== */
