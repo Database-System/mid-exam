@@ -136,7 +136,7 @@ class Controller
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$user['id'], $courseID]);
         if (!$ret) return false;
-        return $stmt->fetch();
+        return true;
     }
     private function check_Course($courseID){
         $sql = "SELECT * FROM Course WHERE ID = ?";
