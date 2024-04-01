@@ -1,21 +1,42 @@
 <?php
 use PHPUnit\Framework\TestCase;
 use Exam\Core\Controller;
+use Exam\Core\Connect;
 require_once './src/Core/Controller.php';
 
 class Insert_and_Delete_Test extends TestCase
 {
     protected static $controller;
+    private static $handler;
 
     public static function setUpBeforeClass(): void
     {
-        self::$controller = new Controller();
-       
-        $handler = self::$controller->getHandler();
+        $connect = new Connect();
+        self::$handler = $connect->getHandler();
 
-        $handler->exec("ALTER TABLE TimeSlot AUTO_INCREMENT = 1;");
     }
-
+    protected function setUp():void
+    {
+        $this->delete_table();
+        self::$controller = new Controller();
+    }
+    private function delete_table()
+    {
+        $need_table=["TimeTable","CourseTimeSlots","TimeSlot","Course"];
+        foreach($need_table as $table)
+        {
+            if(!$this->table_Exists($table))
+            {
+                continue;
+            }
+            self::$handler->exec("DROP TABLE `$table`");
+        }
+    }
+    private function table_Exists($table)
+    {
+        $stmt = self::$handler->query("SHOW TABLES LIKE '$table'");
+        return !($stmt->rowCount() == 0);
+    }
     public function testInsertData()
     {
         // Insert test data and assert that each insertion is successful
@@ -56,5 +77,15 @@ class Insert_and_Delete_Test extends TestCase
         $this->assertTrue(self::$controller->delete_TimeSlot("Monday", "13:10:00", "15:00:00"));
         $this->assertTrue(self::$controller->delete_TimeSlot("Tuesday", "11:10:00", "12:00:00"));
         $this->assertTrue(self::$controller->delete_TimeSlot("Monday", "15:10:00", "17:00:00"));
+    }
+    //§R±¼
+    protected function tearDown(): void
+    {
+        $this->delete_table();
+    }
+    public static function tearDownAfterClass(): void
+    {
+        self::$controller = null;
+        self::$handler = null;
     }
 }
