@@ -29,11 +29,11 @@ class Controller
         "Course" => "CREATE TABLE `Course` (
             `ID` INT(10) UNSIGNED NOT NULL,
             `Name` VARCHAR(255) NOT NULL,
-            `dept` varchar(255) NOT NULL,
+            `dept` varchar(255) NULL,
             `request` TINYINT(1) NOT NULL DEFAULT 0,
             `Credits` INT(10) UNSIGNED NOT NULL,
             `MaxPeople` INT(10) UNSIGNED NOT NULL DEFAULT 0,
-            PRIMARY KEY (`ID`),
+            PRIMARY KEY (`ID`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;",
     
         "CourseTimeSlots" => "CREATE TABLE `CourseTimeSlots` (
