@@ -12,6 +12,7 @@ class Controller
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `username` varchar(50) NOT NULL,
             `password` varchar(255) NOT NULL,
+            `dept` varchar(255) NOT NULL,
             `Total_credits` int(10) UNSIGNED NOT NULL DEFAULT 0,
             PRIMARY KEY (`id`),
             UNIQUE KEY `username_UNIQUE` (`username`)
@@ -28,7 +29,10 @@ class Controller
         "Course" => "CREATE TABLE `Course` (
             `ID` INT(10) UNSIGNED NOT NULL,
             `Name` VARCHAR(255) NOT NULL,
+            `dept` varchar(255) NOT NULL,
+            `request` TINYINT(1) NOT NULL DEFAULT 0,
             `Credits` INT(10) UNSIGNED NOT NULL,
+            `MaxPeople` INT(10) UNSIGNED NOT NULL DEFAULT 0,
             PRIMARY KEY (`ID`),
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;",
 
