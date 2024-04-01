@@ -179,6 +179,7 @@ class Controller
         $user = $this->check_User($username);
 
         $course = $this->check_Course($courseID);
+        if (!$course) return false;
 
         $sql = "SELECT * FROM TimeTable WHERE user_id = ? AND course_ID = ?";
         $stmt = $this->handler->prepare($sql);
