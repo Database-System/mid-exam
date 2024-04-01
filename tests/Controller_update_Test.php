@@ -2,7 +2,6 @@
 use PHPUnit\Framework\TestCase;
 use Exam\Core\Controller;
 use Exam\Core\Connect;
-require_once './src/Core/Controller.php';
 
 class Controller_update_Test extends TestCase{
     protected static $controller;
@@ -16,14 +15,15 @@ class Controller_update_Test extends TestCase{
     {
         $this->delete_table();
         self::$controller = new Controller();
+        $this->insert_Users();
         $this->insert_Courses();
         $this->insert_timeslot();
-        $this->insert_timetable();
         $this->insert_coursetimeslots();
+        $this->insert_timetable();
     }
     private function delete_table()
     {
-        $need_table=["TimeTable","CourseTimeSlots","TimeSlot","Course"];
+        $need_table=["TimeTable","CourseTimeSlots","TimeSlot","Course","Users"];
         foreach($need_table as $table)
         {
             if(!$this->table_Exists($table))
@@ -37,6 +37,10 @@ class Controller_update_Test extends TestCase{
     {
         $stmt = self::$handler->query("SHOW TABLES LIKE '$table'");
         return !($stmt->rowCount() == 0);
+    }
+    private function insert_Users(){
+        $password = password_hash("12345678", PASSWORD_DEFAULT);
+        self::$controller->insert_User("test_user",$password);
     }
     private function insert_Courses(){
         $sql = "INSERT INTO Course (ID, Name, Credits) VALUES 
@@ -111,7 +115,6 @@ class Controller_update_Test extends TestCase{
     }
     public function testDisplayUserTimeTable(){
         $result = self::$controller->display_User_TimeTable('test_user');
-        echo var_dump($result);
         $expected = [
             ["Name"=>"系統程式","day"=>"星期一","start_time"=>"10:10:00","end_time"=>"12:00:00"],
             ["Name"=>"系統程式","day"=>"星期三","start_time"=>"11:10:00","end_time"=>"12:00:00"],
@@ -119,8 +122,7 @@ class Controller_update_Test extends TestCase{
             ["Name"=>"班級活動","day"=>"星期二","start_time"=>"16:10:00","end_time"=>"17:00:00"],
             ["Name"=>"華語教材教法","day"=>"星期四","start_time"=>"18:30:00","end_time"=>"20:15:00"]
         ];
-        echo var_dump($expected);
-        // $this->assertEquals($expected,$result);
+        $this->assertEquals($expected,$result);
     }
     public function tearDown(): void { 
         $this->delete_table();
