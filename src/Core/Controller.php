@@ -17,7 +17,7 @@ class Controller
             PRIMARY KEY (`id`),
             UNIQUE KEY `username_UNIQUE` (`username`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;",
-    
+
         "TimeSlot" => "CREATE TABLE `TimeSlot` (
             `time_slot_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
             `day` VARCHAR(255) NOT NULL,
@@ -25,7 +25,7 @@ class Controller
             `end_time` TIME NOT NULL,
             PRIMARY KEY (`time_slot_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;",
-    
+
         "Course" => "CREATE TABLE `Course` (
             `ID` INT(10) UNSIGNED NOT NULL,
             `Name` VARCHAR(255) NOT NULL,
@@ -35,7 +35,7 @@ class Controller
             `MaxPeople` INT(10) UNSIGNED NOT NULL DEFAULT 0,
             PRIMARY KEY (`ID`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;",
-    
+
         "CourseTimeSlots" => "CREATE TABLE `CourseTimeSlots` (
             `Course_ID` INT(10) UNSIGNED NOT NULL,
             `Time_Slot_ID` INT(10) UNSIGNED NOT NULL,
@@ -43,7 +43,7 @@ class Controller
             FOREIGN KEY (`Course_ID`) REFERENCES `Course`(`ID`),
             FOREIGN KEY (`Time_Slot_ID`) REFERENCES `TimeSlot`(`time_slot_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;",
-    
+
         "TimeTable" => "CREATE TABLE `TimeTable` (
             `course_ID` INT(10) UNSIGNED NOT NULL,
             `time_slot_id` INT(10) UNSIGNED NOT NULL,
@@ -57,9 +57,10 @@ class Controller
     {
         $connect = new Connect();
         $this->handler = $connect->getHandler();
-        if (!isset($this->handler)) die("Can't get DB handler");
+        if (!isset($this->handler))
+            die("Can't get DB handler");
         $this->init_Table();
-    }    
+    }
     private function init_Table(): void
     {
         foreach ($this->need_tables as $table => $val) {
@@ -72,13 +73,14 @@ class Controller
     {
         $stmt = $this->handler->query("SHOW TABLES LIKE '$table'");
         return !($stmt->rowCount() == 0);
-    }    
-    public function insert_User(string $user, string $password): bool | array 
+    }
+    public function insert_User(string $user, string $password): bool|array
     {
         $sql = "INSERT INTO Users (`username`,`password`) VALUES (?,?)";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$user, $password]);
-        if (!$ret) return false;
+        if (!$ret)
+            return false;
         return $stmt->fetch();
     }
     public function check_User(string $user): bool|array
@@ -86,43 +88,48 @@ class Controller
         $sql = "SELECT * from `Users` WHERE `username` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$user]);
-        if (!$ret) return false;
+        if (!$ret)
+            return false;
         return $stmt->fetch();
     }
 
-    public function insert_TimeSlot(string $day,string $start_time,string $end_time)
+    public function insert_TimeSlot(string $day, string $start_time, string $end_time)
     {
         $sql = "INSERT INTO TimeSlot (`day`,`start_time`,`end_time`) VALUES (?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$day,$start_time,$end_time]);
-        if (!$ret) return false;
+        $ret = $stmt->execute([$day, $start_time, $end_time]);
+        if (!$ret)
+            return false;
         return true;
     }
 
-    public function insert_Course(int $ID,string $Name,int $Credits)
+    public function insert_Course(int $ID, string $Name, int $Credits)
     {
         $sql = "INSERT INTO Course (`ID`,`Name`,`Credits`) VALUES (?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$ID,$Name,$Credits]);
-        if (!$ret) return false;
+        $ret = $stmt->execute([$ID, $Name, $Credits]);
+        if (!$ret)
+            return false;
         return true;
     }
 
-    public function insert_CourseTimeSlots(int $Course_ID,int $Time_Slot_ID)
+    public function insert_CourseTimeSlots(int $Course_ID, int $Time_Slot_ID)
     {
         $sql = "INSERT INTO CourseTimeSlots (`Course_ID`,`Time_Slot_ID`) VALUES (?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$Course_ID,$Time_Slot_ID]);
-        if (!$ret) return false;
+        $ret = $stmt->execute([$Course_ID, $Time_Slot_ID]);
+        if (!$ret)
+            return false;
         return true;
     }
 
-    public function insert_TimeTable(int $course_ID,int $time_slot_id,int $user_id)
+    public function insert_TimeTable(int $course_ID, int $time_slot_id, int $user_id)
     {
         $sql = "INSERT INTO TimeTable (`course_ID`,`time_slot_id`,`user_id`) VALUES (?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$course_ID,$time_slot_id,$user_id]);
-        if (!$ret) return false;
+        $ret = $stmt->execute([$course_ID, $time_slot_id, $user_id]);
+        if (!$ret)
+            return false;
         return true;
     }
 
@@ -131,7 +138,8 @@ class Controller
         $sql = "DELETE FROM `TimeSlot` WHERE `day` = ? AND `start_time` = ? AND `end_time` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$day, $start_time, $end_time]);
-        if (!$ret) return false;
+        if (!$ret)
+            return false;
         return true;
     }
 
@@ -140,7 +148,8 @@ class Controller
         $sql = "DELETE FROM `Course` WHERE `ID` = ? AND `Name` = ? AND `Credits` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$ID, $Name, $Credits]);
-        if (!$ret) return false;
+        if (!$ret)
+            return false;
         return true;
     }
 
@@ -150,7 +159,8 @@ class Controller
         $sql = "DELETE FROM `TimeTable` WHERE `course_ID` = ? AND `time_slot_id` = ? AND `user_id` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$course_id, $time_slot_id, $user_id]);
-        if (!$ret) return false;
+        if (!$ret)
+            return false;
         return true;
     }
 
@@ -159,8 +169,48 @@ class Controller
         $sql = "DELETE FROM `CourseTimeSlots` WHERE `course_ID` = ? AND `time_Slot_ID` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$course_id, $time_slot_id]);
-        if (!$ret) return false;
+        if (!$ret)
+            return false;
         return true;
     }
-    
+    //search
+    public function search_User_TimeTable(string $username, int $courseID):bool
+    {
+        $user = $this->check_User( $username);
+
+        $course = $this->check_Course($courseID);
+
+        $sql = "SELECT * FROM TimeTable WHERE user_id = ? AND course_ID = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$user['id'], $courseID]);
+        if (!$ret)
+            return false;
+        return true;
+    }
+    private function check_Course(int $courseID):bool|array
+    {
+        $sql = "SELECT * FROM Course WHERE ID = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$courseID]);
+        if (!$ret)
+            return false;
+        return $stmt->fetch();
+
+    }
+
+    //update
+    public function display_User_TimeTable(string $username):bool|array
+    {
+        $sql = "SELECT Course.Name, TimeSlot.day, TimeSlot.start_time, TimeSlot.end_time
+                FROM Users
+                INNER JOIN TimeTable ON Users.id = TimeTable.user_id
+                INNER JOIN Course ON TimeTable.course_ID = Course.ID
+                INNER JOIN TimeSlot ON TimeTable.time_slot_id = TimeSlot.time_slot_id
+                WHERE Users.username = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$username]);
+        if (!$ret)
+            return false;
+        return $stmt->fetchAll();
+    }
 }
