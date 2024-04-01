@@ -12,7 +12,7 @@ class Controller
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `username` varchar(50) NOT NULL,
             `password` varchar(255) NOT NULL,
-            `dept` varchar(255) NOT NULL,
+            `dept` varchar(255) NULL,
             `Total_credits` int(10) UNSIGNED NOT NULL DEFAULT 0,
             PRIMARY KEY (`id`),
             UNIQUE KEY `username_UNIQUE` (`username`)
@@ -174,9 +174,9 @@ class Controller
         return true;
     }
     //search
-    public function search_User_TimeTable(string $username, int $courseID):bool
+    public function search_User_TimeTable(string $username, int $courseID): bool
     {
-        $user = $this->check_User( $username);
+        $user = $this->check_User($username);
 
         $course = $this->check_Course($courseID);
 
@@ -187,7 +187,7 @@ class Controller
             return false;
         return true;
     }
-    private function check_Course(int $courseID):bool|array
+    private function check_Course(int $courseID): bool|array
     {
         $sql = "SELECT * FROM Course WHERE ID = ?";
         $stmt = $this->handler->prepare($sql);
@@ -195,11 +195,10 @@ class Controller
         if (!$ret)
             return false;
         return $stmt->fetch();
-
     }
 
     //update
-    public function display_User_TimeTable(string $username):bool|array
+    public function display_User_TimeTable(string $username): bool|array
     {
         $sql = "SELECT Course.Name, TimeSlot.day, TimeSlot.start_time, TimeSlot.end_time
                 FROM Users
