@@ -11,10 +11,7 @@ class Insert_and_Delete_Test extends TestCase
     {
         self::$controller = new Controller();
        
-        $reflection = new \ReflectionClass(self::$controller);
-        $handlerProperty = $reflection->getProperty('handler');
-        $handlerProperty->setAccessible(true);
-        $handler = $handlerProperty->getValue(self::$controller);
+        $handler = self::$controller->getHandler();
 
         $handler->exec("ALTER TABLE TimeSlot AUTO_INCREMENT = 1;");
     }
