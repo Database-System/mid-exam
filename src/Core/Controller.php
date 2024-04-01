@@ -89,43 +89,6 @@ class Controller
         return $stmt->fetch();
     }
 
-    //insert
-    public function insert_TimeSlot(string $day,string $start_time,string $end_time)
-    {
-        $sql = "INSERT INTO TimeSlot (`day`,`start_time`,`end_time`) VALUES (?,?,?)";
-        $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$day,$start_time,$end_time]);
-        if (!$ret) return false;
-        return true;
-    }
-
-    public function insert_Course(int $ID,string $Name,int $Credits)
-    {
-        $sql = "INSERT INTO Course (`ID`,`Name`,`Credits`) VALUES (?,?,?)";
-        $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$ID,$Name,$Credits]);
-        if (!$ret) return false;
-        return true;
-    }
-
-    public function insert_CourseTimeSlots(int $Course_ID,int $Time_Slot_ID)
-    {
-        $sql = "INSERT INTO CourseTimeSlots (`Course_ID`,`Time_Slot_ID`) VALUES (?,?)";
-        $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$Course_ID,$Time_Slot_ID]);
-        if (!$ret) return false;
-        return true;
-    }
-
-    public function insert_TimeTable(int $course_ID,int $time_slot_id,int $user_id)
-    {
-        $sql = "INSERT INTO TimeTable (`course_ID`,`time_slot_id`,`user_id`) VALUES (?,?,?)";
-        $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$course_ID,$time_slot_id,$user_id]);
-        if (!$ret) return false;
-        return true;
-    }
-    
     //search
     public function search_User_TimeTable($username, $courseID){
         $user = $this->check_User($username);
@@ -160,18 +123,7 @@ class Controller
         if(!$ret) return false;
         $result = $stmt->fetchAll();
 
-        $timetableData =[];
-
-        if ($result) {
-            foreach($result as $row){
-                $timetableData[]=[
-                    'Name'=>$row['Name'],
-                    'day'=>$row['day'],
-                    'start_time'=>$row['start_time'],
-                    'end_time'=>$row['end_time']
-                ];
-            }
-        }
-        return $timetableData;
+        if (!$result) return false;
+        else return true;
     }
 }
