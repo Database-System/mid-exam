@@ -90,7 +90,7 @@ class Controller
         return $stmt->fetch();
     }
 
-    public function insert_TimeSlot(string $day,string $start_time,string $end_time)
+    public function insert_TimeSlot(string $day,string $start_time,string $end_time): bool
     {
         $sql = "INSERT INTO TimeSlot (`day`,`start_time`,`end_time`) VALUES (?,?,?)";
         $stmt = $this->handler->prepare($sql);
@@ -99,16 +99,16 @@ class Controller
         return true;
     }
 
-    public function insert_Course(int $ID,string $Name,int $Credits)
+    public function insert_Course(int $ID,string $Name,string $dept,int $Credits,int $request,int $MaxPeople): bool
     {
-        $sql = "INSERT INTO Course (`ID`,`Name`,`Credits`) VALUES (?,?,?)";
+        $sql = "INSERT INTO Course (`ID`,`Name`,`dept`,`request`,`Credits`,`MaxPeople`) VALUES (?,?,?,?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$ID,$Name,$Credits]);
+        $ret = $stmt->execute([$ID,$Name,$dept,$request,$Credits,$MaxPeople]);
         if (!$ret) return false;
         return true;
     }
 
-    public function insert_CourseTimeSlots(int $Course_ID,int $Time_Slot_ID)
+    public function insert_CourseTimeSlots(int $Course_ID,int $Time_Slot_ID): bool
     {
         $sql = "INSERT INTO CourseTimeSlots (`Course_ID`,`Time_Slot_ID`) VALUES (?,?)";
         $stmt = $this->handler->prepare($sql);
@@ -117,7 +117,7 @@ class Controller
         return true;
     }
 
-    public function insert_TimeTable(int $course_ID,int $time_slot_id,int $user_id)
+    public function insert_TimeTable(int $course_ID,int $time_slot_id,int $user_id): bool
     {
         $sql = "INSERT INTO TimeTable (`course_ID`,`time_slot_id`,`user_id`) VALUES (?,?,?)";
         $stmt = $this->handler->prepare($sql);
@@ -126,7 +126,7 @@ class Controller
         return true;
     }
 
-    public function delete_TimeSlot(string $day, string $start_time, string $end_time)
+    public function delete_TimeSlot(string $day, string $start_time, string $end_time): bool
     {
         $sql = "DELETE FROM `TimeSlot` WHERE `day` = ? AND `start_time` = ? AND `end_time` = ?";
         $stmt = $this->handler->prepare($sql);
@@ -135,17 +135,17 @@ class Controller
         return true;
     }
 
-    public function delete_Course(int $ID, string $Name, int $Credits)
+    public function delete_Course(int $ID, string $Name, string $dept, int $Credits,int $request ,int $MaxPeople): bool
     {
-        $sql = "DELETE FROM `Course` WHERE `ID` = ? AND `Name` = ? AND `Credits` = ?";
+        $sql = "DELETE FROM `Course` WHERE `ID` = ? AND `Name` = ? AND `dept` AND `Credits` = ? AND `request` = ? AND `MaxPeople` = ?";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$ID, $Name, $Credits]);
+        $ret = $stmt->execute([$ID,$Name,$dept,$Credits,$request,$MaxPeople]);
         if (!$ret) return false;
         return true;
     }
 
 
-    public function delete_TimeTable(int $course_id, int $time_slot_id, int $user_id)
+    public function delete_TimeTable(int $course_id, int $time_slot_id, int $user_id): bool
     {
         $sql = "DELETE FROM `TimeTable` WHERE `course_ID` = ? AND `time_slot_id` = ? AND `user_id` = ?";
         $stmt = $this->handler->prepare($sql);
@@ -154,7 +154,7 @@ class Controller
         return true;
     }
 
-    public function delete_CourseTimeSlots(int $course_id, int $time_slot_id)
+    public function delete_CourseTimeSlots(int $course_id, int $time_slot_id): bool
     {
         $sql = "DELETE FROM `CourseTimeSlots` WHERE `course_ID` = ? AND `time_Slot_ID` = ?";
         $stmt = $this->handler->prepare($sql);
