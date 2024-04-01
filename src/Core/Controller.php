@@ -52,15 +52,15 @@ class Controller
             FOREIGN KEY (`time_slot_id`) REFERENCES `TimeSlot`(`time_slot_id`),
             FOREIGN KEY (`user_id`) REFERENCES `Users`(`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;"
-    ];
+    ];    
     public function __construct()
     {
         $connect = new Connect();
         $this->handler = $connect->getHandler();
         if (!isset($this->handler)) die("Can't get DB handler");
         $this->init_Table();
-    }
-    private function init_Table()
+    }    
+    private function init_Table(): void
     {
         foreach ($this->need_tables as $table => $val) {
             if (!$this->table_Exists($table)) {
@@ -68,12 +68,12 @@ class Controller
             }
         }
     }
-    private function table_Exists($table)
+    private function table_Exists(string $table): bool
     {
         $stmt = $this->handler->query("SHOW TABLES LIKE '$table'");
         return !($stmt->rowCount() == 0);
-    }
-    public function insert_User(string $user, string $password)
+    }    
+    public function insert_User(string $user, string $password): void
     {
         $sql = "INSERT INTO Users (`username`,`password`) VALUES (?,?)";
         $stmt = $this->handler->prepare($sql);
@@ -83,7 +83,7 @@ class Controller
             die("SQL 錯誤：" . $errorInfo[2]);
         }
     }
-    public function check_User(string $user)
+    public function check_User(string $user): bool|array
     {
         $sql = "SELECT * from `Users` WHERE `username` = ?";
         $stmt = $this->handler->prepare($sql);
