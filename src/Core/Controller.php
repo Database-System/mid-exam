@@ -29,7 +29,7 @@ class Controller
         "Course" => "CREATE TABLE `Course` (
             `ID` INT(10) UNSIGNED NOT NULL,
             `Name` VARCHAR(255) NOT NULL,
-            `dept` varchar(255) NULL,
+            `dept` VARCHAR(255) NULL,
             `request` TINYINT(1) NOT NULL DEFAULT 0,
             `Credits` INT(10) UNSIGNED NOT NULL,
             `MaxPeople` INT(10) UNSIGNED NOT NULL DEFAULT 0,
@@ -99,11 +99,11 @@ class Controller
         return true;
     }
 
-    public function insert_Course(int $ID,string $Name,int $Credits)
+    public function insert_Course(int $ID,string $Name,string $dept,int $request,int $Credits,int $MaxPeople): bool
     {
-        $sql = "INSERT INTO Course (`ID`,`Name`,`Credits`) VALUES (?,?,?)";
+        $sql = "INSERT INTO Course (`ID`,`Name`,`dept`,`request`,`Credits`,`MaxPeople`) VALUES (?,?,?,?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$ID,$Name,$Credits]);
+        $ret = $stmt->execute([$ID,$Name,$dept,$request,$Credits,$MaxPeople]);
         if (!$ret) return false;
         return true;
     }
@@ -135,11 +135,11 @@ class Controller
         return true;
     }
 
-    public function delete_Course(int $ID, string $Name, int $Credits)
+    public function delete_Course(int $ID, string $Name, string $dept,int $request, int $Credits ,int $MaxPeople): bool
     {
-        $sql = "DELETE FROM `Course` WHERE `ID` = ? AND `Name` = ? AND `Credits` = ?";
+        $sql = "DELETE FROM `Course` WHERE `ID` = ? AND `Name` = ? AND `dept` = ? AND `request` = ? AND `Credits` = ? AND `MaxPeople` = ?";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$ID, $Name, $Credits]);
+        $ret = $stmt->execute([$ID,$Name,$dept,$request,$Credits,$MaxPeople]);
         if (!$ret) return false;
         return true;
     }
