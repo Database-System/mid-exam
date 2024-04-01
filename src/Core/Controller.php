@@ -12,6 +12,7 @@ class Controller
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `username` varchar(50) NOT NULL,
             `password` varchar(255) NOT NULL,
+            `dept` varchar(255) NOT NULL,
             `Total_credits` int(10) UNSIGNED NOT NULL DEFAULT 0,
             PRIMARY KEY (`id`),
             UNIQUE KEY `username_UNIQUE` (`username`)
@@ -28,8 +29,11 @@ class Controller
         "Course" => "CREATE TABLE `Course` (
             `ID` INT(10) UNSIGNED NOT NULL,
             `Name` VARCHAR(255) NOT NULL,
+            `dept` varchar(255) NOT NULL,
+            `request` TINYINT(1) NOT NULL DEFAULT 0,
             `Credits` INT(10) UNSIGNED NOT NULL,
-            PRIMARY KEY (`ID`)
+            `MaxPeople` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+            PRIMARY KEY (`ID`),
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;",
     
         "CourseTimeSlots" => "CREATE TABLE `CourseTimeSlots` (
@@ -49,16 +53,14 @@ class Controller
             FOREIGN KEY (`user_id`) REFERENCES `Users`(`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;"
     ];
-    
     public function __construct()
     {
         $connect = new Connect();
         $this->handler = $connect->getHandler();
         if (!isset($this->handler)) die("Can't get DB handler");
         $this->init_Table();
-    }
-    
-    private function init_Table()
+    }    
+    private function init_Table(): void
     {
         foreach ($this->need_tables as $table => $val) {
             if (!$this->table_Exists($table)) {
@@ -66,14 +68,12 @@ class Controller
             }
         }
     }
-
-    private function table_Exists($table)
+    private function table_Exists(string $table): bool
     {
         $stmt = $this->handler->query("SHOW TABLES LIKE '$table'");
         return !($stmt->rowCount() == 0);
-    }
-
-    public function insert_User(string $user, string $password)
+    }    
+    public function insert_User(string $user, string $password): void
     {
         $sql = "INSERT INTO Users (`username`,`password`) VALUES (?,?)";
         $stmt = $this->handler->prepare($sql);
@@ -81,8 +81,7 @@ class Controller
         if (!$ret) return false;
         return $stmt->fetch();
     }
-
-    public function check_User(string $user)
+    public function check_User(string $user): bool|array
     {
         $sql = "SELECT * from `Users` WHERE `username` = ?";
         $stmt = $this->handler->prepare($sql);

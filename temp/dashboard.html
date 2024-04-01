@@ -1,0 +1,453 @@
+<html>
+
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FCU測試選課系統</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../src/Resource/Css/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body>
+
+  <div class="dashboad">
+    <header class="title">FCU測試選課系統</header>
+    <div class="sidebar-icon">☰</div>
+    <aside class="sidebar">
+      <div class="login-info">
+        <header>登入資訊</header>
+        <div class="info-item">
+          <span>學號:
+          </span>
+          <span>D1109109</span>
+        </div>
+        <div class="info-item">
+          <span>學分上限:
+          </span>
+          <span>25</span>
+        </div>
+        <div class="info-item">
+          <span>學分下限:
+          </span>
+          <span>12</span>
+        </div>
+        <div class="info-item">
+          <span>已選學分:
+          </span>
+          <span>0</span>
+        </div>
+        <button id="logout">登出</button>
+      </div>
+      <div class="icontext">
+        <div>
+          <span id="1"></span>表示該節次為關注科目
+        </div>
+        <div>
+          <span id="2"></span>表示該節次為已選科目
+        </div>
+        <div>
+          <span id="3"></span>表示該節次為已登記科目
+        </div>
+        <div>
+          <span id="4"></span>表示該節次有1科以上之關注科目
+        </div>
+      </div>
+      <div class="calendar">
+
+        <table>
+          <caption>
+            Front-end web developer course 2021
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">一</th>
+              <th scope="col">二</th>
+              <th scope="col">三</th>
+              <th scope="col">四</th>
+              <th scope="col">五</th>
+              <th scope="col">六</th>
+              <th scope="col">日</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <th scope="row">4</th>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+                <th scope="row">5</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">6</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">7</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">8</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">9</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">10</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">11</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">12</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">13</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+                <th scope="row">14</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </aside>
+    <main class="main-content">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button" role="tab" aria-controls="search" aria-selected="true">課程檢索</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="selected-tab" data-bs-toggle="tab" data-bs-target="#selected" type="button" role="tab" aria-controls="selected" aria-selected="false">已選課表</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="search" role="tabpanel" aria-labelledby="search-tab">
+          <form action="" class="form-box">
+            <p class="form-title mt-4">一、依照開課系所查詢：</p>
+            <div class="row">
+                <p class="col-md-6 col-xl-3 pl-5">學制：<input type="text" class="form-input"></p>
+                <p class="col-md-6 col-xl-3 pl-5">學院：<input type="text" class="form-input"></p>
+                <p class="col-md-6 col-xl-3 pl-5">系所：<input type="text" class="form-input"></p>
+                <p class="col-md-6 col-xl-3 pl-5">班級：<input type="text" class="form-input"></p>
+            </div>
+            <input type="submit" value="查詢" class="ml-4 mb-4">
+          </form>
+          <form action="" class="form-box">
+            <p class="form-title mt-4">二、依照輸入條件查詢：</p>
+            <div class="row">
+                <div class="col-xl-6">
+                    <p class="pl-4"><input type="checkbox" class="mr-1">選課代碼：<input type="text" class=""></p>
+                    <p class="pl-4"><input type="checkbox" class="mr-1">星期：　　<input type="text" class="w-25">　節次：<input type="text" class="w-25"></p>
+                    <p class="pl-4"><input type="checkbox" class="mr-1">科目名稱：<input type="text" class=""></p>
+
+                </div>
+                <div class="col-xl-6">
+                    <p class="pl-4"><input type="checkbox" class="mr-1">開課老師姓名：<input type="text" class=""></p>
+                    <p class="pl-4"><input type="checkbox" class="mr-1">授課語言：　　<input type="text" class=""></p>
+                    <p class="pl-4"><input type="checkbox" class="mr-1">特定科目：　　<input type="text" class=""></p>
+                </div>
+            </div>
+            <input type="submit" value="查詢" class="ml-4 mb-4">
+          </form>
+          <div id="search-result">
+            <p>查詢結果：</p>
+            <div class="">
+
+                <!-- 查詢結果放這裡 -->
+
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="selected" role="tabpanel" aria-labelledby="selected-tab">
+            <div id="function-area" class="selected-class">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <p>選課代碼：<input type="text" class=""><input type="submit" value="查詢"></p>
+                        <a href="">從關注清單選課<span>（0）</span></a>
+                    </div>
+                    <div class="col-xl-6">
+                        <p class="pt-xl-0 pt-4">訊息區：</p>
+                    </div>
+                </div>
+            </div>
+            <div id="selected-area" class="selected-class">
+                <input type="submit" value="列印">
+                <p class="text-primary d-inline text-right">已過學分 2/2</p>
+                <div class="d-flex justify-content-center mb-4 mt-2">
+                    <table>        
+                        <thead>
+                          <tr>
+                            <th scope="col"></th>
+                            <th scope="col">星期一</th>
+                            <th scope="col">星期二</th>
+                            <th scope="col">星期三</th>
+                            <th scope="col">星期四</th>
+                            <th scope="col">星期五</th>
+                            <th scope="col">星期六</th>
+                            <th scope="col">星期日</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">1</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">2</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">4</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                              <th scope="row">5</th>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                          </tr>
+                          <tr>
+                              <th scope="row">6</th>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                          </tr>
+                          <tr>
+                              <th scope="row">7</th>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                          </tr>
+                          <tr>
+                              <th scope="row">8</th>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                          </tr>
+                          <tr>
+                              <th scope="row">9</th>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                          </tr>
+                          <tr>
+                              <th scope="row">10</th>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                          </tr>
+                          <tr>
+                              <th scope="row">11</th>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                          </tr>
+                          <tr>
+                              <th scope="row">12</th>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                          </tr>
+                          <tr>
+                              <th scope="row">13</th>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                              <th scope="row" class="text-left">14</th>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                          </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+
+</html>
