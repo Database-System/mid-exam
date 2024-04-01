@@ -73,7 +73,7 @@ class Controller
         $stmt = $this->handler->query("SHOW TABLES LIKE '$table'");
         return !($stmt->rowCount() == 0);
     }    
-    public function insert_User(string $user, string $password): void
+    public function insert_User(string $user, string $password): bool | array 
     {
         $sql = "INSERT INTO Users (`username`,`password`) VALUES (?,?)";
         $stmt = $this->handler->prepare($sql);
