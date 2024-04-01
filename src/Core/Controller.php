@@ -182,7 +182,7 @@ class Controller
 
         $sql = "SELECT * FROM TimeTable WHERE user_id = ? AND course_ID = ?";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$user['id'], $courseID]);
+        $ret = $stmt->execute([$user['id'], $course['ID']]);
         if (!$ret)
             return false;
         return true;
