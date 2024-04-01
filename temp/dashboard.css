@@ -153,6 +153,11 @@ table {
   font-family: sans-serif;
   font-size: 0.8rem;
   letter-spacing: 1px;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap; 
+  /* table-layout: fixed;
+  word-break: break-all; */
 }
 
 caption {
@@ -213,6 +218,8 @@ tfoot td {
   margin-top: 10px;
   padding: 10px;
 }
+
+
 
 @media screen and (max-width: 1200px) {
   .dashboad {

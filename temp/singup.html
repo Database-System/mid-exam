@@ -25,12 +25,12 @@
                     <form action="" class="validate-form">
                         <div class="input-icon validate-input">
                             <i class="ri-mail-line"></i>     
-                            <input type="email" name="" placeholder="　　NID" id="NID" class="d-flex input100">
+                            <input type="email" name="" placeholder="NID" id="NID" class="d-flex input100">
                         </div>
                         <div class="input-icon">
                             <i class="ri-lock-line"></i> 
                             <i class="ri-eye-off-line ri-eye"></i>
-                            <input type="password" name="" placeholder="　　Password"  id="password" class="d-flex">
+                            <input type="password" name="" placeholder="Password"  id="password" class="d-flex">
                         </div>
                         <input type="submit" id="login-submit" value="註冊">
                     </form>
@@ -45,20 +45,6 @@
 
     <script>
         $(document).ready(function(){
-            $('#NID').on('input', function(){
-                if ($(this).val().trim() !== "") {
-                    $('.ri-mail-line').addClass("d-none")
-                } else {
-                    $('.ri-mail-line').removeClass("d-none")
-                }
-            });
-            $('#password').on('input', function(){
-                if ($(this).val().trim() !== "") {
-                    $('.ri-lock-line').addClass("d-none")
-                } else {
-                    $('.ri-lock-line').removeClass("d-none")
-                }
-            });
             $('.ri-eye').click(function(){
             var input = $('#password');
             var icon = $(this);
