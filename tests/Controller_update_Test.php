@@ -124,6 +124,21 @@ class Controller_update_Test extends TestCase{
         ];
         $this->assertEquals($expected,$result);
     }
+    public function testUpdate(){
+        
+        $result1=self::$controller->updateCourse(1312,'系統程式','information',2,1,30);
+        $this->assertTrue($result1);
+
+        $result2=self::$controller->updateTimeSlots(6, '星期二', '10:30:00','11:00:00');
+        $this->assertTrue($result2);
+
+        $this->assertTrue(self::$controller->update_User_dept("D1185384","Computer_Science"));
+
+        $this->assertTrue(self::$controller->update_User_TotalCerdits("D1185384"));
+
+        $result4=self::$controller->updateCourseTimeSlots(1312,3);
+        $this->assertTrue($result4);
+    }
     public function tearDown(): void { 
         $this->delete_table();
     }

@@ -2,6 +2,7 @@
 
 namespace Exam\Core;
 
+use DateTime;
 use Exam\Core\Connect;
 
 class Controller
@@ -196,8 +197,6 @@ class Controller
             return false;
         return $stmt->fetch();
     }
-
-    //update
     public function display_User_TimeTable(string $username): bool|array
     {
         $sql = "SELECT Course.Name, TimeSlot.day, TimeSlot.start_time, TimeSlot.end_time
@@ -211,5 +210,70 @@ class Controller
         if (!$ret)
             return false;
         return $stmt->fetchAll();
+    }
+
+    // public function updateUsers(int $id, string $username, string $password, string $dept, int $total_credits): bool
+    // {
+    //     $sql = "UPDATE Users SET `username` = ?,`password` = ?,`dept`= ?,`Total_credits`=? WHERE `id` = ?";
+    //     $stmt = $this->handler->prepare($sql);
+    //     $ret = $stmt->execute([$id, $username, $dept, $password, $total_credits]);
+    //     if (!$ret) return false;
+    //     return true;
+    // }
+
+    public function updateCourse(int $ID, string $Name, string $dept, int $credits, int $request,int $Maxpeople): bool
+    {
+        $sql = "UPDATE Course SET `Name` = ?,`Credits` = ?,`dept`= ?, `request`=?,`Maxpeople`=? WHERE `ID` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$ID, $Name, $dept, $request, $credits, $Maxpeople]);
+        if (!$ret) return false;
+        return true;
+    }
+
+    public function Update_User_dept(string $username, string $dept): bool
+    {
+        $sql = "UPDATE Users SET `dept` = ? WHERE `username` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$dept, $username]);
+        if (!$ret) return false;
+        return true;
+    }
+
+    public function Update_User_TotalCerdits(string $username): bool
+    {
+        $calcTotalCreditsSql = "SELECT SUM(Course.Credits) as Total_credits
+                            FROM Users
+                            INNER JOIN TimeTable ON Users.id = TimeTable.user_id
+                            INNER JOIN Course ON TimeTable.course_ID = Course.ID
+                            WHERE Users.username = ?";
+        $calcStmt = $this->handler->prepare($calcTotalCreditsSql);
+        $calcStmt->execute([$username]);
+        $result = $calcStmt->fetch();
+        
+        $sql = "UPDATE Users SET `Total_credits` = ? WHERE `username` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$result, $username]);
+        if (!$ret) return false;
+        return true;
+    }
+
+    public function updateTimeSlots(int $time_slot_id, string $day,string $start_time,string $end_time): bool
+    {
+        $start_datetime=strtotime($start_time);
+        $end_datetime=strtotime($end_time);
+
+        $sql = "UPDATE TimeSlot SET `day` = ?,`start_time` = FROM_UNIXTIME(?),`end_time`=FROM_UNIXTIME(?) WHERE `time_slot_id` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$day,$start_datetime,$end_datetime,$time_slot_id]);
+        if (!$ret) return false;
+        return true;
+    }
+    public function updateCourseTimeSlots(int $Course_ID, int $Time_Slot_ID): bool
+    {
+        $sql = "UPDATE CourseTimeSlots SET `Time_Slot_id`=? WHERE `Course_ID` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$Course_ID, $Time_Slot_ID]);
+        if (!$ret) return false;
+        return true;
     }
 }
