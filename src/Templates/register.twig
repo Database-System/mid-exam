@@ -1,28 +1,44 @@
-{% extends "login.twig" %}
+{% extends 'base.twig' %}
 {% block head %}
-	{{ parent() }}
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{ title }}</title>
+	<link rel="stylesheet" type="text/css" href="{{ session.Css }}bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
+	<link rel="stylesheet" href="{{ session.Css }}style.css">
 {% endblock %}
-{% block form %}
-	<div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-		<input class="input100" type="text" name="user" placeholder="NID">
-		<span class="focus-input100"></span>
-		<span class="symbol-input100">
-			<i class="fa fa-envelope" aria-hidden="true"></i>
-		</span>
+{% block body %}
+
+	<div class="d-flex justify-content-center align-items-center m-auto" style="height: 100vh;">
+		<div class="login-box row bg-white align-items-center" id="login">
+			<div class="col-md-6 justify-content-center d-flex">
+				<img src="{{ session.Image }}/Login/img-01.png" alt="" class="w-75">
+			</div>
+			<div class="col-md-6">
+				<p class="text-center pt-5 pt-md-0" id="login-title">{{ formTitle }}</p>
+				<div class="d-flex justify-content-center">
+					<form method="post" class="validate-form">
+						<div class="input-icon validate-input">
+							<i class="ri-mail-line"></i>
+							<input type="text" name="user" placeholder="NID" id="NID" class="d-flex input100">
+						</div>
+						<div class="input-icon">
+							<i class="ri-lock-line"></i>
+							<i class="ri-eye-off-line ri-eye"></i>
+							<input type="password" name="password" placeholder="Password" id="password" class="d-flex">
+						</div>
+						<input type="submit" id="login-submit" value="註冊">
+						<a href="/login" class="d-flex justify-content-center text-success pt-3"><i class="ri-arrow-left-line pr-1"></i>Back to Login in</a>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 
-	<div class="wrap-input100 validate-input" data-validate="Password is required">
-		<input class="input100" type="password" name="password" placeholder="Password">
-		<span class="focus-input100"></span>
-		<span class="symbol-input100">
-			<i class="fa fa-lock" aria-hidden="true"></i>
-		</span>
-	</div>
-
-	<div class="container-login100-form-btn">
-		<button class="login100-form-btn">
-			Sign UP!!
-		</button>
-	</div>
-	<div class="text-center p-t-136"></div>
+	<script src="{{ session.Js }}Login/main.js"></script>
+	<script src="{{ session.Js }}jquery/jquery-3.7.1.min.js"></script>
+	<script src="{{ session.Js }}bootstrap/js/popper.js"></script>
+	<script src="{{ session.Js }}bootstrap/js/bootstrap.min.js"></script>
+	<script src="{{ session.Js }}Login/check.js"></script>
 {% endblock %}
