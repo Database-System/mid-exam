@@ -158,6 +158,7 @@ table {
   white-space: nowrap; 
   /* table-layout: fixed;
   word-break: break-all; */
+  max-height: 250px;
 }
 
 caption {
