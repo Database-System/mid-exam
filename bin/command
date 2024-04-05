@@ -15,7 +15,7 @@ case "$1" in
     ;;
     "test")
         shift
-        docker compose run --build --rm server ./vendor/bin/phpunit tests/"$1".php
+        docker compose run --build --rm server ./vendor/bin/phpunit tests/"$1"_Test.php
     ;;
     "composer")
         shift

@@ -7,11 +7,12 @@
   <title>FCU測試選課系統</title>
   <link rel="stylesheet" href="test.css" />
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../src/Resource/Css/Login/bootstrap/css/bootstrap.min.css">
 </head>
 
 <body>
 
-  <div class="container">
+  <div class="dashboad">
     <header class="title">FCU測試選課系統</header>
     <div class="sidebar-icon">☰</div>
     <aside class="sidebar">
@@ -107,9 +108,29 @@
         </table>
       </div>
     </aside>
-    <main class="main-content"></main>
+    <main class="main-content">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button" role="tab" aria-controls="search" aria-selected="true">課程檢索</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="selected-tab" data-bs-toggle="tab" data-bs-target="#selected" type="button" role="tab" aria-controls="selected" aria-selected="false">已選課表</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="search" role="tabpanel" aria-labelledby="search-tab">
+          <h3>課程檢索</h3>
+          <p>這是課程檢索的內容。</p>
+        </div>
+        <div class="tab-pane fade" id="selected" role="tabpanel" aria-labelledby="selected-tab">
+          <h3>已選課表</h3>
+          <p>這是已選課表的內容。</p>
+        </div>
+      </div>
+    </main>
     <footer>@Made BY Duacodie Inc.</footer>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="test.js"></script>
 </body>
 
