@@ -131,10 +131,8 @@ class Controller_update_Test extends TestCase{
 
         $result2=self::$controller->updateTimeSlots(6, '星期二', '10:30:00','11:00:00');
         $this->assertTrue($result2);
-
-        $this->assertTrue(self::$controller->update_User_dept("D1185384","Computer_Science"));
-
-        $this->assertTrue(self::$controller->update_User_TotalCerdits("D1185384"));
+        $this->assertTrue(self::$controller->update_User_dept("test_user","Computer_Science"));
+        $this->assertTrue(self::$controller->update_User_TotalCerdits("test_user"));
 
         $result4=self::$controller->updateCourseTimeSlots(1312,3);
         $this->assertTrue($result4);

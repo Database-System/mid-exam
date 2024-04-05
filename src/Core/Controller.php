@@ -3,6 +3,7 @@
 namespace Exam\Core;
 
 use DateTime;
+use Time;
 use Exam\Core\Connect;
 
 class Controller
@@ -212,15 +213,6 @@ class Controller
         return $stmt->fetchAll();
     }
 
-    // public function updateUsers(int $id, string $username, string $password, string $dept, int $total_credits): bool
-    // {
-    //     $sql = "UPDATE Users SET `username` = ?,`password` = ?,`dept`= ?,`Total_credits`=? WHERE `id` = ?";
-    //     $stmt = $this->handler->prepare($sql);
-    //     $ret = $stmt->execute([$id, $username, $dept, $password, $total_credits]);
-    //     if (!$ret) return false;
-    //     return true;
-    // }
-
     public function updateCourse(int $ID, string $Name, string $dept, int $credits, int $request,int $Maxpeople): bool
     {
         $sql = "UPDATE Course SET `Name` = ?,`Credits` = ?,`dept`= ?, `request`=?,`Maxpeople`=? WHERE `ID` = ?";
@@ -252,19 +244,25 @@ class Controller
         
         $sql = "UPDATE Users SET `Total_credits` = ? WHERE `username` = ?";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$result, $username]);
+        $ret = $stmt->execute([$result['Total_credits'], $username]);
         if (!$ret) return false;
         return true;
     }
 
     public function updateTimeSlots(int $time_slot_id, string $day,string $start_time,string $end_time): bool
     {
-        $start_datetime=strtotime($start_time);
-        $end_datetime=strtotime($end_time);
+        $start_datetime=DateTime::createFromFormat('H:i:s',$start_time);
+        $end_datetime=DateTime::createFromFormat('H:i:s',$end_time);
 
-        $sql = "UPDATE TimeSlot SET `day` = ?,`start_time` = FROM_UNIXTIME(?),`end_time`=FROM_UNIXTIME(?) WHERE `time_slot_id` = ?";
+        if(!$start_datetime || !$end_datetime) return false;
+
+        $start_time_formatted=$start_datetime->format('H:i:s');
+        $end_time_formatted=$end_datetime->format('H:i:s');
+
+        $sql = "UPDATE TimeSlot SET `day` = ?,`start_time` = ?,`end_time`=? WHERE `time_slot_id` = ?";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$day,$start_datetime,$end_datetime,$time_slot_id]);
+
+        $ret = $stmt->execute([$day,$start_time_formatted,$end_time_formatted,$time_slot_id]);
         if (!$ret) return false;
         return true;
     }
