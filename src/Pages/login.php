@@ -33,7 +33,7 @@ class Login
     }
     private function mark_User(array $data)
     {
-        $_SESSION['userID'] = $data["username"];
+        $_SESSION['userID'] = $data["id"];
         header('Location: /back/dashboard');
     }
 }

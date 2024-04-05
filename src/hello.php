@@ -1,5 +1,5 @@
 <?php
-    $ret = 20;
-    if ($ret == 20){
+    $ret = 10;
+    if ($ret == 10){
         echo $ret."Hello, Docker!";
     }

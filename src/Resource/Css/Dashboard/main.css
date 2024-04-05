@@ -7,11 +7,11 @@ p {
   margin: 0;
   padding: 0;
 }
-.dashboad {
+.container {
   display: grid;
   width: 100%;
   height: 100vh;
-  grid-template-columns: 325px 1fr;
+  grid-template-columns: minmax(200px, 20%) 1fr;
   grid-template-rows: auto 1fr 1fr auto;
   grid-template-areas:
     "header header"
@@ -44,7 +44,7 @@ p {
   width: 100%;
 }
 
-.FUC-dashboad > footer {
+.container > footer {
   grid-area: footer;
   background: #8cffa0;
   padding: 0.5rem;
@@ -148,75 +148,49 @@ p {
 }
 
 table {
-  border-collapse: collapse;
-  border: 2px solid rgb(140 140 140);
-  font-family: sans-serif;
-  font-size: 0.8rem;
-  letter-spacing: 1px;
-}
-
-caption {
-  caption-side: bottom;
-  padding: 10px;
-  font-weight: bold;
-}
-
-thead,
-tfoot {
-  background-color: rgb(228 240 245);
-}
-
-th,
-td {
-  border: 1px solid rgb(160 160 160);
-  padding: 8px 10px;
-}
-
-td:last-of-type {
-  text-align: center;
-}
-
-tbody > tr:nth-of-type(even) {
-  background-color: rgb(237 238 242);
-}
-
-tfoot th {
-  text-align: right;
-}
-
-tfoot td {
-  font-weight: bold;
-}
-
-.nav-tabs .nav-item{
-  border: 1px solid #000;
-  margin-right: 10px;
-}
-
-.form-title{
-  color: #fff;
-  background-color: #64a4b9;
-  padding: 8px;
-  font-weight: bold;
-}
-
-.form-input{
-  max-width: 120px;
-}
-
-.form-box{
-  background-color: #eee;
-}
-
-.selected-class{
-  border: #000 1px solid;
-  margin-top: 10px;
-  padding: 10px;
-}
+    border-collapse: collapse;
+    border: 2px solid rgb(140 140 140);
+    font-family: sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+  
+  caption {
+    caption-side: bottom;
+    padding: 10px;
+    font-weight: bold;
+  }
+  
+  thead,
+  tfoot {
+    background-color: rgb(228 240 245);
+  }
+  
+  th,
+  td {
+    border: 1px solid rgb(160 160 160);
+    padding: 8px 10px;
+  }
+  
+  td:last-of-type {
+    text-align: center;
+  }
+  
+  tbody > tr:nth-of-type(even) {
+    background-color: rgb(237 238 242);
+  }
+  
+  tfoot th {
+    text-align: right;
+  }
+  
+  tfoot td {
+    font-weight: bold;
+  }
 
 @media screen and (max-width: 1200px) {
-  .dashboad {
-    grid-template-columns: 325px 1fr;
+  .container {
+    grid-template-columns: minmax(200px, 20%) 1fr;
     grid-template-rows: auto 1fr 1fr auto;
     grid-template-areas:
       "header header"
@@ -242,9 +216,8 @@ tfoot td {
   }
 }
 
-
 @media screen and (max-width: 768px) {
-  .dashboad {
+  .container {
     display: grid;
     width: 100%;
     height: 100vh;
@@ -256,16 +229,12 @@ tfoot td {
       "content"
       "footer footer";
   }
-  .main-content{
-    width: 100%;
-  }
   .sidebar-icon {
     display: block;
   }
-  /* .sidebar {
-  transition: .3s;
-  transform: translate(-100%);
-  } */
+  .sidebar {
+    display: none;
+  }
   .icontext > div {
     font-size: small;
   }
@@ -274,16 +243,3 @@ tfoot td {
     width: 100%; /* On small screens, take full width */
   }
 }
-.sidebar-toggle{
-  position: absolute;
-  width: 300px;
-  height: 100%;
-  margin-top: 56px;
-  display: none;
-}
-  .sidebar-open {
-    transform: translate(0);
-    display: block;
-    z-index: 999;
-  }
-
