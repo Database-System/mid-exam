@@ -126,8 +126,10 @@ class Controller_update_Test extends TestCase{
     }
     public function testUpdate(){
         
-        $result1=self::$controller->updateCourse(1312,'系統程式','information',2,1,30);
+        $result1=self::$controller->updateCourse(1312,'Maxpeople',30);
         $this->assertTrue($result1);
+        $result3=self::$controller->updateCourse(1312,'Name','系統程式W');
+        $this->assertTrue($result3);
 
         $result2=self::$controller->updateTimeSlots(6, '星期二', '10:30:00','11:00:00');
         $this->assertTrue($result2);

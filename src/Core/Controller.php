@@ -213,11 +213,36 @@ class Controller
         return $stmt->fetchAll();
     }
 
-    public function updateCourse(int $ID, string $Name, string $dept, int $credits, int $request,int $Maxpeople): bool
+    // public function updateCourse(int $ID, string $Name, string $dept, int $credits, int $request,int $Maxpeople): bool
+    // {
+    //     $sql = "UPDATE Course SET `Name` = ?,`Credits` = ?,`dept`= ?, `request`=?,`Maxpeople`=? WHERE `ID` = ?";
+    //     $stmt = $this->handler->prepare($sql);
+    //     $ret = $stmt->execute([$ID, $Name, $dept, $request, $credits, $Maxpeople]);
+    //     if (!$ret) return false;
+    //     return true;
+    // }
+
+    private function courseIdExists(int $ID): bool
     {
-        $sql = "UPDATE Course SET `Name` = ?,`Credits` = ?,`dept`= ?, `request`=?,`Maxpeople`=? WHERE `ID` = ?";
+        $sql = "SELECT * FROM Course WHERE ID = ?";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$ID, $Name, $dept, $request, $credits, $Maxpeople]);
+        $stmt->execute([$ID]);
+        return true;
+    }
+
+    public function updateCourse(int $ID, string $column, $Value): bool
+    {
+        if (!$this->courseIdExists($ID)) {
+            return false; 
+        }
+        $validColumns = ['Name', 'dept', 'request', 'Credits', 'Maxpeople']; 
+        if (!in_array($column, $validColumns)) {
+            return false; 
+        }
+
+        $sql = "UPDATE Course SET `$column` = ? WHERE `ID` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$Value, $ID]);
         if (!$ret) return false;
         return true;
     }
