@@ -2,6 +2,8 @@
 
 namespace Exam\Core;
 
+use DateTime;
+use Time;
 use Exam\Core\Connect;
 
 class Controller
@@ -188,17 +190,6 @@ class Controller
             return false;
         return true;
     }
-    private function check_Course(int $courseID): bool|array
-    {
-        $sql = "SELECT * FROM Course WHERE ID = ?";
-        $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$courseID]);
-        if (!$ret)
-            return false;
-        return $stmt->fetch();
-    }
-
-    //update
     public function display_User_TimeTable(string $username): bool|array
     {
         $sql = "SELECT Course.Name, TimeSlot.day, TimeSlot.start_time, TimeSlot.end_time
@@ -212,5 +203,85 @@ class Controller
         if (!$ret)
             return false;
         return $stmt->fetchAll();
+    }
+
+    private function check_Course(int $courseID): bool|array
+    {
+        $sql = "SELECT * FROM Course WHERE ID = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$courseID]);
+        if (!$ret)
+            return false;
+        return $stmt->fetch();
+    }
+
+    public function updateCourse(int $ID, string $column, $Value): bool
+    {
+        if (!$this->check_Course($ID)) {
+            return false; 
+        }
+        $validColumns = ['Name', 'dept', 'request', 'Credits', 'MaxPeople']; 
+        if (!in_array($column, $validColumns)) {
+            return false; 
+        }
+
+        $sql = "UPDATE Course SET `$column` = ? WHERE `ID` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$Value, $ID]);
+        if (!$ret) return false;
+        return true;
+    }
+
+    public function Update_User_dept(string $username, string $dept): bool
+    {
+        $sql = "UPDATE Users SET `dept` = ? WHERE `username` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$dept, $username]);
+        if (!$ret) return false;
+        return true;
+    }
+
+    public function Update_User_TotalCerdits(string $username): bool
+    {
+        $calcTotalCreditsSql = "SELECT SUM(Course.Credits) as Total_credits
+                            FROM Users
+                            INNER JOIN TimeTable ON Users.id = TimeTable.user_id
+                            INNER JOIN Course ON TimeTable.course_ID = Course.ID
+                            WHERE Users.username = ?";
+        $calcStmt = $this->handler->prepare($calcTotalCreditsSql);
+        $calcStmt->execute([$username]);
+        $result = $calcStmt->fetch();
+        
+        $sql = "UPDATE Users SET `Total_credits` = ? WHERE `username` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$result['Total_credits'], $username]);
+        if (!$ret) return false;
+        return true;
+    }
+
+    public function updateTimeSlots(int $time_slot_id, string $day,string $start_time,string $end_time): bool
+    {
+        $start_datetime=DateTime::createFromFormat('H:i:s',$start_time);
+        $end_datetime=DateTime::createFromFormat('H:i:s',$end_time);
+
+        if(!$start_datetime || !$end_datetime) return false;
+
+        $start_time_formatted=$start_datetime->format('H:i:s');
+        $end_time_formatted=$end_datetime->format('H:i:s');
+
+        $sql = "UPDATE TimeSlot SET `day` = ?,`start_time` = ?,`end_time`=? WHERE `time_slot_id` = ?";
+        $stmt = $this->handler->prepare($sql);
+
+        $ret = $stmt->execute([$day,$start_time_formatted,$end_time_formatted,$time_slot_id]);
+        if (!$ret) return false;
+        return true;
+    }
+    public function updateCourseTimeSlots(int $Course_ID, int $Time_Slot_ID): bool
+    {
+        $sql = "UPDATE CourseTimeSlots SET `Time_Slot_id`=? WHERE `Course_ID` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$Course_ID, $Time_Slot_ID]);
+        if (!$ret) return false;
+        return true;
     }
 }
