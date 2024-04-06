@@ -14,16 +14,32 @@ class Register
     public function __construct()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $user = $_POST["user"] ?? '';
+            $user = htmlspecialchars($_POST["user"]) ?? '';
             $pass = $_POST["password"] ?? '';
-            $this->register($user, $pass);
-            header('Location: /login');
+            $dept = htmlspecialchars($_POST["dept"]) ?? '';
+            if ($this->register($user, $pass, $dept)) {
+                header('Location: /login');
+            }
         } else new twigLoader(__FILE__, false, $this->OPTIONS);
     }
-    private function register(string $user, string $pass)
+    private function register(string $user, string $pass, string $dept): bool
     {
         $controller = new Controller();
         $password = password_hash($pass, PASSWORD_DEFAULT);
-        if (!$controller->check_User($user)) $controller->insert_User($user, $password);
+        if (!$controller->check_User($user)) {
+            if (!$controller->insert_User($user, $password)){
+                header('Location: /login');
+            }
+            $controller->Update_User_dept($user,$dept);
+            return true;
+        }
+        echo "<script type='text/javascript'>
+            if (confirm('已註冊，要返回登入嗎')) {
+                window.location.href = '/login';
+            } else {
+                window.location.href = '/';
+            }
+            </script>";
+        return false;
     }
 }

@@ -4,13 +4,12 @@
 	<meta charset="UTF-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<title>FCU測試選課系統</title>
-	<link rel="stylesheet" type="text/css" href="{{ session.Css }}Dashboard/main.css">
+	<link rel="stylesheet" type="text/css" href="{{ session.Css }}Dashboard/dashboard.css">
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-	<link rel="stylesheet" type="text/css" href="{{ session.Css }}bootstrap/css/bootstrap.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 {% endblock %}
 
 {% block body %}
-
 	<div class="dashboad">
 		<header class="title">FCU測試選課系統</header>
 		<div class="sidebar-icon">☰</div>
@@ -18,16 +17,23 @@
 			<div class="login-info">
 				<header>登入資訊</header>
 				<div class="info-item">
-					<span>學號:</span><span>{{ NID }}</span>
+					<span>學號:</span>
+					<span>{{ NID }}</span>
 				</div>
 				<div class="info-item">
-					<span>學分上限:</span><span>25</span>
+					<span>學分上限:
+					</span>
+					<span>25</span>
 				</div>
 				<div class="info-item">
-					<span>學分下限:</span><span>12</span>
+					<span>學分下限:
+					</span>
+					<span>12</span>
 				</div>
 				<div class="info-item">
-					<span>已選學分:</span><span>0</span>
+					<span>已選學分:
+					</span>
+					<span>{{ total|default(0) }}</span>
 				</div>
 				<button id="logout">登出</button>
 			</div>
@@ -48,163 +54,31 @@
 			<div class="calendar">
 
 				<table>
-					<caption>
-						Front-end web developer course 2021
-					</caption>
 					<thead>
 						<tr>
-							<th scope="col"></th>
-							<th scope="col">一</th>
-							<th scope="col">二</th>
-							<th scope="col">三</th>
-							<th scope="col">四</th>
-							<th scope="col">五</th>
-							<th scope="col">六</th>
-							<th scope="col">日</th>
+							<th scope="row"></th>
+							{% set days = ['一', '二','三','四','五','六','日'] %}
+							{% for day in days %}
+								<th scope="col" class="text-center">{{ day }}</th>
+							{% endfor %}
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<th scope="row">1</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th scope="row">2</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th scope="row">3</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th scope="row">4</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th scope="row">5</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th scope="row">6</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th scope="row">7</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th scope="row">8</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th scope="row">9</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th scope="row">10</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th scope="row">11</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th scope="row">12</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th scope="row">13</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
+					<tbody class="text-center">
+						{% for i in 0..12 %}
+							<tr>
+								<th scope="row">{{ i+1 }}</th>
+								{% for j in 0..6 %}
+									<td>{{ attribute(_context, 'x' ~ j ~ 'y' ~ i)|default("") }}</td>
+								{% endfor %}
+							</tr>
+						{% endfor %}
 					</tbody>
 					<tfoot>
 						<tr>
-							<th scope="row">14</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<th scope="row" class="text-center">14</th>
+							{% for j in 0..6 %}
+								<td>{{ attribute(_context, 'x' ~ j ~ 'y' ~ '13')|default("") }}</td>
+							{% endfor %}
 						</tr>
 					</tfoot>
 				</table>
@@ -223,214 +97,95 @@
 				<div class="tab-pane fade show active" id="search" role="tabpanel" aria-labelledby="search-tab">
 					<form method="post" class="form-box">
 						<p class="form-title mt-4">一、依照開課系所查詢：</p>
-						<div class="row">
-							<p class="col-md-6 col-xl-3 pl-5">學制：<input type="text" name="degree" class="form-input"></p>
-							<p class="col-md-6 col-xl-3 pl-5">學院：<input type="text" name="deptId" class="form-input"></p>
-							<p class="col-md-6 col-xl-3 pl-5">系所：<input type="text" name="unitId" class="form-input"></p>
-							<p class="col-md-6 col-xl-3 pl-5">班級：<input type="text" name="classId" class="form-input"></p>
+						<div class="p-3">
+							<div class="row">
+								<p class="col-md-6 col-xl-3 pl-5">學院：<input type="text" class="form-input" name="deptId"></p>
+								<p class="col-md-6 col-xl-3 pl-5">系所：<input type="text" class="form-input" name="unitId"></p>
+								<p class="col-md-6 col-xl-3 pl-5">班級：<input type="text" class="form-input" name="classId"></p>
+							</div>
+							<input type="submit" value="查詢" class="ml-4">
 						</div>
-						<input type="submit" value="查詢" class="ml-4 mb-4">
 					</form>
-					<form method="post" class="form-box">
+					{# <div class="px-3"></div> #}
+					<form method="post" class="form-box check-value">
 						<p class="form-title mt-4">二、依照輸入條件查詢：</p>
 						<div class="row">
 							<div class="col-xl-6">
-								<p class="pl-4"><input type="checkbox" name="checkcode" class="mr-1">選課代碼：<input type="text" name="code" class=""></p>
-								<p class="pl-4"><input type="checkbox" name="checkweek" class="mr-1">星期：<input type="text" name="week" class="w-25">節次：<input type="text" name="period" class="w-25"></p>
-								<p class="pl-4"><input type="checkbox" name="checkcourse" class="mr-1">科目名稱：<input type="text" name="course" class=""></p>
+								<div class="px-3">
 
-							</div>
-							<div class="col-xl-6">
-								<p class="pl-4"><input type="checkbox" name="checkteacher" class="mr-1">開課老師姓名：<input type="text" name="teacher" class=""></p>
-								<p class="pl-4"><input type="checkbox" name="checkuseLanguage" class="mr-1">授課語言：<input type="text" name="useLanguage" class=""></p>
-								<p class="pl-4"><input type="checkbox" name="checkspecificSubject" class="mr-1">特定科目：<input type="text" name="specificSubject" class=""></p>
+									<div class="py-2">
+										<input type="checkbox" id="courseCodeCheckbox" name="checkcode" class="mr-1">
+										<label for="courseCodeCheckbox" class="ms-2">選課代碼：</label>
+										<input type="number" class="" name="code">
+									</div>
+									<div class="py-2">
+										<input type="checkbox" id="dayCheckbox" class="mr-1" name="checkweek">
+										<label for="dayCheckbox" class="ms-2">星期：</label>
+										<input type="number" class="w-25" name="week" min="1" max="7">
+										<span class="ms-2">節次：</span>
+										<input type="number" class="w-25" name="unit" min="1" max="14">
+									</div>
+									<div class="py-2">
+										<input type="checkbox" id="subjectNameCheckbox" class="mr-1" name="checkcourse">
+										<label for="subjectNameCheckbox" class="ms-2">科目名稱：</label>
+										<input type="text" name="course">
+									</div>
+
+								</div>
 							</div>
 						</div>
-						<input type="submit" value="查詢" class="ml-4 mb-4">
+						<input type="submit" value="查詢" class="ms-3 mb-3 mt-1">
 					</form>
 					<div id="search-result">
-						<p>查詢結果：</p>
-						<div class="">
-						<!-- 查詢結果放這裡 -->
-						{% if searchResult is defined and searchResult is not null %}
-						{{ dump(searchResult) }}
-						{% endif %}
-
+						<p class="mt-2 fs-6">查詢結果：</p>
+						<div
+							class="result">
+							<!-- 查詢結果放這裡 -->
+							{% if searchResult is defined and searchResult is not null %}
+								{{ dump(searchResult) }}
+							{% endif %}
 						</div>
 					</div>
 				</div>
 				<div class="tab-pane fade" id="selected" role="tabpanel" aria-labelledby="selected-tab">
 					<div id="function-area" class="selected-class">
-						<div class="row">
+						<div class="row pt-2">
 							<div class="col-xl-6">
 								<p>選課代碼：<input type="text" class=""><input type="submit" value="查詢"></p>
-								<a href="">從關注清單選課<span>（0）</span>
-								</a>
 							</div>
 							<div class="col-xl-6">
 								<p class="pt-xl-0 pt-4">訊息區：</p>
 							</div>
 						</div>
 					</div>
-					<div id="selected-area" class="selected-class">
-						<input type="submit" value="列印">
-						<p class="text-primary d-inline text-right">已過學分 2/2</p>
+					<div id="selected-area" class="selected-class1">
 						<div class="d-flex justify-content-center mb-4 mt-2">
 							<table>
 								<thead>
-									<tr>
-										<th scope="col"></th>
-										<th scope="col">星期一</th>
-										<th scope="col">星期二</th>
-										<th scope="col">星期三</th>
-										<th scope="col">星期四</th>
-										<th scope="col">星期五</th>
-										<th scope="col">星期六</th>
-										<th scope="col">星期日</th>
+									<tr class="text-center">
+										<th scope="row"></th>
+										{% set days = ['星期一', '星期二','星期三','星期四','星期五','星期六','星期日'] %}
+										{% for day in days %}
+											<th scope="col">{{ day }}</th>
+										{% endfor %}
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<th scope="row">1</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<th scope="row">2</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<th scope="row">3</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<th scope="row">4</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<th scope="row">5</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<th scope="row">6</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<th scope="row">7</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<th scope="row">8</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<th scope="row">9</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<th scope="row">10</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<th scope="row">11</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<th scope="row">12</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<th scope="row">13</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
+									{% for i in 0..12 %}
+										<tr>
+											<th scope="row" class="text-center">{{ i+1 }}</th>
+											{% for j in 0..6 %}
+												<td class="text-center">{{ attribute(_context, 'x' ~ j ~ 'y' ~ i)|default("") }}</td>
+											{% endfor %}
+										</tr>
+									{% endfor %}
 								</tbody>
 								<tfoot>
 									<tr>
-										<th scope="row" class="text-left">14</th>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
+										<th scope="row" class="text-center">14</th>
+										{% for j in 0..6 %}
+											<td class="text-center">{{ attribute(_context, 'x' ~ j ~ 'y' ~ '13')|default("") }}</td>
+										{% endfor %}
 									</tr>
 								</tfoot>
 							</table>
@@ -441,5 +196,5 @@
 		</main>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="{{ session.Js }}Dashboard/main.js"></script>
+	<script src="{{ session.Js }}Dashboard/dashboard.js"></script>
 {% endblock %}

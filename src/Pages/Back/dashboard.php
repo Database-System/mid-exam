@@ -13,14 +13,16 @@ class Dashboard
     {
         Utils::isLogin();
         $this->options["NID"] = $_SESSION['userID'];
+        $this->options["x0y0"] = 1411;
+        $this->options["x1y0"] = 1412;
         if ($_SERVER["REQUEST_METHOD"] == "POST") $this->parse_arg();
         $this->renderPage($this->options);
     }
     private function parse_arg(){
         $class_data = array();
         $condition_data = array();
-        $class_search_name = ["degree", "deptId", "unitId", "classId"];
-        $condition_search_name = ["code", "week", "course", "teacher", "useLanguage", "specificSubject","checkcode","checkweek","checkcourse","checkteacher","checkuseLanguage","checkspecificSubject"];
+        $class_search_name = ["deptId", "unitId", "classId"];
+        $condition_search_name = ["code", "week", "unit","course","checkcode","checkweek","checkcourse"];
         foreach ($class_search_name as $name) {
             if(!isset($_POST[$name]) || empty($_POST[$name])){
                 continue;
