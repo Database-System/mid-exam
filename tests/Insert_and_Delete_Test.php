@@ -41,13 +41,13 @@ class Insert_and_Delete_Test extends TestCase
     {
         // Insert test data and assert that each insertion is successful
         $this->assertTrue(self::$controller->insert_TimeSlot("Monday", "08:00:00", "10:00:00"));
-        $this->assertTrue(self::$controller->insert_TimeSlot("Wednesday", "11:10:00", "12:00:00")); // Corrected spelling of "Wednesday"
+        $this->assertTrue(self::$controller->insert_TimeSlot("Wednesday", "11:10:00", "12:00:00")); 
         $this->assertTrue(self::$controller->insert_TimeSlot("Monday", "13:10:00", "15:00:00"));
         $this->assertTrue(self::$controller->insert_TimeSlot("Tuesday", "11:10:00", "12:00:00"));
         $this->assertTrue(self::$controller->insert_TimeSlot("Monday", "15:10:00", "17:00:00"));
         
-        $this->assertTrue(self::$controller->insert_Course(1312, "System_Program", 3));
-        $this->assertTrue(self::$controller->insert_Course(1314, "Probability_and_Statistics", 3));
+        $this->assertTrue(self::$controller->insert_Course(1312, "System_Program", "Computer_Science", 1, 3, 60));
+        $this->assertTrue(self::$controller->insert_Course(1314, "Probability_and_Statistics", "Computer_Science", 1, 3, 50));
 
         $this->assertTrue(self::$controller->insert_CourseTimeSlots(1312, 1));
         $this->assertTrue(self::$controller->insert_CourseTimeSlots(1312, 2));
@@ -69,16 +69,16 @@ class Insert_and_Delete_Test extends TestCase
         $this->assertTrue(self::$controller->delete_CourseTimeSlots(1314, 3));
         $this->assertTrue(self::$controller->delete_CourseTimeSlots(1314, 4));
         
-        $this->assertTrue(self::$controller->delete_Course(1312, "System_Program", 3));
-        $this->assertTrue(self::$controller->delete_Course(1314, "Probability_and_Statistics", 3));
+        $this->assertTrue(self::$controller->delete_Course(1312, "System_Program"));
+        $this->assertTrue(self::$controller->delete_Course(1314, "Probability_and_Statistics"));
         
         $this->assertTrue(self::$controller->delete_TimeSlot("Monday", "08:00:00", "10:00:00"));
-        $this->assertTrue(self::$controller->delete_TimeSlot("Wednesday", "11:10:00", "12:00:00")); // Corrected spelling
+        $this->assertTrue(self::$controller->delete_TimeSlot("Wednesday", "11:10:00", "12:00:00")); 
         $this->assertTrue(self::$controller->delete_TimeSlot("Monday", "13:10:00", "15:00:00"));
         $this->assertTrue(self::$controller->delete_TimeSlot("Tuesday", "11:10:00", "12:00:00"));
         $this->assertTrue(self::$controller->delete_TimeSlot("Monday", "15:10:00", "17:00:00"));
     }
-    //§R±¼
+   
     protected function tearDown(): void
     {
         $this->delete_table();

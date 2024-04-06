@@ -93,43 +93,39 @@ class Controller
         return $stmt->fetch();
     }
 
-    public function insert_TimeSlot(string $day, string $start_time, string $end_time)
+    public function insert_TimeSlot(string $day,string $start_time,string $end_time)
     {
         $sql = "INSERT INTO TimeSlot (`day`,`start_time`,`end_time`) VALUES (?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$day, $start_time, $end_time]);
-        if (!$ret)
-            return false;
+        $ret = $stmt->execute([$day,$start_time,$end_time]);
+        if (!$ret) return false;
         return true;
     }
 
-    public function insert_Course(int $ID, string $Name, int $Credits)
+    public function insert_Course(int $ID,string $Name,string $dept,int $request,int $Credits,int $MaxPeople): bool
     {
-        $sql = "INSERT INTO Course (`ID`,`Name`,`Credits`) VALUES (?,?,?)";
+        $sql = "INSERT INTO Course (`ID`,`Name`,`dept`,`request`,`Credits`,`MaxPeople`) VALUES (?,?,?,?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$ID, $Name, $Credits]);
-        if (!$ret)
-            return false;
+        $ret = $stmt->execute([$ID,$Name,$dept,$request,$Credits,$MaxPeople]);
+        if (!$ret) return false;
         return true;
     }
 
-    public function insert_CourseTimeSlots(int $Course_ID, int $Time_Slot_ID)
+    public function insert_CourseTimeSlots(int $Course_ID,int $Time_Slot_ID)
     {
         $sql = "INSERT INTO CourseTimeSlots (`Course_ID`,`Time_Slot_ID`) VALUES (?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$Course_ID, $Time_Slot_ID]);
-        if (!$ret)
-            return false;
+        $ret = $stmt->execute([$Course_ID,$Time_Slot_ID]);
+        if (!$ret) return false;
         return true;
     }
 
-    public function insert_TimeTable(int $course_ID, int $time_slot_id, int $user_id)
+    public function insert_TimeTable(int $course_ID,int $time_slot_id,int $user_id)
     {
         $sql = "INSERT INTO TimeTable (`course_ID`,`time_slot_id`,`user_id`) VALUES (?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$course_ID, $time_slot_id, $user_id]);
-        if (!$ret)
-            return false;
+        $ret = $stmt->execute([$course_ID,$time_slot_id,$user_id]);
+        if (!$ret) return false;
         return true;
     }
 
@@ -138,18 +134,16 @@ class Controller
         $sql = "DELETE FROM `TimeSlot` WHERE `day` = ? AND `start_time` = ? AND `end_time` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$day, $start_time, $end_time]);
-        if (!$ret)
-            return false;
+        if (!$ret) return false;
         return true;
     }
 
-    public function delete_Course(int $ID, string $Name, int $Credits)
+    public function delete_Course(int $ID, string $Name): bool
     {
-        $sql = "DELETE FROM `Course` WHERE `ID` = ? AND `Name` = ? AND `Credits` = ?";
+        $sql = "DELETE FROM `Course` WHERE `ID` = ? AND `Name` = ? ";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$ID, $Name, $Credits]);
-        if (!$ret)
-            return false;
+        $ret = $stmt->execute([$ID,$Name]);
+        if (!$ret) return false;
         return true;
     }
 
@@ -159,8 +153,7 @@ class Controller
         $sql = "DELETE FROM `TimeTable` WHERE `course_ID` = ? AND `time_slot_id` = ? AND `user_id` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$course_id, $time_slot_id, $user_id]);
-        if (!$ret)
-            return false;
+        if (!$ret) return false;
         return true;
     }
 
@@ -169,10 +162,10 @@ class Controller
         $sql = "DELETE FROM `CourseTimeSlots` WHERE `course_ID` = ? AND `time_Slot_ID` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$course_id, $time_slot_id]);
-        if (!$ret)
-            return false;
+        if (!$ret) return false;
         return true;
     }
+
     //search
     public function search_User_TimeTable(string $username, int $courseID): bool
     {
