@@ -18,7 +18,8 @@ $(document).ready(function () {
   $("#logout").on("click", function () {
     window.location.href = "/back/logout";
   });
-  $('.check-value').removeAttr('min').removeAttr('max');
+  // $('.check-value').removeAttr('min').removeAttr('max');
+  $('.check-value').attr('novalidate', 'novalidate');
   $(".check-value").on("submit", function (event) {
     event.preventDefault();
     $(".result").empty();
@@ -40,16 +41,16 @@ $(document).ready(function () {
               console.log(label);
               if (label === "星期" || label === "節次") {
                 $(".result").append(
-                  "<div>请输入正确的" + "星期&節次" + "</div>"
+                  "<div>請輸入正確的" + "星期&節次" + "</div>"
                 );
               } 
               else {
                 
-                $(".result").append("<div>请输入正确的" + label + "</div>");
+                $(".result").append("<div>請輸入正確的" + label + "</div>");
               }
               isFormValid = false;
             } else if (!$(this).val()) {
-              $(".result").append("<div>" + label + "为必填项</div>");
+              $(".result").append("<div>" + label + "為必填項</div>");
               isFormValid = false;
             }
           });
