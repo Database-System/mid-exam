@@ -12,9 +12,9 @@ class Dashboard
     public function __construct()
     {
         Utils::isLogin();
-        $this->options["NID"] = $_SESSION['userID'];
-        $this->options["x0y0"] = 1411;
-        $this->options["x0y1"] = 1412;
+        $this->userdata_preload($_SESSION['userID']);
+        // $this->options["x0y0"] = 1411;
+        // $this->options["x0y1"] = 1412;
         if ($_SERVER["REQUEST_METHOD"] == "POST") $this->parse_arg();
         $this->renderPage($this->options);
     }
@@ -52,5 +52,8 @@ class Dashboard
     }
     private function renderPage(array $OPTION){
         new twigLoader(__FILE__,false, $OPTION);
+    }
+    private function userdata_preload(string $user){
+        $this->options["NID"] = $user;
     }
 }
