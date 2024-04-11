@@ -240,7 +240,7 @@ class Controller
         return $stmt->fetchAll();
     }
 
-    private function check_Course(int $courseID): bool|array
+    public function check_Course(int $courseID): bool|array
     {
         $sql = "SELECT * FROM Course WHERE ID = ?";
         $stmt = $this->handler->prepare($sql);
