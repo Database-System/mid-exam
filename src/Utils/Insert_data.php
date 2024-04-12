@@ -1,7 +1,7 @@
 <?php
 namespace Exam\Utils;
-chdir(dirname(__DIR__,2));
-require_once('./vendor/autoload.php');
+// chdir(dirname(__DIR__,2));
+// require_once('./vendor/autoload.php');
 
 
 use Exam\Core\Controller;
@@ -10,11 +10,9 @@ use Exam\Core\Controller;
 class Insert_data
 {
     protected $controller; 
-    private $handler;
 
     public function __construct()
     {
-        $this->handler = (new \Exam\Core\Connect())->getHandler();
         $this->controller = new Controller();
     }
 
@@ -185,7 +183,7 @@ class Insert_data
         if (array_key_exists($dept_id, $dept)) {
         return $dept[$dept_id];
         } else {
-        return "Department ID does not exist.";
+        return "\0";
         }
     }
 
@@ -202,5 +200,5 @@ class Insert_data
 }
 
 
-$test = new Insert_data();
-$test->insert_json_data();
+// $test = new Insert_data();
+// $test->insert_json_data();

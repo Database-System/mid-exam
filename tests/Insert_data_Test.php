@@ -49,13 +49,13 @@ class Insert_data_Test extends TestCase
         
     }
 
-    protected function tearDown(): void
-    {
-        $this->delete_table();
-    }
-    public static function tearDownAfterClass(): void
-    {
-        self::$controller = null;
-        self::$handler = null;
-    }
+    // protected function tearDown(): void
+    // {
+    //     $this->delete_table();
+    // }
+    // public static function tearDownAfterClass(): void
+    // {
+    //     self::$controller = null;
+    //     self::$handler = null;
+    // }
 }
