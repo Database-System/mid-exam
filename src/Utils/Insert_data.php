@@ -33,7 +33,7 @@ class Insert_data
                 }
                 $Name = $record['sub_name'];
                 $dept1 = substr($record['cls_id'],0,4);
-                $dept = $this->insert_dept($dept1); 
+                $dept = $this->search_dept($dept1); 
                 $request = $record ['scj_scr_mso'] == "選修" ? 0 : 1;
                 $Credits = $record ['scr_credit'];
                 $MaxPeople = $record ['scr_acptcnt'];
@@ -48,7 +48,7 @@ class Insert_data
         return $allSuccess; 
     }
     
-    public function insert_dept($dept_id): string
+    public function search_dept($dept_id): string|NULL
     {
         
         $dept = [
@@ -183,7 +183,7 @@ class Insert_data
         if (array_key_exists($dept_id, $dept)) {
         return $dept[$dept_id];
         } else {
-        return "\0";
+        return NULL;
         }
     }
 
