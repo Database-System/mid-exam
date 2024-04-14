@@ -65,4 +65,12 @@ $(document).ready(function () {
       this.submit();
     }
   });
+  $('.calendar table tbody tr td, .calendar table tfoot tr td').each(function() {
+    var spans = $(this).find('span');
+    if (spans.length === 1 && spans.text().trim() !== '') {
+      $(this).addClass('color-1');
+    } else if (spans.length > 1) {
+      $(this).addClass('color-4');
+    }
+  });
 });

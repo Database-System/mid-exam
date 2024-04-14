@@ -130,6 +130,22 @@ p {
   background-color: #e46451;
   margin-right: 5px;
 }
+.color-1{
+  background-color: #9ccd81;
+  color: black;
+}
+.color-2{
+  background-color: #64c2c2;
+  color: black;
+}
+.color-3{
+  background-color: #a1d7e9;
+  color: black;
+}
+.color-4{
+  background-color: #e46451;
+  color: black;
+}
 
 .sidebar-icon {
   display: none;

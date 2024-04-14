@@ -13,12 +13,15 @@ class Dashboard
     {
         Utils::isLogin();
         $this->userdata_preload($_SESSION['userID']);
-        $this->options["x0y0"] = 1411;
-        $this->options["x0y0-title"] = "國文";
-        $this->options["x0y1"] = 1412;
-        $this->options["x0y1-title"] = "英文";
-        $this->options["x0y13"] = 1413;
-        $this->options["x0y13-title"] = "數學";
+        $this->options = [
+            "x0y0" => ["1411","1433","1435"],
+            "x0y0-title" => ["國文","國文1","國文2"],
+            "x0y1" => 1412,
+            "x0y1-title" => "英文",
+            "x0y13" => [1413,1415,1444],
+        ];
+        $this->options["x0y13-title"] = ["數學","數學1","數學2"];
+        $this->options["display"] = true;
         if ($_SERVER["REQUEST_METHOD"] == "POST") $this->parse_arg();
         $this->renderPage($this->options);
     }
