@@ -68,7 +68,7 @@
 							<tr>
 								<th scope="row">{{ i+1 }}</th>
 								{% for j in 0..6 %}
-									<td>{{ attribute(_context, 'x' ~ j ~ 'y' ~ i)|default("") }}</td>
+									<td title="{{ attribute(_context, 'x' ~ j ~ 'y' ~ i ~ '-title')|default("") }}">{{ attribute(_context, 'x' ~ j ~ 'y' ~ i)|default("") }}</td>
 								{% endfor %}
 							</tr>
 						{% endfor %}
@@ -77,7 +77,7 @@
 						<tr>
 							<th scope="row" class="text-center">14</th>
 							{% for j in 0..6 %}
-								<td>{{ attribute(_context, 'x' ~ j ~ 'y' ~ '13')|default("") }}</td>
+								<td title="{{ attribute(_context, 'x' ~ j ~ 'y' ~ '13-title')|default("") }}">{{ attribute(_context, 'x' ~ j ~ 'y' ~ '13')|default("") }}</td>
 							{% endfor %}
 						</tr>
 					</tfoot>
@@ -175,7 +175,7 @@
 										<tr>
 											<th scope="row" class="text-center">{{ i+1 }}</th>
 											{% for j in 0..6 %}
-												<td class="text-center">{{ attribute(_context, 'x' ~ j ~ 'y' ~ i)|default("") }}</td>
+												<td class="text-center">{{ attribute(_context, 'x' ~ j ~ 'y' ~ i ~ '-title')|default("") }}</td>
 											{% endfor %}
 										</tr>
 									{% endfor %}
@@ -184,7 +184,7 @@
 									<tr>
 										<th scope="row" class="text-center">14</th>
 										{% for j in 0..6 %}
-											<td class="text-center">{{ attribute(_context, 'x' ~ j ~ 'y' ~ '13')|default("") }}</td>
+											<td class="text-center">{{ attribute(_context, 'x' ~ j ~ 'y' ~ '13-title')|default("") }}</td>
 										{% endfor %}
 									</tr>
 								</tfoot>
