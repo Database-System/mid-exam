@@ -43,6 +43,8 @@ class Dashboard
                 $class_data = $this->controller->search_Courses_By_Dept($_POST['deptId']);
             else if($name == "unitId")
                 $class_data = $this->controller->search_Courses_By_Dept($_POST['unitId']);
+            else if($name == "classId")
+                $class_data = $this->controller->search_Courses_By_clsname($_POST['classId']);
             
         }
         foreach ($condition_search_name as $name) {

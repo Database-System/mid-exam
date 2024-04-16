@@ -543,5 +543,15 @@ class Controller
         return $stmt->fetchAll();
     }
 
+    public function search_Courses_By_clsname(?string $cls_name):bool|array
+    {
+        $sql = "SELECT * FROM Course WHERE cls_name LIKE ? ";
+        $stmt = $this->handler->prepare($sql);
+        $ret=$stmt->execute(['%'.$cls_name.'%']);
+        if(!$ret){
+            return false;
+        }
+        return $stmt->fetchAll();
+    }
     
 }
