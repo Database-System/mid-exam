@@ -89,7 +89,6 @@ class Controller
                 preg_match_all('/\([一二三四五六日]\)\d{2}(-\d{2})?/u', $record["scr_period"], $matches);
                 if (!empty($matches[0])) {
                     $times = $matches[0];
-                    die(var_dump($times));
                 } else {
                     continue;
                 }
