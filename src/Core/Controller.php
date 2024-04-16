@@ -518,7 +518,7 @@ class Controller
             return false;
         }
 
-        $courses = $stmt->fetchAll();
+        return $stmt->fetchAll();
     }
 
     public function search_Courses_By_Name(string $Name):bool|array
