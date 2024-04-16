@@ -31,9 +31,11 @@ class Controller
         "Course" => "CREATE TABLE `Course` (
             `ID` INT(10) UNSIGNED NOT NULL,
             `Name` VARCHAR(255) NOT NULL,
+            `cls_name` VARCHAR(255) NULL,
             `dept` varchar(255) NULL,
             `request` TINYINT(1) NOT NULL DEFAULT 0,
             `Credits` INT(10) UNSIGNED NOT NULL,
+            `CurrentPeople` INT(10) UNSIGNED NOT NULL DEFAULT 0,
             `MaxPeople` INT(10) UNSIGNED NOT NULL DEFAULT 0,
             PRIMARY KEY (`ID`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;",
@@ -86,6 +88,7 @@ class Controller
                     continue;
                 }
                 $Name = $record['sub_name'];
+                $cls_name=$record['cls_name'];
                 preg_match_all('/\([一二三四五六日]\)\d{2}(-\d{2})?/u', $record["scr_period"], $matches);
                 if (!empty($matches[0])) {
                     $times = $matches[0];
@@ -97,7 +100,7 @@ class Controller
                 $request = $record['scj_scr_mso'] == "選修" ? 0 : 1;
                 $Credits = $record['scr_credit'];
                 $MaxPeople = $record['scr_acptcnt'];
-                $this->insert_Course($ID, $Name, $dept, $request, $Credits, $MaxPeople);
+                $this->insert_Course($ID, $Name,$cls_name, $dept, $request, $Credits, $MaxPeople);
             }
         }
     }
@@ -323,11 +326,11 @@ class Controller
         return true;
     }
 
-    public function insert_Course(int $ID, string $Name, ?string $dept, int $request, int $Credits, int $MaxPeople): bool
+    public function insert_Course(int $ID, string $Name,?string $cls_name,?string $dept, int $request, int $Credits, int $MaxPeople): bool
     {
-        $sql = "INSERT INTO Course (`ID`,`Name`,`dept`,`request`,`Credits`,`MaxPeople`) VALUES (?,?,?,?,?,?)";
+        $sql = "INSERT INTO Course (`ID`,`Name`,`cls_name`,`dept`,`request`,`Credits`,`MaxPeople`) VALUES (?,?,?,?,?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$ID, $Name, $dept, $request, $Credits, $MaxPeople]);
+        $ret = $stmt->execute([$ID, $Name,$cls_name, $dept, $request, $Credits, $MaxPeople]);
         if (!$ret) return false;
         return true;
     }
@@ -424,7 +427,7 @@ class Controller
         $ret = $stmt->execute([$courseID]);
         if (!$ret)
             return false;
-        return $stmt->fetch();
+        return $stmt->fetchall();
     }
 
     public function updateCourse(int $ID, string $column, $Value): bool
@@ -496,4 +499,49 @@ class Controller
         if (!$ret) return false;
         return true;
     }
+
+    public function update_currentpeople(int $people, int $ID):bool
+    {
+        $sql = "UPDATE Course SET `CurrentPeople` = `CurrentPeople` + ? WHERE `ID` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$people, $ID]);
+        if (!$ret) return false;
+        return true;
+    }
+
+    public function search_Courses_By_TimeSlot(int $class):bool| array
+    {   
+        $sql = "SELECT * FROM Course WHERE Course.ID IN (SELECT Course_ID FROM CourseTimeSlots WHERE Time_Slot_ID = ? )";
+        $stmt = $this->handler->prepare($sql);
+        $ret=$stmt->execute([$class]);
+        if(!$ret){
+            return false;
+        }
+
+        $courses = $stmt->fetchAll();
+    }
+
+    public function search_Courses_By_Name(string $Name):bool|array
+    {
+        $sql = "SELECT * FROM Course WHERE Name LIKE  ? ";
+        $stmt = $this->handler->prepare($sql);
+        $ret=$stmt->execute(['%'.$Name.'%']);
+        if(!$ret){
+            return false;
+        }
+        return $stmt->fetchall();
+    }
+    
+    public function search_Courses_By_Dept(?string $dept):bool|array
+    {
+        $sql = "SELECT * FROM Course WHERE dept LIKE ? ";
+        $stmt = $this->handler->prepare($sql);
+        $ret=$stmt->execute([$dept]);
+        if(!$ret){
+            return false;
+        }
+        return $stmt->fetchAll();
+    }
+
+    
 }

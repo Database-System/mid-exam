@@ -73,4 +73,16 @@ $(document).ready(function () {
       $(this).addClass('color-4');
     }
   });
+  
 });
+function enroll(CourseID) {
+  $.ajax({
+  type: "PUT",
+  url: "/back/dashboard",
+  data: JSON.stringify({ CourseID: CourseID }),
+  success: function(temp){
+      // window.location.reload()
+    console.log('success: ', temp);
+  },
+  });
+}

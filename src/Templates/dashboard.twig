@@ -1,4 +1,4 @@
-{% extends 'base.twig' %}
+﻿{% extends 'base.twig' %}
 {% block head %}
 	<title>FCU測試選課系統</title>
 	<link rel="stylesheet" type="text/css" href="{{ session.Css }}Dashboard/dashboard.css">
@@ -165,7 +165,34 @@
 							class="result">
 							<!-- 查詢結果放這裡 -->
 							{% if searchResult is defined and searchResult is not null %}
-								{{ dump(searchResult) }}
+								<table>
+									<thead>
+										<tr>
+											<th>課程代碼</th>
+											<th>系所</th>
+											<th>科目</th>
+											<th>選修/必修</th>
+											<th>學分</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for course in searchResult %}
+											<tr>
+												<td>{{ course.courseCode }}</td>
+												<td>{{ course.department }}</td>
+												<td>{{ course.subject }}</td>
+												<td>{{ course.type }}</td>
+												<td>{{ course.credits }}</td>
+												<td>
+													<button type="button" onclick="enroll('{{ course.courseCode }}')">關注</button>
+												</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							{% else %}
+								<p>無查詢結果。</p>
 							{% endif %}
 						</div>
 					</div>
