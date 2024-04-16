@@ -365,6 +365,20 @@ class Controller
         if (!$ret) return false;
         return true;
     }
+    public function check_people_number(int $course_ID){
+        $sql= "SELECT CurrentPeople,MaxPeople From Course WHERE ID = ?";
+        $stmt = $this->handler->prepare($sql);
+        $stmt->execute([$course_ID]);
+       
+        $row = $stmt->fetch();
+        $CurrentPeople = $row['CurrentPeople'];
+        $MaxPeople = $row['MaxPeople'];
+    
+        if ($CurrentPeople >= $MaxPeople) {
+            return false; 
+        }
+        return true;
+    }
 
     public function insert_TimeTable(int $course_ID, int $time_slot_id, int $user_id)
     {
