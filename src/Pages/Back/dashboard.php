@@ -31,6 +31,7 @@ class Dashboard
     }
     private function parse_arg()
     {
+        $this->options["queryPerformed"] = true;
         $class_data = array();
         $condition_data = array();
         $class_search_name = ["deptId", "unitId", "classId"];
@@ -105,7 +106,6 @@ class Dashboard
         }
 
         $this->options["searchResult"] = $allCoursesInfo;
-
     }
     private function handlePut()
     {
