@@ -15,6 +15,7 @@ class Controller
             `username` varchar(50) NOT NULL,
             `password` varchar(255) NOT NULL,
             `dept` varchar(255) NULL,
+            `cls_name` varchar(255) NULL,
             `Total_credits` int(10) UNSIGNED NOT NULL DEFAULT 0,
             PRIMARY KEY (`id`),
             UNIQUE KEY `username_UNIQUE` (`username`)
@@ -464,6 +465,15 @@ class Controller
         $sql = "UPDATE Users SET `dept` = ? WHERE `username` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$dept, $username]);
+        if (!$ret) return false;
+        return true;
+    }
+
+    public function Update_User_clsname(string $username, string $cls_name): bool
+    {
+        $sql = "UPDATE Users SET `cls_name` = ? WHERE `username` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$cls_name, $username]);
         if (!$ret) return false;
         return true;
     }
