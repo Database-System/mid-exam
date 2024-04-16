@@ -25,6 +25,7 @@ class Dashboard
         // ];
         // $this->options["x0y13-title"] = ["數學","數學1","數學2"];
         $this->options["display"] = true;
+        if ($_SERVER["REQUEST_METHOD"] == "PUT") $this->handlePut();
         if ($_SERVER["REQUEST_METHOD"] == "POST") $this->parse_arg();
         $this->renderPage($this->options);
     }
@@ -104,6 +105,17 @@ class Dashboard
         $this->options["searchResult"] = $allCoursesInfo;
 
     }
+    private function handlePut()
+    {
+        $temp1=[
+            "msg" => "success"
+        ];
+
+        $temp = json_encode($temp1);
+        $data = json_decode(file_get_contents('php://input'), true);
+        die($temp);
+    }
+
     private function renderPage(array $OPTION){
         new twigLoader(__FILE__,false, $OPTION);
     }
