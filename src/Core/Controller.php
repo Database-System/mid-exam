@@ -146,7 +146,7 @@ class Controller
         return true;
     }
 
-    public function insert_Course(int $ID, string $Name, string $dept, int $request, int $Credits, int $MaxPeople): bool
+    public function insert_Course(int $ID, string $Name, ?string $dept, int $request, int $Credits, int $MaxPeople): bool
     {
         $sql = "INSERT INTO Course (`ID`,`Name`,`dept`,`request`,`Credits`,`MaxPeople`) VALUES (?,?,?,?,?,?)";
         $stmt = $this->handler->prepare($sql);
@@ -240,7 +240,7 @@ class Controller
         return $stmt->fetchAll();
     }
 
-    private function check_Course(int $courseID): bool|array
+    public function check_Course(int $courseID): bool|array
     {
         $sql = "SELECT * FROM Course WHERE ID = ?";
         $stmt = $this->handler->prepare($sql);
