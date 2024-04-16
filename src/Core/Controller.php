@@ -89,20 +89,25 @@ class Controller
                     continue;
                 }
                 $Name = $record['sub_name'];
-                $cls_name=$record['cls_name'];
-                preg_match_all('/\([一二三四五六日]\)\d{2}(-\d{2})?/u', $record["scr_period"], $matches);
+                $cls_name = $record['cls_name'];
+                preg_match_all('/\([一二三四五六日]\)\d{2}(-\d{2})?/u', $record['scr_period'], $matches);
                 if (!empty($matches[0])) {
                     foreach ($matches[0] as $match) {
                         $clean = str_replace(['(', ')'], '', $match);
                         if (strpos($clean, '-') !== false) {
                             list($firstPart, $secondPart) = explode('-', $clean);
                             $weekDay = mb_substr($firstPart, 0, 1, "UTF-8");
-                            $weekDay = $this->chineseToNumber($weekDay);
-                            $firstNumber = mb_substr($firstPart, 1, null, "UTF-8");
-                            $results[] = $weekDay . $firstNumber;
-                            $results[] = $weekDay . $secondPart;
+                            $firstNumber = mb_substr($firstPart, 1);
+                            $secondNumber = mb_substr($secondPart, 0);
+                            $weekDayNumber = chineseToNumber($weekDay);
+                            for ($i = intval($firstNumber); $i <= intval($secondNumber); $i++) {
+                                $results[] = $weekDayNumber . str_pad($i, 2, "0", STR_PAD_LEFT);
+                            }
                         } else {
-                            $results[] = $clean;
+                            $weekDay = mb_substr($clean, 0, 1, "UTF-8");
+                            $number = mb_substr($clean, 1);
+                            $weekDayNumber = chineseToNumber($weekDay);
+                            $results[] = $weekDayNumber . str_pad($number, 2, "0", STR_PAD_LEFT);
                         }
                     }
                     $times = $results;
@@ -114,16 +119,17 @@ class Controller
                 $request = $record['scj_scr_mso'] == "選修" ? 0 : 1;
                 $Credits = $record['scr_credit'];
                 $MaxPeople = $record['scr_acptcnt'];
-                $this->insert_Course($ID, $Name,$cls_name, $dept, $request, $Credits, $MaxPeople);
+                $this->insert_Course($ID, $Name, $cls_name, $dept, $request, $Credits, $MaxPeople);
             }
         }
     }
-    private function chineseToNumber($chinese) {
+    private function chineseToNumber($chinese)
+    {
         $numbers = [
             '一' => 1, '二' => 2, '三' => 3, '四' => 4,
             '五' => 5, '六' => 6, '日' => 7
         ];
-    
+
         return isset($numbers[$chinese]) ? $numbers[$chinese] : 'Unknown';
     }
     private function search_dept($dept_id): string|NULL
@@ -348,11 +354,11 @@ class Controller
         return true;
     }
 
-    public function insert_Course(int $ID, string $Name,?string $cls_name,?string $dept, int $request, int $Credits, int $MaxPeople): bool
+    public function insert_Course(int $ID, string $Name, ?string $cls_name, ?string $dept, int $request, int $Credits, int $MaxPeople): bool
     {
         $sql = "INSERT INTO Course (`ID`,`Name`,`cls_name`,`dept`,`request`,`Credits`,`MaxPeople`) VALUES (?,?,?,?,?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$ID, $Name,$cls_name, $dept, $request, $Credits, $MaxPeople]);
+        $ret = $stmt->execute([$ID, $Name, $cls_name, $dept, $request, $Credits, $MaxPeople]);
         if (!$ret) return false;
         return true;
     }
@@ -365,17 +371,18 @@ class Controller
         if (!$ret) return false;
         return true;
     }
-    public function check_people_number(int $course_ID){
-        $sql= "SELECT CurrentPeople,MaxPeople From Course WHERE ID = ?";
+    public function check_people_number(int $course_ID)
+    {
+        $sql = "SELECT CurrentPeople,MaxPeople From Course WHERE ID = ?";
         $stmt = $this->handler->prepare($sql);
         $stmt->execute([$course_ID]);
-       
+
         $row = $stmt->fetch();
         $CurrentPeople = $row['CurrentPeople'];
         $MaxPeople = $row['MaxPeople'];
-    
+
         if ($CurrentPeople >= $MaxPeople) {
-            return false; 
+            return false;
         }
         return true;
     }
@@ -545,7 +552,7 @@ class Controller
         return true;
     }
 
-    public function update_currentpeople(int $people, int $ID):bool
+    public function update_currentpeople(int $people, int $ID): bool
     {
         $sql = "UPDATE Course SET `CurrentPeople` = `CurrentPeople` + ? WHERE `ID` = ?";
         $stmt = $this->handler->prepare($sql);
@@ -554,49 +561,48 @@ class Controller
         return true;
     }
 
-    public function search_Courses_By_TimeSlot(int $class):bool| array
-    {   
+    public function search_Courses_By_TimeSlot(int $class): bool| array
+    {
         $sql = "SELECT * FROM Course WHERE Course.ID IN (SELECT Course_ID FROM CourseTimeSlots WHERE Time_Slot_ID = ? )";
         $stmt = $this->handler->prepare($sql);
-        $ret=$stmt->execute([$class]);
-        if(!$ret){
+        $ret = $stmt->execute([$class]);
+        if (!$ret) {
             return false;
         }
 
         return $stmt->fetchAll();
     }
 
-    public function search_Courses_By_Name(string $Name):bool|array
+    public function search_Courses_By_Name(string $Name): bool|array
     {
         $sql = "SELECT * FROM Course WHERE Name LIKE  ? ";
         $stmt = $this->handler->prepare($sql);
-        $ret=$stmt->execute(['%'.$Name.'%']);
-        if(!$ret){
+        $ret = $stmt->execute(['%' . $Name . '%']);
+        if (!$ret) {
             return false;
         }
         return $stmt->fetchall();
     }
-    
-    public function search_Courses_By_Dept(?string $dept):bool|array
+
+    public function search_Courses_By_Dept(?string $dept): bool|array
     {
         $sql = "SELECT * FROM Course WHERE dept LIKE ? ";
         $stmt = $this->handler->prepare($sql);
-        $ret=$stmt->execute([$dept]);
-        if(!$ret){
+        $ret = $stmt->execute([$dept]);
+        if (!$ret) {
             return false;
         }
         return $stmt->fetchAll();
     }
 
-    public function search_Courses_By_clsname(?string $cls_name):bool|array
+    public function search_Courses_By_clsname(?string $cls_name): bool|array
     {
         $sql = "SELECT * FROM Course WHERE cls_name LIKE ? ";
         $stmt = $this->handler->prepare($sql);
-        $ret=$stmt->execute(['%'.$cls_name.'%']);
-        if(!$ret){
+        $ret = $stmt->execute(['%' . $cls_name . '%']);
+        if (!$ret) {
             return false;
         }
         return $stmt->fetchAll();
     }
-    
 }
