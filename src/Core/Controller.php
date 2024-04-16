@@ -91,7 +91,19 @@ class Controller
                 $cls_name=$record['cls_name'];
                 preg_match_all('/\([一二三四五六日]\)\d{2}(-\d{2})?/u', $record["scr_period"], $matches);
                 if (!empty($matches[0])) {
-                    $times = $matches[0];
+                    foreach ($matches[0] as $match) {
+                        $clean = str_replace(['(', ')'], '', $match);
+                        if (strpos($clean, '-') !== false) {
+                            list($firstPart, $secondPart) = explode('-', $clean);
+                            $weekDay = mb_substr($firstPart, 0, 1, "UTF-8");
+                            $firstNumber = mb_substr($firstPart, 1, null, "UTF-8");
+                            $results[] = $weekDay . $firstNumber;
+                            $results[] = $weekDay . $secondPart;
+                        } else {
+                            $results[] = $clean;
+                        }
+                    }
+                    $times = $results;
                 } else {
                     continue;
                 }
