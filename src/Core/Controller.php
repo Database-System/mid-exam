@@ -122,7 +122,7 @@ class Controller
                     continue;
                 }
                 foreach($times as $time){
-                    if($this->checkIfIdExists($time)||$time % 100 == 0)
+                    if($time % 100 == 0)
                     {
                         continue;
                     }

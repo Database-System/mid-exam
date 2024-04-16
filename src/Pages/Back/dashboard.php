@@ -84,6 +84,7 @@ class Dashboard
                 'courseCode' => $course['ID'],
                 'department' => $course['dept'],
                 'subject' => $course['Name'],
+                'class'=> $course['cls_name'],
                 'type' => $course['request'] == 0 ? '選修' : '必修',
                 'credits' => $course['Credits']
             ];
@@ -101,6 +102,7 @@ class Dashboard
                 'courseCode' => $course['ID'],
                 'department' => $course['dept'],
                 'subject' => $course['Name'],
+                'class'=> $course['cls_name'],
                 'type' => $course['request'] == 0 ? '選修' : '必修',
                 'credits' => $course['Credits']
             ];
