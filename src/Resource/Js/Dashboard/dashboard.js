@@ -73,4 +73,5 @@ $(document).ready(function () {
       $(this).addClass('color-4');
     }
   });
+  
 });

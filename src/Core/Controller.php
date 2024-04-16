@@ -146,7 +146,7 @@ class Controller
         return true;
     }
 
-    public function insert_Course(int $ID, string $Name, string $dept, int $request, int $Credits, int $MaxPeople): bool
+    public function insert_Course(int $ID, string $Name, ?string $dept, int $request, int $Credits, int $MaxPeople): bool
     {
         $sql = "INSERT INTO Course (`ID`,`Name`,`dept`,`request`,`Credits`,`MaxPeople`) VALUES (?,?,?,?,?,?)";
         $stmt = $this->handler->prepare($sql);
@@ -240,14 +240,14 @@ class Controller
         return $stmt->fetchAll();
     }
 
-    private function check_Course(int $courseID): bool|array
+    public function check_Course(int $courseID): bool|array
     {
         $sql = "SELECT * FROM Course WHERE ID = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$courseID]);
         if (!$ret)
             return false;
-        return $stmt->fetch();
+        return $stmt->fetchall();
     }
 
     public function updateCourse(int $ID, string $column, $Value): bool
@@ -319,4 +319,39 @@ class Controller
         if (!$ret) return false;
         return true;
     }
+    public function search_Courses_By_TimeSlot(int $class):bool| array
+    {   
+        $sql = "SELECT * FROM Course WHERE Course.ID IN (SELECT Course_ID FROM CourseTimeSlots WHERE Time_Slot_ID = ? )";
+        $stmt = $this->handler->prepare($sql);
+        $ret=$stmt->execute([$class]);
+        if(!$ret){
+            return false;
+        }
+
+        $courses = $stmt->fetchAll();
+    }
+
+    public function search_Courses_By_Name(string $Name):bool|array
+    {
+        $sql = "SELECT * FROM Course WHERE Name LIKE  ? ";
+        $stmt = $this->handler->prepare($sql);
+        $ret=$stmt->execute(['%'.$Name.'%']);
+        if(!$ret){
+            return false;
+        }
+        return $stmt->fetchall();
+    }
+    
+    public function search_Courses_By_Dept(?string $dept):bool|array
+    {
+        $sql = "SELECT * FROM Course WHERE dept LIKE ? ";
+        $stmt = $this->handler->prepare($sql);
+        $ret=$stmt->execute([$dept]);
+        if(!$ret){
+            return false;
+        }
+        return $stmt->fetchAll();
+    }
+
+    
 }
