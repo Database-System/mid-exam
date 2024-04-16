@@ -90,8 +90,15 @@ class Controller
                 }
                 $Name = $record['sub_name'];
                 $cls_name = $record['cls_name'];
+                $dept1 = substr($record['cls_id'], 0, 4);
+                $dept = $this->search_dept($dept1);
+                $request = $record['scj_scr_mso'] == "選修" ? 0 : 1;
+                $Credits = $record['scr_credit'];
+                $MaxPeople = $record['scr_acptcnt'];
+                $this->insert_Course($ID, $Name, $cls_name, $dept, $request, $Credits, $MaxPeople);
                 preg_match_all('/\([一二三四五六日]\)\d{2}(-\d{2})?/u', $record['scr_period'], $matches);
                 if (!empty($matches[0])) {
+                    $results = [];
                     foreach ($matches[0] as $match) {
                         $clean = str_replace(['(', ')'], '', $match);
                         if (strpos($clean, '-') !== false) {
@@ -99,30 +106,33 @@ class Controller
                             $weekDay = mb_substr($firstPart, 0, 1, "UTF-8");
                             $firstNumber = mb_substr($firstPart, 1);
                             $secondNumber = mb_substr($secondPart, 0);
-                            $weekDayNumber = chineseToNumber($weekDay);
+                            $weekDayNumber = $this->chineseToNumber($weekDay);
                             for ($i = intval($firstNumber); $i <= intval($secondNumber); $i++) {
                                 $results[] = $weekDayNumber . str_pad($i, 2, "0", STR_PAD_LEFT);
                             }
                         } else {
                             $weekDay = mb_substr($clean, 0, 1, "UTF-8");
                             $number = mb_substr($clean, 1);
-                            $weekDayNumber = chineseToNumber($weekDay);
+                            $weekDayNumber = $this->chineseToNumber($weekDay);
                             $results[] = $weekDayNumber . str_pad($number, 2, "0", STR_PAD_LEFT);
                         }
                     }
-                    $times = $results;
+                    $times = array_unique($results);
                 } else {
                     continue;
                 }
-                $dept1 = substr($record['cls_id'], 0, 4);
-                $dept = $this->search_dept($dept1);
-                $request = $record['scj_scr_mso'] == "選修" ? 0 : 1;
-                $Credits = $record['scr_credit'];
-                $MaxPeople = $record['scr_acptcnt'];
-                $this->insert_Course($ID, $Name, $cls_name, $dept, $request, $Credits, $MaxPeople);
+                foreach($times as $time){
+                    if($time % 100 == 0)
+                    {
+                        continue;
+                    }
+                    $time = (intdiv($time, 100)-1) * 14 + $time % 100;
+                    $this->insert_CourseTimeSlots($ID, $time);
+                }
             }
         }
     }
+
     private function chineseToNumber($chinese)
     {
         $numbers = [
@@ -132,6 +142,7 @@ class Controller
 
         return isset($numbers[$chinese]) ? $numbers[$chinese] : 'Unknown';
     }
+
     private function search_dept($dept_id): string|NULL
     {
 

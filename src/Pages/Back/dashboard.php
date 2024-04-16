@@ -32,6 +32,8 @@ class Dashboard
     private function parse_arg()
     {
         $this->options["queryPerformed"] = true;
+        // $this->options["searchResult"] = [];
+        // die(var_dump($_POST));
         $class_data = array();
         $condition_data = array();
         $class_search_name = ["deptId", "unitId", "classId"];
@@ -55,13 +57,13 @@ class Dashboard
             if($name == "code"){
                 $condition_data = $this->controller->check_Course($_POST['code']);
             }
-            // else if($name == "week"){
+            else if($name == "week"){
                 
-            //     $temp_week=intval($_POST['week']);
-            //     $temp_unit=intval($_POST['unit']);
-            //     $temp = ($temp_week-1)*14+($temp_unit);
-            //     $condition_data = $this->controller->search_Courses_By_TimeSlot($temp);
-            // }
+                $temp_week=intval($_POST['week']);
+                $temp_unit=intval($_POST['unit']);
+                $temp = ($temp_week-1)*14+($temp_unit);
+                $condition_data = $this->controller->search_Courses_By_TimeSlot($temp);
+            }
             else if($name == "course"){
                 $condition_data = $this->controller->search_Courses_By_Name($_POST[$name]);
             }
@@ -82,6 +84,7 @@ class Dashboard
                 'courseCode' => $course['ID'],
                 'department' => $course['dept'],
                 'subject' => $course['Name'],
+                'class'=> $course['cls_name'],
                 'type' => $course['request'] == 0 ? '選修' : '必修',
                 'credits' => $course['Credits']
             ];
@@ -99,6 +102,7 @@ class Dashboard
                 'courseCode' => $course['ID'],
                 'department' => $course['dept'],
                 'subject' => $course['Name'],
+                'class'=> $course['cls_name'],
                 'type' => $course['request'] == 0 ? '選修' : '必修',
                 'credits' => $course['Credits']
             ];
