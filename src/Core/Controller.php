@@ -97,6 +97,7 @@ class Controller
                         if (strpos($clean, '-') !== false) {
                             list($firstPart, $secondPart) = explode('-', $clean);
                             $weekDay = mb_substr($firstPart, 0, 1, "UTF-8");
+                            $weekDay = $this->chineseToNumber($weekDay);
                             $firstNumber = mb_substr($firstPart, 1, null, "UTF-8");
                             $results[] = $weekDay . $firstNumber;
                             $results[] = $weekDay . $secondPart;
@@ -116,6 +117,14 @@ class Controller
                 $this->insert_Course($ID, $Name,$cls_name, $dept, $request, $Credits, $MaxPeople);
             }
         }
+    }
+    private function chineseToNumber($chinese) {
+        $numbers = [
+            '一' => 1, '二' => 2, '三' => 3, '四' => 4,
+            '五' => 5, '六' => 6, '日' => 7
+        ];
+    
+        return isset($numbers[$chinese]) ? $numbers[$chinese] : 'Unknown';
     }
     private function search_dept($dept_id): string|NULL
     {
