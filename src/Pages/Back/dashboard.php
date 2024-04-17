@@ -5,7 +5,6 @@ namespace Exam\Pages\Back;
 use Exam\Pages\twigLoader;
 use Exam\Utils\Utils;
 use Exam\Core\Controller;
-use LDAP\Result;
 
 if (!session_id()) session_start();
 
@@ -18,14 +17,6 @@ class Dashboard
         $this->controller = new Controller();
         Utils::isLogin();
         $this->userdata_preload($_SESSION['userID']);
-        // $this->options = [
-        //     "x0y0" => ["1411","1433","1435"],
-        //     "x0y0-title" => ["國文","國文1","國文2"],
-        //     "x0y1" => 1412,
-        //     "x0y1-title" => "英文",
-        //     "x0y13" => [1413,1415,1444],
-        // ];
-        // $this->options["x0y13-title"] = ["數學","數學1","數學2"];
         $this->options["total"] = $this->controller->get_total_credits($_SESSION['userID']);
         $this->options["display"] = true;
         if ($_SERVER["REQUEST_METHOD"] == "PUT") $this->handlePut();
@@ -36,8 +27,6 @@ class Dashboard
     private function parse_arg()
     {
         $this->options["queryPerformed"] = true;
-        // $this->options["searchResult"] = [];
-        // die(var_dump($_POST));
         $class_data = array();
         $condition_data = array();
         $class_search_name = ["deptId", "unitId", "classId"];
@@ -46,29 +35,26 @@ class Dashboard
             if (!isset($_POST[$name]) || empty($_POST[$name])) {
                 continue;
             }
-            if($name == "deptId")
+            if ($name == "deptId")
                 $class_data = $this->controller->search_Courses_By_Dept($_POST['deptId']);
-            else if($name == "unitId")
+            else if ($name == "unitId")
                 $class_data = $this->controller->search_Courses_By_Dept($_POST['unitId']);
-            else if($name == "classId")
+            else if ($name == "classId")
                 $class_data = $this->controller->search_Courses_By_clsname($_POST['classId']);
-            
         }
         foreach ($condition_search_name as $name) {
             if (!isset($_POST[$name]) || empty($_POST[$name])) {
                 continue;
             }
-            if($name == "code"){
+            if ($name == "code") {
                 $condition_data = $this->controller->check_Course($_POST['code']);
-            }
-            else if($name == "week"){
-                
-                $temp_week=intval($_POST['week']);
-                $temp_unit=intval($_POST['unit']);
-                $temp = ($temp_week-1)*14+($temp_unit);
+            } else if ($name == "week") {
+
+                $temp_week = intval($_POST['week']);
+                $temp_unit = intval($_POST['unit']);
+                $temp = ($temp_week - 1) * 14 + ($temp_unit);
                 $condition_data = $this->controller->search_Courses_By_TimeSlot($temp);
-            }
-            else if($name == "course"){
+            } else if ($name == "course") {
                 $condition_data = $this->controller->search_Courses_By_Name($_POST[$name]);
             }
         }
@@ -88,7 +74,7 @@ class Dashboard
                 'courseCode' => $course['ID'],
                 'department' => $course['dept'],
                 'subject' => $course['Name'],
-                'class'=> $course['cls_name'],
+                'class' => $course['cls_name'],
                 'type' => $course['request'] == 0 ? '選修' : '必修',
                 'credits' => $course['Credits']
             ];
@@ -106,7 +92,7 @@ class Dashboard
                 'courseCode' => $course['ID'],
                 'department' => $course['dept'],
                 'subject' => $course['Name'],
-                'class'=> $course['cls_name'],
+                'class' => $course['cls_name'],
                 'type' => $course['request'] == 0 ? '選修' : '必修',
                 'credits' => $course['Credits']
             ];
@@ -117,7 +103,7 @@ class Dashboard
     }
     private function handlePut()
     {
-        $temp1=[
+        $temp1 = [
             "msg" => "success"
         ];
 
@@ -135,10 +121,12 @@ class Dashboard
             $this->options["x".$weekday."y".$unit."-title"] = $row['Name'];
         }
     }
-    private function renderPage(array $OPTION){
+    private function renderPage(array $OPTION)
+    {
         new twigLoader(__FILE__,false, $OPTION);
     }
-    private function userdata_preload(string $user){
+    private function userdata_preload(string $user)
+    {
         $this->options["NID"] = $user;
     }
 }

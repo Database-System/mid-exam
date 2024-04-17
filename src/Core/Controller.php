@@ -120,12 +120,11 @@ class Controller
                 } else {
                     continue;
                 }
-                foreach($times as $time){
-                    if($time % 100 == 0)
-                    {
+                foreach ($times as $time) {
+                    if ($time % 100 == 0) {
                         continue;
                     }
-                    $time = (intdiv($time, 100)-1) * 14 + $time % 100;
+                    $time = (intdiv($time, 100) - 1) * 14 + $time % 100;
                     $this->insert_CourseTimeSlots($ID, $time);
                 }
             }
@@ -442,8 +441,6 @@ class Controller
         if (!$ret) return false;
         return true;
     }
-
-    //search
     public function search_User_TimeTable(string $username, int $courseID): bool
     {
         $user = $this->check_User($username);
@@ -526,13 +523,13 @@ class Controller
         $calcStmt = $this->handler->prepare($calcTotalCreditsSql);
         $calcStmt->execute([$username]);
         $result = $calcStmt->fetchAll();
-        
+
         $temp = [];
         foreach ($result as $row) {
             $sql = "SELECT Credits FROM Course WHERE ID = ?";
             $stmt = $this->handler->prepare($sql);
             $stmt->execute([$row['course_ID']]);
-            $temp[]= $stmt->fetchall();
+            $temp[] = $stmt->fetchall();
         }
 
         $totalCredits = 0;
@@ -629,7 +626,7 @@ class Controller
 
     public function Insert_Request_Course(string $username, string $dept, string $cls_name): bool
     {
-        if(!isset($dept) || !isset($cls_name)){
+        if (!isset($dept) || !isset($cls_name)) {
             return false;
         }
         $sql = "SELECT DISTINCT Course_ID FROM CourseTimeSlots WHERE Course_ID IN(SELECT ID FROM Course WHERE dept = ? AND cls_name = ? AND request = 1)";
@@ -641,11 +638,11 @@ class Controller
         $result = $stmt->fetchAll();
         $user = $this->check_User($username);
         foreach ($result as $row) {
-            $temp=intval($row['Course_ID']);
+            $temp = intval($row['Course_ID']);
             $this->insert_TimeTable($temp, $user['id']);
         }
         return true;
-    }   
+    }
 
     public function get_total_credits(string $username): int
     {
@@ -655,8 +652,8 @@ class Controller
         if (!$ret) {
             return false;
         }
-        $temp=$stmt->fetch();
-        $totalCredits=$temp['Total_credits'];
+        $temp = $stmt->fetch();
+        $totalCredits = $temp['Total_credits'];
         return $totalCredits;
     }
 

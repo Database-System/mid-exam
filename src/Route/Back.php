@@ -1,11 +1,12 @@
 <?php
 
 namespace Exam\Route;
+
 if (!session_id()) session_start();
 class Back
 {
     private static $ROUTES = [];
-    
+
     public static function addRoute($path, $class, $method = null, $constructorParams = [])
     {
         self::$ROUTES[$path] = ['class' => $class, 'method' => $method, 'params' => $constructorParams];
