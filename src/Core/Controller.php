@@ -671,4 +671,15 @@ class Controller
         }
         return $stmt->fetchall();
     }
+    
+    public function get_Courses_Timeslot(int $courseID): bool|array
+    {
+        $sql = "SELECT * FROM CourseTimeSlots WHERE Course_ID = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$courseID]);
+        if (!$ret) {
+            return false;
+        }
+        return $stmt->fetchall();
+    }
 }
