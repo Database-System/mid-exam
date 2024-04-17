@@ -5,6 +5,7 @@ namespace Exam\Core;
 use DateTime;
 use Time;
 use Exam\Core\Connect;
+use Twig\Node\Expression\Binary\AndBinary;
 
 class Controller
 {
@@ -654,5 +655,20 @@ class Controller
         $temp = $stmt->fetch();
         $totalCredits = $temp['Total_credits'];
         return $totalCredits;
+    }
+
+    public function get_Courses_Time(string $ID): bool|array
+    {
+        $user = $this->check_User($ID);
+        $sql = "SELECT CourseTimeSlots.Course_ID,CourseTimeSlots.Time_Slot_ID,Course.Name 
+                FROM CourseTimeSlots,Course
+                WHERE CourseTimeSlots.course_ID in(SELECT course_ID FROM TimeTable WHERE user_id = ?) 
+                AND CourseTimeSlots.Course_ID = Course.ID";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$user['id']]);
+        if (!$ret) {
+            return false;
+        }
+        return $stmt->fetchall();
     }
 }
