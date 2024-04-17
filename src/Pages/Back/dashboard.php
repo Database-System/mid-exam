@@ -30,6 +30,7 @@ class Dashboard
         $this->options["display"] = true;
         if ($_SERVER["REQUEST_METHOD"] == "PUT") $this->handlePut();
         if ($_SERVER["REQUEST_METHOD"] == "POST") $this->parse_arg();
+        $this->puttable();
         $this->renderPage($this->options);
     }
     private function parse_arg()
@@ -124,7 +125,16 @@ class Dashboard
         $data = json_decode(file_get_contents('php://input'), true);
         die($temp);
     }
-
+    private function puttable()
+    {
+        $result = $this->controller->get_Courses_Time($_SESSION['userID']);
+        foreach($result as $row){
+            $weekday = intdiv($row['Time_Slot_ID'],14);
+            $unit = $row['Time_Slot_ID']%14; 
+            $this->options["x".$weekday."y".$unit] = $row['Course_ID'];
+            $this->options["x".$weekday."y".$unit."-title"] = $row['Name'];
+        }
+    }
     private function renderPage(array $OPTION){
         new twigLoader(__FILE__,false, $OPTION);
     }
