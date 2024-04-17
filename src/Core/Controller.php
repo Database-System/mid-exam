@@ -51,10 +51,8 @@ class Controller
 
         "TimeTable" => "CREATE TABLE `TimeTable` (
             `course_ID` INT(10) UNSIGNED NOT NULL,
-            `time_slot_id` INT(10) UNSIGNED NOT NULL,
             `user_id` INT(11) NOT NULL,
-            FOREIGN KEY (`course_ID`) REFERENCES `Course`(`ID`),
-            FOREIGN KEY (`time_slot_id`) REFERENCES `TimeSlot`(`time_slot_id`),
+            FOREIGN KEY (`course_ID`) REFERENCES `CourseTimeSlots`(`Course_ID`),
             FOREIGN KEY (`user_id`) REFERENCES `Users`(`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;"
     ];
@@ -398,11 +396,11 @@ class Controller
         return true;
     }
 
-    public function insert_TimeTable(int $course_ID, int $time_slot_id, int $user_id)
+    public function insert_TimeTable(int $course_ID, string $username)
     {
-        $sql = "INSERT INTO TimeTable (`course_ID`,`time_slot_id`,`user_id`) VALUES (?,?,?)";
+        $sql = "INSERT INTO TimeTable (`course_ID`,`user_id`) VALUES (?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$course_ID, $time_slot_id, $user_id]);
+        $ret = $stmt->execute([$course_ID, $username]);
         if (!$ret) return false;
         return true;
     }
@@ -426,11 +424,11 @@ class Controller
     }
 
 
-    public function delete_TimeTable(int $course_id, int $time_slot_id, int $user_id)
+    public function delete_TimeTable(int $course_id, int $user_id)
     {
-        $sql = "DELETE FROM `TimeTable` WHERE `course_ID` = ? AND `time_slot_id` = ? AND `user_id` = ?";
+        $sql = "DELETE FROM `TimeTable` WHERE `course_ID` = ?  AND `user_id` = ?";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$course_id, $time_slot_id, $user_id]);
+        $ret = $stmt->execute([$course_id, $user_id]);
         if (!$ret) return false;
         return true;
     }
@@ -465,9 +463,9 @@ class Controller
                 FROM Users
                 INNER JOIN TimeTable ON Users.id = TimeTable.user_id
                 INNER JOIN Course ON TimeTable.course_ID = Course.ID
-                INNER JOIN TimeSlot ON TimeTable.time_slot_id = TimeSlot.time_slot_id
                 WHERE Users.username = ?";
         $stmt = $this->handler->prepare($sql);
+        // INNER JOIN TimeSlot ON TimeTable.time_slot_id = TimeSlot.time_slot_id
         $ret = $stmt->execute([$username]);
         if (!$ret)
             return false;
@@ -521,18 +519,29 @@ class Controller
 
     public function Update_User_TotalCerdits(string $username): bool
     {
-        $calcTotalCreditsSql = "SELECT SUM(Course.Credits) as Total_credits
-                            FROM Users
-                            INNER JOIN TimeTable ON Users.id = TimeTable.user_id
-                            INNER JOIN Course ON TimeTable.course_ID = Course.ID
-                            WHERE Users.username = ?";
+        $calcTotalCreditsSql = "SELECT course_ID 
+                                FROM TimeTable
+                                WHERE user_id in (SELECT id FROM Users WHERE username = ?)";
         $calcStmt = $this->handler->prepare($calcTotalCreditsSql);
         $calcStmt->execute([$username]);
-        $result = $calcStmt->fetch();
+        $result = $calcStmt->fetchAll();
+        
+        $temp = [];
+        foreach ($result as $row) {
+            $sql = "SELECT Credits FROM Course WHERE ID = ?";
+            $stmt = $this->handler->prepare($sql);
+            $stmt->execute([$row['course_ID']]);
+            $temp[]= $stmt->fetchall();
+        }
+
+        $totalCredits = 0;
+        foreach ($temp as $row) {
+            $totalCredits += $row[0]['Credits'];
+        }
 
         $sql = "UPDATE Users SET `Total_credits` = ? WHERE `username` = ?";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$result['Total_credits'], $username]);
+        $ret = $stmt->execute([$totalCredits, $username]);
         if (!$ret) return false;
         return true;
     }
@@ -615,5 +624,38 @@ class Controller
             return false;
         }
         return $stmt->fetchAll();
+    }
+
+    public function Insert_Request_Course(string $username, string $dept, string $cls_name): bool
+    {
+        if(!isset($dept) || !isset($cls_name)){
+            return false;
+        }
+        $sql = "SELECT DISTINCT Course_ID FROM CourseTimeSlots WHERE Course_ID IN(SELECT ID FROM Course WHERE dept = ? AND cls_name = ? AND request = 1)";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$dept, $cls_name]);
+        if (!$ret) {
+            return false;
+        }
+        $result = $stmt->fetchAll();
+        $user = $this->check_User($username);
+        foreach ($result as $row) {
+            $temp=intval($row['Course_ID']);
+            $this->insert_TimeTable($temp, $user['id']);
+        }
+        return true;
+    }   
+
+    public function get_total_credits(string $username): int
+    {
+        $sql = "SELECT Total_credits FROM Users WHERE username = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$username]);
+        if (!$ret) {
+            return false;
+        }
+        $temp=$stmt->fetch();
+        $totalCredits=$temp['Total_credits'];
+        return $totalCredits;
     }
 }

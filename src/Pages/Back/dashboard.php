@@ -5,6 +5,8 @@ namespace Exam\Pages\Back;
 use Exam\Pages\twigLoader;
 use Exam\Utils\Utils;
 use Exam\Core\Controller;
+use LDAP\Result;
+
 if (!session_id()) session_start();
 
 class Dashboard
@@ -24,6 +26,7 @@ class Dashboard
         //     "x0y13" => [1413,1415,1444],
         // ];
         // $this->options["x0y13-title"] = ["數學","數學1","數學2"];
+        $this->options["total"] = $this->controller->get_total_credits($_SESSION['userID']);
         $this->options["display"] = true;
         if ($_SERVER["REQUEST_METHOD"] == "PUT") $this->handlePut();
         if ($_SERVER["REQUEST_METHOD"] == "POST") $this->parse_arg();

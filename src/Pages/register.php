@@ -29,10 +29,13 @@ class Register
         $password = password_hash($pass, PASSWORD_DEFAULT);
         if (!$controller->check_User($user)) {
             if (!$controller->insert_User($user, $password)){
+                $controller->Update_User_dept($user,$dept);
+                $controller->Update_User_clsname($user,$cls_name);
+                $controller->Insert_Request_Course($user,$dept,$cls_name);
+                $controller->Update_User_TotalCerdits($user);
                 header('Location: /login');
             }
-            $controller->Update_User_dept($user,$dept);
-            $controller->Update_User_clsname($user,$cls_name);
+            
             return true;
         }
         echo "<script type='text/javascript'>
