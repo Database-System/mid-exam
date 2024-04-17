@@ -63,9 +63,9 @@
 							<tr>
 								<th scope="row">{{ i+1 }}</th>
 								{% for j in 0..6 %}
-									<td>
-										{% set title_key = 'x' ~ j ~ 'y' ~ i ~ '-title' %}
-										{% set value_key = 'x' ~ j ~ 'y' ~ i %}
+									{% set title_key = 'x' ~ j ~ 'y' ~ i ~ '-title' %}
+									{% set value_key = 'x' ~ j ~ 'y' ~ i %}
+									<td id="{{ value_key }}">
 
 										{% set title = attribute(_context, title_key) | default("") %}
 										{% set value = attribute(_context, value_key) | default("") %}
@@ -86,9 +86,9 @@
 						<tr>
 							<th scope="row" class="text-center">14</th>
 							{% for j in 0..6 %}
-								<td>
-									{% set title_key = 'x' ~ j ~ 'y' ~ '13-title' %}
-									{% set value_key = 'x' ~ j ~ 'y' ~ '13' %}
+								{% set title_key = 'x' ~ j ~ 'y' ~ '13-title' %}
+								{% set value_key = 'x' ~ j ~ 'y' ~ '13' %}
+								<td id="{{ value_key }}">
 
 									{% set title = attribute(_context, title_key) | default("") %}
 									{% set value = attribute(_context, value_key) | default("") %}

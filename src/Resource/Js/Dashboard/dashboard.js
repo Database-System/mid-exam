@@ -77,12 +77,25 @@ $(document).ready(function () {
 });
 function enroll(CourseID) {
   $.ajax({
-  type: "PUT",
-  url: "/back/dashboard",
-  data: JSON.stringify({ CourseID: CourseID }),
-  success: function(temp){
-      // window.location.reload()
-    console.log('success: ', temp);
-  },
+    type: "PUT",
+    url: "/back/dashboard",
+    contentType: "application/json",
+    data: JSON.stringify({ CourseID: CourseID }),
+    success: function(temp) {
+      // temp = JSON.parse(temp);
+      // if (Array.isArray(temp)) {
+      //   temp.forEach(item => {
+      //     let courseID = Number(item.Course_ID);
+      //     let timeSlotID = Number(item.Time_Slot_ID);
+      //     let week = Math.floor(timeSlotID / 14);
+      //     let period = timeSlotID % 14 -1;
+      //     let show_td_id = "x" + week + "y" + period;
+      //     $('#' + show_td_id).find('span').text(courseID);
+      //     $('#' + show_td_id).find('span').first().attr('title', newTitle);
+      //   });
+      // } else {
+      //   console.log('Received data is not an array.');
+      // }
+    }
   });
 }

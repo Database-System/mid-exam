@@ -104,14 +104,15 @@ class Dashboard
     private function handlePut()
     {
         $data = json_decode(file_get_contents('php://input'), true);
-        die($data['CourseID']);
+        $result = $this->controller->get_Courses_Timeslot(intval($data['CourseID']));
+        die(json_encode($result));
     }
     private function puttable()
     {
         $result = $this->controller->get_Courses_Time($_SESSION['userID']);
         foreach ($result as $row) {
             $weekday = intdiv($row['Time_Slot_ID'], 14);
-            $unit = $row['Time_Slot_ID'] % 14;
+            $unit = $row['Time_Slot_ID'] % 14 - 1;
             $this->options["x" . $weekday . "y" . $unit] = $row['Course_ID'];
             $this->options["x" . $weekday . "y" . $unit . "-title"] = $row['Name'];
         }
