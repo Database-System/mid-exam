@@ -2,10 +2,7 @@
 
 namespace Exam\Core;
 
-use DateTime;
-use Time;
 use Exam\Core\Connect;
-use Twig\Node\Expression\Binary\AndBinary;
 
 class Controller
 {
@@ -544,23 +541,23 @@ class Controller
         return true;
     }
 
-    public function updateTimeSlots(int $time_slot_id, string $day, string $start_time, string $end_time): bool
-    {
-        $start_datetime = DateTime::createFromFormat('H:i:s', $start_time);
-        $end_datetime = DateTime::createFromFormat('H:i:s', $end_time);
+    // public function updateTimeSlots(int $time_slot_id, string $day, string $start_time, string $end_time): bool
+    // {
+    //     $start_datetime = DateTime::createFromFormat('H:i:s', $start_time);
+    //     $end_datetime = DateTime::createFromFormat('H:i:s', $end_time);
 
-        if (!$start_datetime || !$end_datetime) return false;
+    //     if (!$start_datetime || !$end_datetime) return false;
 
-        $start_time_formatted = $start_datetime->format('H:i:s');
-        $end_time_formatted = $end_datetime->format('H:i:s');
+    //     $start_time_formatted = $start_datetime->format('H:i:s');
+    //     $end_time_formatted = $end_datetime->format('H:i:s');
 
-        $sql = "UPDATE TimeSlot SET `day` = ?,`start_time` = ?,`end_time`=? WHERE `time_slot_id` = ?";
-        $stmt = $this->handler->prepare($sql);
+    //     $sql = "UPDATE TimeSlot SET `day` = ?,`start_time` = ?,`end_time`=? WHERE `time_slot_id` = ?";
+    //     $stmt = $this->handler->prepare($sql);
 
-        $ret = $stmt->execute([$day, $start_time_formatted, $end_time_formatted, $time_slot_id]);
-        if (!$ret) return false;
-        return true;
-    }
+    //     $ret = $stmt->execute([$day, $start_time_formatted, $end_time_formatted, $time_slot_id]);
+    //     if (!$ret) return false;
+    //     return true;
+    // }
     public function updateCourseTimeSlots(int $Course_ID, int $Time_Slot_ID): bool
     {
         $sql = "UPDATE CourseTimeSlots SET `Time_Slot_id`=? WHERE `Course_ID` = ?";
@@ -671,7 +668,7 @@ class Controller
         }
         return $stmt->fetchall();
     }
-    
+
     public function get_Courses_Timeslot(int $courseID): bool|array
     {
         $sql = "SELECT * FROM CourseTimeSlots WHERE Course_ID = ?";
