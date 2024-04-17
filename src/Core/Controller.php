@@ -657,9 +657,9 @@ class Controller
         return $totalCredits;
     }
 
-    public function get_Courses_Time(string $ID): bool|array
+    public function get_Courses_Time(string $UID): bool|array
     {
-        $user = $this->check_User($ID);
+        $user = $this->check_User($UID);
         $sql = "SELECT CourseTimeSlots.Course_ID,CourseTimeSlots.Time_Slot_ID,Course.Name 
                 FROM CourseTimeSlots,Course
                 WHERE CourseTimeSlots.course_ID in(SELECT course_ID FROM TimeTable WHERE user_id = ?) 

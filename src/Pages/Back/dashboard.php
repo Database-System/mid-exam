@@ -103,27 +103,22 @@ class Dashboard
     }
     private function handlePut()
     {
-        $temp1 = [
-            "msg" => "success"
-        ];
-
-        $temp = json_encode($temp1);
         $data = json_decode(file_get_contents('php://input'), true);
-        die($temp);
+        die($data['CourseID']);
     }
     private function puttable()
     {
         $result = $this->controller->get_Courses_Time($_SESSION['userID']);
-        foreach($result as $row){
-            $weekday = intdiv($row['Time_Slot_ID'],14);
-            $unit = $row['Time_Slot_ID']%14; 
-            $this->options["x".$weekday."y".$unit] = $row['Course_ID'];
-            $this->options["x".$weekday."y".$unit."-title"] = $row['Name'];
+        foreach ($result as $row) {
+            $weekday = intdiv($row['Time_Slot_ID'], 14);
+            $unit = $row['Time_Slot_ID'] % 14;
+            $this->options["x" . $weekday . "y" . $unit] = $row['Course_ID'];
+            $this->options["x" . $weekday . "y" . $unit . "-title"] = $row['Name'];
         }
     }
     private function renderPage(array $OPTION)
     {
-        new twigLoader(__FILE__,false, $OPTION);
+        new twigLoader(__FILE__, false, $OPTION);
     }
     private function userdata_preload(string $user)
     {
