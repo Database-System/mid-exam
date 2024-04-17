@@ -26,10 +26,10 @@ class Dashboard
         //     "x0y13" => [1413,1415,1444],
         // ];
         // $this->options["x0y13-title"] = ["數學","數學1","數學2"];
+        $this->options["total"] = $this->controller->get_total_credits($_SESSION['userID']);
         $this->options["display"] = true;
         if ($_SERVER["REQUEST_METHOD"] == "PUT") $this->handlePut();
         if ($_SERVER["REQUEST_METHOD"] == "POST") $this->parse_arg();
-        $this->puttable();
         $this->renderPage($this->options);
     }
     private function parse_arg()
@@ -123,13 +123,6 @@ class Dashboard
         $temp = json_encode($temp1);
         $data = json_decode(file_get_contents('php://input'), true);
         die($temp);
-    }
-
-    private function puttable(){
-        $username=$this->options["NID"];
-        $user_id=$this->controller->check_User($username);
-        $Result=$this->controller->search_TimeTable($user_id['id']);
-        die(var_dump($Result));
     }
 
     private function renderPage(array $OPTION){
