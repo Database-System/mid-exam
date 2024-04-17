@@ -5,6 +5,8 @@ namespace Exam\Pages\Back;
 use Exam\Pages\twigLoader;
 use Exam\Utils\Utils;
 use Exam\Core\Controller;
+use LDAP\Result;
+
 if (!session_id()) session_start();
 
 class Dashboard
@@ -27,6 +29,7 @@ class Dashboard
         $this->options["display"] = true;
         if ($_SERVER["REQUEST_METHOD"] == "PUT") $this->handlePut();
         if ($_SERVER["REQUEST_METHOD"] == "POST") $this->parse_arg();
+        $this->puttable();
         $this->renderPage($this->options);
     }
     private function parse_arg()
@@ -120,6 +123,13 @@ class Dashboard
         $temp = json_encode($temp1);
         $data = json_decode(file_get_contents('php://input'), true);
         die($temp);
+    }
+
+    private function puttable(){
+        $username=$this->options["NID"];
+        $user_id=$this->controller->check_User($username);
+        $Result=$this->controller->search_TimeTable($user_id['id']);
+        die(var_dump($Result));
     }
 
     private function renderPage(array $OPTION){

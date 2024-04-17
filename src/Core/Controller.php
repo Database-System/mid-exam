@@ -398,11 +398,11 @@ class Controller
         return true;
     }
 
-    public function insert_TimeTable(int $course_ID, int $time_slot_id, int $user_id)
+    public function insert_TimeTable(int $course_ID, int $time_slot_id, string $username)
     {
         $sql = "INSERT INTO TimeTable (`course_ID`,`time_slot_id`,`user_id`) VALUES (?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$course_ID, $time_slot_id, $user_id]);
+        $ret = $stmt->execute([$course_ID, $time_slot_id, $username]);
         if (!$ret) return false;
         return true;
     }
@@ -616,4 +616,36 @@ class Controller
         }
         return $stmt->fetchAll();
     }
+
+    public function Insert_Request_Course(string $username, string $dept, string $cls_name): bool
+    {
+        $sql = "SELECT * FROM CourseTimeSlots WHERE Course_ID IN(SELECT ID FROM Course WHERE dept = ? AND cls_name = ? AND request = 1)";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$dept, $cls_name]);
+        if (!$ret) {
+            return false;
+        }
+        $result = $stmt->fetchAll();
+        $user = $this->check_User($username);
+        foreach ($result as $row) {
+            $this->insert_TimeTable($row['Course_ID'], $row['Time_Slot_ID'], $user['id']);
+        }
+        return true;
+
+    }
+    
+    public function Search_Timetable(int $user_id):bool|string
+    {
+        $sql = "SELECT Course.Name,CourseTimeSlot.course_ID ,CourseTimeSlots.time_slot_ID from CourseTimeSlots
+                INNER JOIN Course ON CourseTimeSlots.Course_ID = Course.ID
+                WHERE CourseTimeSlots.Course_ID IN (SELECT Course_ID FROM TimeTable WHERE user_id = ?)";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$user_id]);
+        if (!$ret)
+            return false;
+        return $stmt->fetchAll();
+    }
+
+    
+
 }
