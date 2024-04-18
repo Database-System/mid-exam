@@ -30,6 +30,8 @@ class GetDoneTable
         foreach ($result as $row) {
             $weekday = intdiv($row['Time_Slot_ID'], 14);
             $unit = $row['Time_Slot_ID'] % 14 - 1;
+            $ret = $this->options["x" . $weekday . "y" . $unit];
+            $ret1 = $this->options["x" . $weekday . "y" . $unit . "-title"];
             array_push($ret, $row['Course_ID']);
             array_push($ret1, $row['Name']);
             $this->options["x" . $weekday . "y" . $unit] = $ret;

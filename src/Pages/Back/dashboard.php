@@ -127,19 +127,17 @@ class Dashboard
     private function puttable()
     {
         $result = $this->controller->get_Courses_Time($_SESSION['userID']);
-        // die(var_dump($result));
         $ret = [];
         $ret1 = [];
         foreach ($result as $row) {
-            
             $weekday = intdiv($row['Time_Slot_ID'], 14);
             $unit = $row['Time_Slot_ID'] % 14 - 1;
+            $ret = $this->options["x" . $weekday . "y" . $unit];
+            $ret1 = $this->options["x" . $weekday . "y" . $unit . "-title"];
             array_push($ret, $row['Course_ID']);
             array_push($ret1, $row['Name']);
             $this->options["x" . $weekday . "y" . $unit] = $ret;
             $this->options["x" . $weekday . "y" . $unit . "-title"] = $ret1;
-            // $this->options["x" . $weekday . "y" . $unit] = $row['Course_ID'];
-            // $this->options["x" . $weekday . "y" . $unit . "-title"] = $row['Name'];
         }
     }
     private function handleDelete(){
