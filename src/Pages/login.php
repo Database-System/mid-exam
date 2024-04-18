@@ -5,9 +5,7 @@ namespace Exam\Pages;
 if (!session_id()) session_start();
 
 use Exam\Core\Controller;
-use Exam\Route\Back;
 use Exam\Pages\twigLoader;
-use Exam\Route\Router;
 
 class Login
 {
@@ -21,7 +19,9 @@ class Login
             $user = $_POST["user"] ?? '';
             $pass = $_POST["password"] ?? '';
             $this->login($user, $pass);
-        } else new twigLoader(__FILE__, false, $this->OPTIONS);
+        }
+        if (isset($_SESSION['userID'])) header('Location: /back/dashboard');
+        else new twigLoader(__FILE__, false, $this->OPTIONS);
     }
 
     private function login(string $user, string $password)
@@ -29,7 +29,10 @@ class Login
         $controller = new Controller();
         $data = $controller->check_User($user);
         if (is_array($data) && password_verify($password, $data['password'])) $this->mark_User($data);
-        else header('Location: /login');
+        else echo "<script type='text/javascript'>
+        alert('帳號密碼錯誤');
+        window.location.href = '/login';
+        </script>";
     }
     private function mark_User(array $data)
     {

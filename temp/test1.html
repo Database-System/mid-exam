@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .tooltip {
+          position: relative;
+          display: inline-block;
+        }
+      
+        .tooltip .tooltiptext {
+          visibility: hidden;
+          width: 120px;
+          background-color: black;
+          color: white;
+          text-align: center;
+          border-radius: 6px;
+          padding: 5px 0;
+          position: absolute;
+          z-index: 1;
+          bottom: 100%;
+          left: 50%;
+          margin-left: -60px;
+        }
+      
+        .tooltip:hover .tooltiptext {
+          visibility: visible;
+        }
+      </style>
+</head>
+<body>
+    <table>
+  <tr>
+    <td style="background-color: #ffcccc; color: black;">單元格1</td>
+    <td>單元格2</td>
+  </tr>
+  <tr>
+    <td>單元格3</td>
+    <td>單元格4</td>
+  </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<div class="calendar">
+	<table>
+		<thead>
+			<tr>
+				<th scope="row"></th>
+				{% set days = ['一', '二','三','四','五','六','日'] %}
+				{% for day in days %}
+					<th scope="col" class="text-center">{{ day }}</th>
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody class="text-center">
+			{% for i in 0..12 %}
+				<tr>
+					<th scope="row">{{ i+1 }}</th>
+					{% for j in 0..6 %}
+						{% set title_key = 'x' ~ j ~ 'y' ~ i ~ '-title' %}
+						{% set value_key = 'x' ~ j ~ 'y' ~ i %}
+						<td id="{{ value_key }}">
+
+							{% set title = attribute(_context, title_key) | default("") %}
+							{% set value = attribute(_context, value_key) | default("") %}
+
+							{% if title is iterable and value is iterable %}
+								{% for index, item_title in title %}
+									<span title="{{ item_title }}">{{ attribute(value, index)|default("") }}</span>
+								{% endfor %}
+							{% else %}
+								<span title="{{ title }}">{{ value }}</span>
+							{% endif %}
+						</td>
+					{% endfor %}
+				</tr>
+			{% endfor %}
+		</tbody>
+		<tfoot>
+			<tr>
+				<th scope="row" class="text-center">14</th>
+				{% for j in 0..6 %}
+					{% set title_key = 'x' ~ j ~ 'y' ~ '13-title' %}
+					{% set value_key = 'x' ~ j ~ 'y' ~ '13' %}
+					<td id="{{ value_key }}">
+
+						{% set title = attribute(_context, title_key) | default("") %}
+						{% set value = attribute(_context, value_key) | default("") %}
+
+						{% if title is iterable and value is iterable %}
+							{% for index, item_title in title %}
+								<span title="{{ item_title }}">{{ attribute(value, index)|default("") }}</span>
+							{% endfor %}
+						{% else %}
+							<span title="{{ title }}">{{ value }}</span>
+						{% endif %}
+					</td>
+				{% endfor %}
+			</tr>
+		</tfoot>
+	</table>
+</div>

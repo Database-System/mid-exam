@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  user-select: none;
 }
 body,
 h1,
@@ -26,15 +27,22 @@ p {
   padding: 1rem;
   text-align: center;
 }
+/* .sidebar {
+  grid-area: sidebar;
+  background-color: #eee;
+  padding: 1rem;
+  display: grid;
+  width: 100%;
+  grid-template-rows: 235px 78px 1fr;
+  gap: 1rem;
+  min-width: 325px;
+} */
 .sidebar {
   grid-area: sidebar;
   background-color: #eee;
   padding: 1rem;
-  /* display: grid; */
-  width: 100%;
-  /* grid-template-rows: 235px 78px 1fr;
-  gap: 1rem; */
-  min-width: 325px;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-content {
@@ -147,18 +155,25 @@ p {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.calendar {
+  flex: 1;
+  overflow: auto;
+}
+
 table {
   border-collapse: collapse;
   border: 2px solid rgb(140 140 140);
   font-family: sans-serif;
   font-size: 0.8rem;
   letter-spacing: 1px;
-  display: block;
-  overflow-x: auto;
-  white-space: nowrap; 
-  /* table-layout: fixed;
-  word-break: break-all; */
-  max-height: 250px;
+  width: 100%;
+  border: none;
+}
+th[scope="row"] {
+  border-right: 1px solid #000;
+}
+thead th {
+  border-bottom: 1px solid #000;
 }
 
 caption {
@@ -194,33 +209,31 @@ tfoot td {
   font-weight: bold;
 }
 
-.nav-tabs .nav-item{
+.nav-tabs .nav-item {
   border: 1px solid #000;
   margin-right: 10px;
 }
 
-.form-title{
+.form-title {
   color: #fff;
   background-color: #64a4b9;
   padding: 8px;
   font-weight: bold;
 }
 
-.form-input{
+.form-input {
   max-width: 120px;
 }
 
-.form-box{
+.form-box {
   background-color: #eee;
 }
 
-.selected-class{
+.selected-class {
   border: #000 1px solid;
   margin-top: 10px;
   padding: 10px;
 }
-
-
 
 @media screen and (max-width: 1200px) {
   .dashboad {
@@ -235,12 +248,7 @@ tfoot td {
   .sidebar-icon {
     display: none;
   }
-  .sidebar {
-    grid-area: sidebar;
-    background-color: #eee;
-    padding: 1rem;
-    width: 100%;
-  }
+
   .icontext > div {
     font-size: small;
   }
@@ -249,7 +257,6 @@ tfoot td {
     width: 100%; /* On small screens, take full width */
   }
 }
-
 
 @media screen and (max-width: 768px) {
   .dashboad {
@@ -264,16 +271,12 @@ tfoot td {
       "content"
       "footer footer";
   }
-  .main-content{
+  .main-content {
     width: 100%;
   }
   .sidebar-icon {
     display: block;
   }
-  /* .sidebar {
-  transition: .3s;
-  transform: translate(-100%);
-  } */
   .icontext > div {
     font-size: small;
   }
@@ -282,16 +285,15 @@ tfoot td {
     width: 100%; /* On small screens, take full width */
   }
 }
-.sidebar-toggle{
+.sidebar-toggle {
   position: absolute;
   width: 300px;
   height: 100%;
   margin-top: 56px;
   display: none;
 }
-  .sidebar-open {
-    transform: translate(0);
-    display: block;
-    z-index: 999;
-  }
-
+.sidebar-open {
+  transform: translate(0);
+  display: flex;
+  z-index: 999;
+}

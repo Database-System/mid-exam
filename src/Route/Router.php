@@ -3,6 +3,7 @@
 namespace Exam\Route;
 
 use Exam\Utils\Utils;
+
 Utils::GetRoot();
 define("ROOT_PATH", dirname(dirname(dirname(__FILE__))) . '/');
 define("rVendor_PATH", ROOT_PATH . 'vendor' . '/');
@@ -40,7 +41,7 @@ class Router
     private function dispatch($url)
     {
         if (!array_key_exists($url, self::$ROUTES)) {
-            if (!preg_match("/^\/back(\/.*)?$/", $url,$matches)) {
+            if (!preg_match("/^\/back(\/.*)?$/", $url, $matches)) {
                 header('Location: /404');
                 die();
             } else {
@@ -84,7 +85,7 @@ class Router
         self::addRoute('/login', 'login');
         self::addRoute('/404', 'errors', null, ["404"]);
         self::addRoute("/signup", "register");
-        self::addRoute("/back","Back");
+        self::addRoute("/back", "Back");
     }
     public function __construct()
     {
