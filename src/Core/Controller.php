@@ -2,7 +2,10 @@
 
 namespace Exam\Core;
 
+use DateTime;
+use Time;
 use Exam\Core\Connect;
+use Twig\Node\Expression\Binary\AndBinary;
 
 class Controller
 {
@@ -50,6 +53,7 @@ class Controller
         "TimeTable" => "CREATE TABLE `TimeTable` (
             `course_ID` INT(10) UNSIGNED NOT NULL,
             `user_id` INT(11) NOT NULL,
+            `check` INT(1) NOT NULL DEFAULT 0,
             FOREIGN KEY (`course_ID`) REFERENCES `CourseTimeSlots`(`Course_ID`),
             FOREIGN KEY (`user_id`) REFERENCES `Users`(`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;"
@@ -393,11 +397,11 @@ class Controller
         return true;
     }
 
-    public function insert_TimeTable(int $course_ID, string $username)
+    public function insert_TimeTable(int $course_ID, string $username, int $check)
     {
-        $sql = "INSERT INTO TimeTable (`course_ID`,`user_id`) VALUES (?,?)";
+        $sql = "INSERT INTO TimeTable (`course_ID`,`user_id`,`check`) VALUES (?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$course_ID, $username]);
+        $ret = $stmt->execute([$course_ID, $username, $check]);
         if (!$ret) return false;
         return true;
     }
@@ -541,23 +545,23 @@ class Controller
         return true;
     }
 
-    // public function updateTimeSlots(int $time_slot_id, string $day, string $start_time, string $end_time): bool
-    // {
-    //     $start_datetime = DateTime::createFromFormat('H:i:s', $start_time);
-    //     $end_datetime = DateTime::createFromFormat('H:i:s', $end_time);
+    public function updateTimeSlots(int $time_slot_id, string $day, string $start_time, string $end_time): bool
+    {
+        $start_datetime = DateTime::createFromFormat('H:i:s', $start_time);
+        $end_datetime = DateTime::createFromFormat('H:i:s', $end_time);
 
-    //     if (!$start_datetime || !$end_datetime) return false;
+        if (!$start_datetime || !$end_datetime) return false;
 
-    //     $start_time_formatted = $start_datetime->format('H:i:s');
-    //     $end_time_formatted = $end_datetime->format('H:i:s');
+        $start_time_formatted = $start_datetime->format('H:i:s');
+        $end_time_formatted = $end_datetime->format('H:i:s');
 
-    //     $sql = "UPDATE TimeSlot SET `day` = ?,`start_time` = ?,`end_time`=? WHERE `time_slot_id` = ?";
-    //     $stmt = $this->handler->prepare($sql);
+        $sql = "UPDATE TimeSlot SET `day` = ?,`start_time` = ?,`end_time`=? WHERE `time_slot_id` = ?";
+        $stmt = $this->handler->prepare($sql);
 
-    //     $ret = $stmt->execute([$day, $start_time_formatted, $end_time_formatted, $time_slot_id]);
-    //     if (!$ret) return false;
-    //     return true;
-    // }
+        $ret = $stmt->execute([$day, $start_time_formatted, $end_time_formatted, $time_slot_id]);
+        if (!$ret) return false;
+        return true;
+    }
     public function updateCourseTimeSlots(int $Course_ID, int $Time_Slot_ID): bool
     {
         $sql = "UPDATE CourseTimeSlots SET `Time_Slot_id`=? WHERE `Course_ID` = ?";
@@ -636,7 +640,7 @@ class Controller
         $user = $this->check_User($username);
         foreach ($result as $row) {
             $temp = intval($row['Course_ID']);
-            $this->insert_TimeTable($temp, $user['id']);
+            $this->insert_TimeTable($temp, $user['id'], 2);
         }
         return true;
     }
@@ -671,12 +675,34 @@ class Controller
 
     public function get_Courses_Timeslot(int $courseID): bool|array
     {
-        $sql = "SELECT * FROM CourseTimeSlots WHERE Course_ID = ?";
+        $sql = "SELECT CourseTimeSlots.Course_ID,CourseTimeSlots.Time_Slot_ID,Course.Name 
+                FROM CourseTimeSlots,Course 
+                WHERE Course_ID = ? AND CourseTimeSlots.Course_ID = Course.ID";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$courseID]);
         if (!$ret) {
             return false;
         }
         return $stmt->fetchall();
+    }
+
+    public function get_Courses_courseid_check(int $courseID): bool|array
+    {
+        $sql = "SELECT `course_ID`,`check` FROM `TimeTable` WHERE `course_ID` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$courseID]);
+        if (!$ret) {
+            return false;
+        }
+        return $stmt->fetchall();
+    }
+
+    public function update_courseid_check(int $courseID, int $check): bool
+    {
+        $sql = "UPDATE TimeTable SET `check` = ? WHERE `course_ID` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$check, $courseID]);
+        if (!$ret) return false;
+        return true;
     }
 }
