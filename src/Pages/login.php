@@ -29,7 +29,10 @@ class Login
         $controller = new Controller();
         $data = $controller->check_User($user);
         if (is_array($data) && password_verify($password, $data['password'])) $this->mark_User($data);
-        else header('Location: /login');
+        else echo "<script type='text/javascript'>
+        alert('帳號密碼錯誤');
+        window.location.href = '/login';
+        </script>";
     }
     private function mark_User(array $data)
     {
