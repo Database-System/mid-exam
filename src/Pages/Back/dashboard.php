@@ -19,8 +19,12 @@ class Dashboard
         $this->userdata_preload($_SESSION['userID']);
         $this->options["total"] = $this->controller->get_total_credits($_SESSION['userID']);
         $this->options["display"] = true;
+        $this->options["activeTab"] = "search";
         if ($_SERVER["REQUEST_METHOD"] == "PUT") $this->handlePut();
-        if ($_SERVER["REQUEST_METHOD"] == "POST") $this->parse_arg();
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $this->parse_arg();
+            $this->updateActiveTab();
+        }
         $this->puttable();
         $this->renderPage($this->options);
     }
@@ -101,12 +105,19 @@ class Dashboard
 
         $this->options["searchResult"] = $allCoursesInfo;
     }
+
+    private function updateActiveTab()
+    {
+        if (isset($_POST['originTab'])) {
+            $this->options["activeTab"] = $_POST['originTab'];
+        }
+    }
     private function handlePut()
     {
         $data = json_decode(file_get_contents('php://input'), true);
         $user = $this->controller->check_User($data["NID"]);
-        $result = $this->controller->insert_TimeTable(intval($data['CourseID']),$user['id'],$data["check"]);
-        if(!$result){
+        $result = $this->controller->insert_TimeTable(intval($data['CourseID']), $user['id'], $data["check"]);
+        if (!$result) {
             die(json_encode("Can't insert to timetable"));
         }
         die(json_encode("Success"));

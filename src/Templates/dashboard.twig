@@ -113,12 +113,14 @@
 					<button class="nav-link active" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button" role="tab" aria-controls="search" aria-selected="true">課程檢索</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="selected-tab" data-bs-toggle="tab" data-bs-target="#selected" type="button" role="tab" aria-controls="selected" aria-selected="false">已選課表</button>
+					<button class="nav-link " id="selected-tab" data-bs-toggle="tab" data-bs-target="#selected" type="button" role="tab" aria-controls="selected" aria-selected="false">已選課表</button>
 				</li>
 			</ul>
 			<div class="tab-content" id="myTabContent">
-				<div class="tab-pane fade show active" id="search" role="tabpanel" aria-labelledby="search-tab">
+				<div class="tab-pane fade {% if activeTab == 'search' %} show active {% endif %}" id="search" role="tabpanel" aria-labelledby="search-tab">
 					<form method="post" class="form-box">
+						<input type="hidden" name="originTab" value="selected">
+						<input type="hidden" name="originTab" value="search">
 						<p class="form-title mt-4">一、依照開課系所查詢：</p>
 						<div class="p-3">
 							<div class="row">
@@ -131,6 +133,7 @@
 					</form>
 					{# <div class="px-3"></div> #}
 					<form method="post" class="form-box check-value">
+						<input type="hidden" name="originTab" value="search">
 						<p class="form-title mt-4">二、依照輸入條件查詢：</p>
 						<div class="row">
 							<div class="col-xl-6">
@@ -203,7 +206,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="tab-pane fade" id="selected" role="tabpanel" aria-labelledby="selected-tab">
+				<div class="tab-pane fade {% if activeTab == 'selected' %} show active {% endif %}" id="selected" role="tabpanel" aria-labelledby="selected-tab">
 					<div id="function-area" class="selected-class">
 						<div class="row pt-2">
 							<div class="col-xl-6">
