@@ -21,10 +21,11 @@ class Dashboard
         $this->options["display"] = true;
         $this->options["activeTab"] = "search";
         if ($_SERVER["REQUEST_METHOD"] == "PUT") $this->handlePut();
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        else if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $this->parse_arg();
             $this->updateActiveTab();
         }
+        else if($_SERVER["REQUEST_METHOD"] == "DELETE") $this->handleDelete();
         $this->puttable();
         $this->renderPage($this->options);
     }
@@ -132,6 +133,15 @@ class Dashboard
             $this->options["x" . $weekday . "y" . $unit] = $row['Course_ID'];
             $this->options["x" . $weekday . "y" . $unit . "-title"] = $row['Name'];
         }
+    }
+    private function handleDelete(){
+        $data = json_decode(file_get_contents('php://input'), true);
+        $user = $this->controller->check_User($data["NID"]);
+        $ret = $this->controller->delete_TimeTable($data["CourseID"],$user["id"]);
+        if(!$ret){
+            die("Can't delete from timetable");
+        }
+        die("success");
     }
     private function renderPage(array $OPTION)
     {

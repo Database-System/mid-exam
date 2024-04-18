@@ -74,10 +74,37 @@ function pageInit() {
     }
   );
   buttonDisable();
+
   $("button[data-course-id]").click(function () {
     var courseCode = $(this).data("course-id");
     $(this).prop("disabled", true);
     enroll(courseCode);
+  });
+  $('a[name="delCourse"]').click(function (event) {
+    event.preventDefault();
+
+    var courseId = $(this).data("course-id");
+    $.ajax({
+      url: "/back/dashboard",
+      type: "DELETE",
+      data: JSON.stringify({
+        CourseID: courseId,
+        NID: $(".info-item").find("span").eq(1).text(),
+      }),
+      success: function (response) {
+        if (response === "success") {
+          refreshCalendar();
+          refreshDoneTable();
+        } else {
+          alert("刪除失敗");
+        }
+      },
+    });
+  });
+  $(".nav-link").on("click", function (event) {
+    pageInit();
+    refreshCalendar();
+    refreshDoneTable();
   });
 }
 function enroll(courseCode) {
@@ -121,21 +148,34 @@ function refreshCalendar() {
     },
   });
 }
+function refreshDoneTable() {
+  $.ajax({
+    url: "/back/getDoneTable",
+    type: "GET",
+    success: function (data) {
+      $(".doneTable").html(data);
+      pageInit();
+    },
+    error: function () {
+      console.error("Calendar could not be updated.");
+    },
+  });
+}
 
-function buttonDisable(){
+function buttonDisable() {
   var courseIds = new Set();
-    $('.calendar span').each(function() {
-      var text = $(this).text().trim();
-      if (text === "") {
-          return true; 
-      }
-      courseIds.add(text);
-    });
-    var courseIdsArray = Array.from(courseIds);
-    $("button[data-course-id]").each(function() {
-        var btnCourseId = $(this).data('course-id').toString();
-        if (courseIdsArray.includes(btnCourseId)) {
-            $(this).prop('disabled', true);
-        }
-    });
+  $(".calendar span").each(function () {
+    var text = $(this).text().trim();
+    if (text === "") {
+      return true;
+    }
+    courseIds.add(text);
+  });
+  var courseIdsArray = Array.from(courseIds);
+  $("button[data-course-id]").each(function () {
+    var btnCourseId = $(this).data("course-id").toString();
+    if (courseIdsArray.includes(btnCourseId)) {
+      $(this).prop("disabled", true);
+    }
+  });
 }

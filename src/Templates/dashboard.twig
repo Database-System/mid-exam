@@ -66,9 +66,8 @@
 									{% set title_key = 'x' ~ j ~ 'y' ~ i ~ '-title' %}
 									{% set value_key = 'x' ~ j ~ 'y' ~ i %}
 									<td>
-
-										{% set title = attribute(_context, title_key) | default("") %}
-										{% set value = attribute(_context, value_key) | default("") %}
+										{% set title = attribute(_context, title_key)|default("") %}
+										{% set value = attribute(_context, value_key)|default("") %}
 
 										{% if title is iterable and value is iterable %}
 											{% for index, item_title in title %}
@@ -110,10 +109,10 @@
 		<main class="main-content">
 			<ul class="nav nav-tabs" id="myTab" role="tablist">
 				<li class="nav-item" role="presentation">
-					<button class="nav-link active" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button" role="tab" aria-controls="search" aria-selected="true">課程檢索</button>
+					<button class="nav-link {% if activeTab == 'search' %}active{% endif %}" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button" role="tab" aria-controls="search" aria-selected="true">課程檢索</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link " id="selected-tab" data-bs-toggle="tab" data-bs-target="#selected" type="button" role="tab" aria-controls="selected" aria-selected="false">已選課表</button>
+					<button class="nav-link {% if activeTab == 'selected' %}active{% endif %}" id="selected-tab" data-bs-toggle="tab" data-bs-target="#selected" type="button" role="tab" aria-controls="selected" aria-selected="false">已選課表</button>
 				</li>
 			</ul>
 			<div class="tab-content" id="myTabContent">
@@ -224,7 +223,7 @@
 					<div id="selected-area" class="selected-class1">
 						{% if display is defined and display == true %}
 							<div class="d-flex justify-content-center mb-4 mt-2">
-								<table>
+								<table class="doneTable">
 									<thead>
 										<tr class="text-center">
 											<th scope="row"></th>
@@ -243,16 +242,16 @@
 														{% set title_key = 'x' ~ j ~ 'y' ~ i ~ '-title' %}
 														{% set value_key = 'x' ~ j ~ 'y' ~ i %}
 
-														{% set title = attribute(_context, title_key) | default("") %}
-														{% set value = attribute(_context, value_key) | default("") %}
+														{% set title = attribute(_context, title_key)|default("") %}
+														{% set value = attribute(_context, value_key)|default("") %}
 
 														{% if title is iterable and value is iterable %}
 															{% for index, item_title in title %}
-																<span>{{ item_title | default("") }}</span>
+																<a href="#" data-course-id="{{ value }}" name="delCourse">{{ item_title|default("") }}</a>
 																<br>
 															{% endfor %}
 														{% else %}
-															<span>{{ title }}</span>
+															<a href="#" data-course-id="{{ value }}" name="delCourse">{{ title }}</a>
 														{% endif %}
 													</td>
 												{% endfor %}
@@ -267,25 +266,25 @@
 													{% set title_key = 'x' ~ j ~ 'y' ~ '13-title' %}
 													{% set value_key = 'x' ~ j ~ 'y' ~ '13' %}
 
-													{% set title = attribute(_context, title_key) | default("") %}
-													{% set value = attribute(_context, value_key) | default("") %}
+													{% set title = attribute(_context, title_key)|default("") %}
+													{% set value = attribute(_context, value_key)|default("") %}
 
 													{% if title is iterable and value is iterable %}
 														{% for index, item_title in title %}
-															<span>{{ item_title | default("") }}</span>
+															<a href="#" data-course-id="{{ value }}" name="delCourse">{{ item_title|default("") }}</a>
 															<br>
 														{% endfor %}
 													{% else %}
-														<span>{{ title }}</span>
+														<a href="#" data-course-id="{{ value }}" name="delCourse">{{ title }}</a>
 													{% endif %}
 												</td>
 											{% endfor %}
 										</tr>
 									</tfoot>
 								</table>
+							</div>
 							{% else %}
 								<p>尚未選課</p>
-							</div>
 						{% endif %}
 					</div>
 				</div>

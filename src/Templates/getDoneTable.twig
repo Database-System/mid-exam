@@ -1,0 +1,59 @@
+<table class="doneTable">
+	<thead>
+		<tr class="text-center">
+			<th scope="row"></th>
+			{% set days = ['星期一', '星期二','星期三','星期四','星期五','星期六','星期日'] %}
+			{% for day in days %}
+				<th scope="col">{{ day }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		{% for i in 0..12 %}
+			<tr>
+				<th scope="row" class="text-center">{{ i+1 }}</th>
+				{% for j in 0..6 %}
+					<td class="text-center">
+						{% set title_key = 'x' ~ j ~ 'y' ~ i ~ '-title' %}
+						{% set value_key = 'x' ~ j ~ 'y' ~ i %}
+
+						{% set title = attribute(_context, title_key)|default("") %}
+						{% set value = attribute(_context, value_key)|default("") %}
+
+						{% if title is iterable and value is iterable %}
+							{% for index, item_title in title %}
+								<a href="#" data-course-id="{{ value }}" name="delCourse">{{ item_title|default("") }}</a>
+								<br>
+							{% endfor %}
+						{% else %}
+							<a href="#" data-course-id="{{ value }}" name="delCourse">{{ title }}</a>
+						{% endif %}
+					</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</tbody>
+	<tfoot>
+		<tr>
+			<th scope="row" class="text-center">14</th>
+			{% for j in 0..6 %}
+				<td class="text-center">
+					{% set title_key = 'x' ~ j ~ 'y' ~ '13-title' %}
+					{% set value_key = 'x' ~ j ~ 'y' ~ '13' %}
+
+					{% set title = attribute(_context, title_key)|default("") %}
+					{% set value = attribute(_context, value_key)|default("") %}
+
+					{% if title is iterable and value is iterable %}
+						{% for index, item_title in title %}
+							<a href="#" data-course-id="{{ value }}" name="delCourse">{{ item_title|default("") }}</a>
+							<br>
+						{% endfor %}
+					{% else %}
+						<a href="#" data-course-id="{{ value }}" name="delCourse">{{ title }}</a>
+					{% endif %}
+				</td>
+			{% endfor %}
+		</tr>
+	</tfoot>
+</table>

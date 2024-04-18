@@ -311,3 +311,12 @@ tfoot th {
   display: flex;
   z-index: 999;
 }
+
+a[name="delCourse"] {
+  background: none;
+  color: blue;
+  border: none;
+  padding: 0;
+  font: inherit;
+  text-decoration: underline;
+}
