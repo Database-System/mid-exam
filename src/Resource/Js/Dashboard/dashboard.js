@@ -148,6 +148,9 @@ function buttonDisable() {
     if (courseIdsArray.includes(btnCourseId)) {
       $(this).prop("disabled", true);
     }
+    else{
+      $(this).prop("disabled", false);
+    }
   });
 }
 function changeColor() {
