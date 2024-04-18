@@ -3,9 +3,7 @@
 namespace Exam\Core;
 
 use DateTime;
-use Time;
 use Exam\Core\Connect;
-use Twig\Node\Expression\Binary\AndBinary;
 
 class Controller
 {
