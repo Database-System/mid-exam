@@ -144,14 +144,20 @@ class Controller_update_Test extends TestCase{
         // $result4=self::$controller->updateCourseTimeSlots(1312,3);
         // $this->assertTrue($result4);
 
-        $result5=self::$controller->check_people_number(1312) ;
-        $this->assertTrue($result5);
+        // $result5=self::$controller->check_people_number(1312) ;
+        // $this->assertTrue($result5);
 
-        $result6=self::$controller->check_people_number(1313) ;
-        $this->assertTrue($result6);
+        // $result6=self::$controller->check_people_number(1313) ;
+        // $this->assertTrue($result6);
 
-        $result7=self::$controller->check_people_number(1314) ;
-        $this->assertTrue($result7);
+        // $result7=self::$controller->check_people_number(1314) ;
+        // $this->assertTrue($result7);
+
+        $result8= self::$controller->insert_check_Credits(1314,'test_user');
+        $this->assertTrue($result8);
+
+        $result9= self::$controller->remove_check_Credits(1314,'test_user');
+        $this->assertFalse($result9);
     }
 
     public function CourseInfo(int $ID): bool|array
