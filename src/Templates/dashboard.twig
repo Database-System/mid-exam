@@ -65,14 +65,14 @@
 								{% for j in 0..6 %}
 									{% set title_key = 'x' ~ j ~ 'y' ~ i ~ '-title' %}
 									{% set value_key = 'x' ~ j ~ 'y' ~ i %}
-									<td id="{{ value_key }}">
+									<td>
 
 										{% set title = attribute(_context, title_key) | default("") %}
 										{% set value = attribute(_context, value_key) | default("") %}
 
 										{% if title is iterable and value is iterable %}
 											{% for index, item_title in title %}
-												<span title="{{ item_title }}">{{ attribute(value, index)|default("") }}</span>
+												<span title="{{ item_title }}">{{ value|default("") }}</span>
 											{% endfor %}
 										{% else %}
 											<span title="{{ title }}">{{ value }}</span>
@@ -88,14 +88,14 @@
 							{% for j in 0..6 %}
 								{% set title_key = 'x' ~ j ~ 'y' ~ '13-title' %}
 								{% set value_key = 'x' ~ j ~ 'y' ~ '13' %}
-								<td id="{{ value_key }}">
+								<td>
 
 									{% set title = attribute(_context, title_key) | default("") %}
 									{% set value = attribute(_context, value_key) | default("") %}
 
 									{% if title is iterable and value is iterable %}
 										{% for index, item_title in title %}
-											<span title="{{ item_title }}">{{ attribute(value, index)|default("") }}</span>
+											<span title="{{ item_title }}">{{ value|default("") }}</span>
 										{% endfor %}
 									{% else %}
 										<span title="{{ title }}">{{ value }}</span>
@@ -188,7 +188,9 @@
 													<td>{{ course.type }}</td>
 													<td>{{ course.credits }}</td>
 													<td>
-														<button type="button" onclick="enroll('{{ course.courseCode }}')">關注</button>
+														{# <button type="button" onclick="enroll('{{ course.courseCode }}')">關注</button> #}
+														<button type="button" data-course-id="{{ course.courseCode }}">關注</button>
+
 													</td>
 												</tr>
 											{% endfor %}

@@ -395,11 +395,11 @@ class Controller
         return true;
     }
 
-    public function insert_TimeTable(int $course_ID, string $username, int $check)
+    public function insert_TimeTable(int $course_ID, string $uid, int $check)
     {
         $sql = "INSERT INTO TimeTable (`course_ID`,`user_id`,`check`) VALUES (?,?,?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$course_ID, $username, $check]);
+        $ret = $stmt->execute([$course_ID, $uid, $check]);
         if (!$ret) return false;
         return true;
     }

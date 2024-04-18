@@ -41,6 +41,7 @@ class Back
     {
         self::addRoute("/dashboard", "dashboard");
         self::addRoute("/logout", "logout");
+        self::addRoute("/getCalendar", "getCalendar");
     }
     public function __construct(string $url)
     {

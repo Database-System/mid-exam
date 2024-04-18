@@ -104,8 +104,13 @@ class Dashboard
     private function handlePut()
     {
         $data = json_decode(file_get_contents('php://input'), true);
-        $result = $this->controller->get_Courses_Timeslot(intval($data['CourseID']));
-        die(json_encode($result));
+        $user = $this->controller->check_User($data["NID"]);
+        $result = $this->controller->insert_TimeTable(intval($data['CourseID']),$user['id'],$data["check"]);
+        if(!$result){
+            die(json_encode("Can't insert to timetable"));
+        }
+        die(json_encode("Success"));
+        // die(var_dump($data));
     }
     private function puttable()
     {
