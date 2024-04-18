@@ -143,6 +143,21 @@ class Dashboard
         }
         die("success");
     }
+    private function alarm_total_credits(){
+        if (!$this->controller->insert_check_Credits($_SESSION['Course_ID'],$_SESSION['Name'])) {
+            echo "<script type ='text/javascript'>
+                alert('無法加選，加選後學分將高於最高30學分');
+                </script>";
+            return false;
+        }
+
+        if (!$this->controller->remove_check_Credits($_SESSION['Course_ID'],$_SESSION['Name'])) {
+            echo "<script type ='text/javascript'>
+                alert('無法退選，退選後學分將低於最低9學分');
+                </script>";
+            return false;
+        }
+    }
     private function renderPage(array $OPTION)
     {
         new twigLoader(__FILE__, false, $OPTION);
