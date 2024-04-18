@@ -47,7 +47,6 @@
 				</div>
 			</div>
 			<div class="calendar">
-
 				<table>
 					<thead>
 						<tr>
@@ -65,13 +64,14 @@
 								{% for j in 0..6 %}
 									{% set title_key = 'x' ~ j ~ 'y' ~ i ~ '-title' %}
 									{% set value_key = 'x' ~ j ~ 'y' ~ i %}
-									<td>
-										{% set title = attribute(_context, title_key)|default("") %}
-										{% set value = attribute(_context, value_key)|default("") %}
+									<td id="{{ value_key }}">
+
+										{% set title = attribute(_context, title_key) | default("") %}
+										{% set value = attribute(_context, value_key) | default("") %}
 
 										{% if title is iterable and value is iterable %}
 											{% for index, item_title in title %}
-												<span title="{{ item_title }}">{{ value|default("") }}</span>
+												<span title="{{ item_title }}">{{ attribute(value, index)|default("") }}</span>
 											{% endfor %}
 										{% else %}
 											<span title="{{ title }}">{{ value }}</span>
@@ -87,14 +87,14 @@
 							{% for j in 0..6 %}
 								{% set title_key = 'x' ~ j ~ 'y' ~ '13-title' %}
 								{% set value_key = 'x' ~ j ~ 'y' ~ '13' %}
-								<td>
+								<td id="{{ value_key }}">
 
 									{% set title = attribute(_context, title_key) | default("") %}
 									{% set value = attribute(_context, value_key) | default("") %}
 
 									{% if title is iterable and value is iterable %}
 										{% for index, item_title in title %}
-											<span title="{{ item_title }}">{{ value|default("") }}</span>
+											<span title="{{ item_title }}">{{ attribute(value, index)|default("") }}</span>
 										{% endfor %}
 									{% else %}
 										<span title="{{ title }}">{{ value }}</span>
@@ -105,6 +105,7 @@
 					</tfoot>
 				</table>
 			</div>
+
 		</aside>
 		<main class="main-content">
 			<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -283,8 +284,8 @@
 									</tfoot>
 								</table>
 							</div>
-							{% else %}
-								<p>尚未選課</p>
+						{% else %}
+							<p>尚未選課</p>
 						{% endif %}
 					</div>
 				</div>
