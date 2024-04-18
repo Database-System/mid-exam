@@ -5,9 +5,7 @@ namespace Exam\Pages;
 if (!session_id()) session_start();
 
 use Exam\Core\Controller;
-use Exam\Route\Back;
 use Exam\Pages\twigLoader;
-use Exam\Route\Router;
 
 class Login
 {
@@ -21,7 +19,9 @@ class Login
             $user = $_POST["user"] ?? '';
             $pass = $_POST["password"] ?? '';
             $this->login($user, $pass);
-        } else new twigLoader(__FILE__, false, $this->OPTIONS);
+        }
+        if (isset($_SESSION['userID'])) header('Location: /back/dashboard');
+        else new twigLoader(__FILE__, false, $this->OPTIONS);
     }
 
     private function login(string $user, string $password)
