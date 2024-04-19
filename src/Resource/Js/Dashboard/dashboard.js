@@ -182,6 +182,7 @@ function delete_handle(){
           refreshCalendar();
           console.log("刪除成功");
         } else {
+          console.log(response);
           alert("刪除失敗");
         }
       },
