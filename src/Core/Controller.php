@@ -379,6 +379,77 @@ class Controller
         if (!$ret) return false;
         return true;
     }
+
+    //加選條件
+    // public function add_course(int $course_ID, int $user_id, string $username,int $check): bool
+    // {
+    //     /*
+    //     加選：
+    //          同學只能加選本系的課程
+    //          人數已滿的課程不可加選 check_people_number
+    //          不可加選與已選課程同名的課程
+    //          加選後學分不可超過最高學分限制 (30 學分)  insert_check_Credits
+    //          不可加選衝堂的課程
+    //     */
+    //     if (!$this->insert_check_Credits($course_ID, $username)) {
+    //         return false;
+    //     }
+ 
+    //     if (!$this->check_people_number($course_ID)) {
+    //         return false;
+    //     }
+ 
+    //     return $this->insert_TimeTable($course_ID, $user_id,$check);
+    // }
+    public function check_request(int $course_ID){
+        $sql = "SELECT request From Course WHERE ID = ?";
+        $stmt = $this->handler->prepare($sql);
+        $stmt->execute([$course_ID]);
+
+        $row = $stmt->fetch();
+        $course_request = $row['request'];
+
+        if ($course_request==1) {
+            return false;//是必修
+        }
+        return true;
+    }
+
+    public function insert_check_Credits(int $course_ID, string $username):bool
+    {    
+        $totalCreditsAfterAdd = $this->get_total_credits($username) + $this->Course_credits($course_ID);
+        if ($totalCreditsAfterAdd > 30) {
+            return false;
+        }
+
+        return true;
+    }
+    
+    public function remove_check_Credits(int $course_ID, string $username):bool
+    {
+        $totalCreditsAfterRemove =  $this->get_total_credits($username) - $this->Course_credits($course_ID);
+        
+        if ($totalCreditsAfterRemove < 9) {
+            return false;
+        }
+        return true;
+    }
+
+    public function Course_credits(int $course_ID):int
+    {
+        $sql = "SELECT Credits FROM Course WHERE ID = ?";
+        $stmt = $this->handler->prepare($sql);
+        $stmt->execute([$course_ID]);
+        $row = $stmt->fetch();
+        return $row['Credits'];
+    }
+    public function updateTotalCredits(string $username, int $totalCredits) { //直接插入學分
+        $sql = "UPDATE Users SET Total_credits = ? WHERE username = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$totalCredits,$username]);
+        if (!$ret) return false;
+        return true;
+    }
     public function check_people_number(int $course_ID)
     {
         $sql = "SELECT CurrentPeople,MaxPeople From Course WHERE ID = ?";

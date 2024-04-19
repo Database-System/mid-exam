@@ -148,7 +148,7 @@ function buttonDisable() {
     if (courseIdsArray.includes(btnCourseId)) {
       $(this).prop("disabled", true);
     }
-    else{
+    else {
       $(this).prop("disabled", false);
     }
   });
@@ -165,13 +165,14 @@ function changeColor() {
     }
   );
 }
-function delete_handle(){
+function delete_handle() {
   $('a[name="delCourse"]').on("click", function (event) {
     event.preventDefault();
     var courseId = $(this).data("course-id");
     $.ajax({
       url: "/back/dashboard",
       type: "DELETE",
+      dataType: 'json',
       data: JSON.stringify({
         CourseID: courseId,
         NID: $(".info-item").find("span").eq(1).text(),
@@ -182,10 +183,43 @@ function delete_handle(){
           refreshCalendar();
           console.log("刪除成功");
         } else {
-          console.log(response);
-          alert("刪除失敗");
+          console.log(response.confirm);
+          if (response.confirm == 2) {
+
+            if (confirm("注意!這是必修課程，確定要退選嗎")) {
+              $.ajax({
+                url: "/back/dashboard",
+                type: "DELETE",
+                dataType: 'json',
+                data: JSON.stringify({
+                  CourseID: courseId,
+                  NID: $(".info-item").find("span").eq(1).text(),
+                  Confirm: 1
+                }),
+                success: function (response) {
+                  console.log(response);
+                  if (response === "success") {
+                    refreshDoneTable();
+                    refreshCalendar();
+                    console.log("刪除成功");
+                  } else {
+                    console.log(response);
+                    alert("刪除失敗1");
+                  }
+                },
+              });
+            } else {
+              window.location.href = "/back/dashboard?activeTab=selected";
+            }
+          }
+          else {
+            alert("刪除失敗");
+          }
         }
       },
+      error: function (jqXHR, textStatus, error) {
+        console.error("Type: " + textStatus + "\n" + error);
+      }
     });
   });
 }
