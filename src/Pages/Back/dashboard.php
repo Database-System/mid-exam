@@ -18,14 +18,18 @@ class Dashboard
         Utils::isLogin();
         $this->userdata_preload($_SESSION['userID']);
         $this->options["total"] = $this->controller->get_total_credits($_SESSION['userID']);
-        $this->options["display"] = true;
+        // $this->options["display"] = true;
         $this->options["activeTab"] = "search";
         if ($_SERVER["REQUEST_METHOD"] == "PUT") $this->handlePut();
         else if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $this->parse_arg();
             $this->updateActiveTab();
+            $this->checkout();
         }
         else if($_SERVER["REQUEST_METHOD"] == "DELETE") $this->handleDelete();
+        else if($_SERVER["REQUEST_METHOD"] == "UPDATECOURSE") $this->handlePut2();
+        else if($_SERVER["REQUEST_METHOD"] == "DELETECOURSE") $this->handleDelete();
+        $this->checkout();
         $this->puttable();
         $this->renderPage($this->options);
     }
@@ -124,6 +128,17 @@ class Dashboard
         die(json_encode("Success"));
         // die(var_dump($data));
     }
+    private function handlePut2()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $user = $this->controller->check_User($data["NID"]);
+        $result = $this->controller->Update_TimeTable(intval($data['CourseID']), $user['id'], $data["check"]);
+        if (!$result) {
+            die(json_encode("Can't insert to timetable"));
+        }
+        die(json_encode("Success"));
+        // die(var_dump($data));
+    }
     private function puttable()
     {
         $result = $this->controller->get_Courses_Time($_SESSION['userID']);
@@ -136,6 +151,33 @@ class Dashboard
         }
         //die(var_dump($this->options["x" . 2 . "y" . 3], $this->options["x" . 2 . "y" . 3 . "-title"]));
     }
+
+    private function checkout()
+    {
+        $result = $this->controller->Courses_Time_check($_SESSION['userID'],1);
+        if($result==null){
+            $this->options["display"] = true;
+            return ;
+        }
+        else{
+            $this->options["display"] = false;
+        }
+        $course = $this->controller->get_Courses_Time_check1($_SESSION['userID'],1);
+        $allCoursesInfo = [];
+        foreach($course as $CoursesInfo){
+            $CoursesInfo = [
+                'courseCode' => $CoursesInfo['ID'],
+                'department' => $CoursesInfo['dept'],
+                'subject' => $CoursesInfo['Name'],
+                'class' => $CoursesInfo['cls_name'],
+                'type' => $CoursesInfo['request'] == 0 ? '選修' : '必修',
+                'credits' => $CoursesInfo['Credits']
+            ];
+            $allCoursesInfo[] = $CoursesInfo;
+        }
+        $this->options["choiceResult"] = $allCoursesInfo;
+    }
+
     private function handleDelete(){
         $data = json_decode(file_get_contents('php://input'), true);
         $COURSEID = intval($data["CourseID"]);
