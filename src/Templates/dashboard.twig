@@ -213,9 +213,19 @@
 								<p>選課代碼：<input type="text" class=""><input type="submit" value="查詢"></p>
 							</div>
 							<div class="col-xl-6">
-								<p class="pt-xl-0 pt-4">訊息區：
+								<p class="pt-xl-0 pt-4">訊息區：</p>
+								<div class="result1">
 									{% if choiceResult is defined and choiceResult is not null %}
 										{{ dump(choiceResult) }}
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="row pt-2">
+							<div class="col-xl-12">
+								<p class="pt-xl-0 pt-4">從關注清單加選
+									{% if choiceResult1 is defined and choiceResult1 is not null %}
+										{{ dump(choiceResult1) }}
 									{% endif %}
 								</p>
 							</div>
