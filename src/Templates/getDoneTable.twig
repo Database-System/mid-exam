@@ -19,14 +19,15 @@
 
 						{% set title = attribute(_context, title_key)|default("") %}
 						{% set value = attribute(_context, value_key)|default("") %}
-
 						{% if title is iterable and value is iterable %}
-							{% for index, item_title in title %}
-								<a href="#" data-course-id="{{ value }}" name="delCourse">{{ item_title|default("") }}</a>
-								<br>
-							{% endfor %}
+							{% if title|length == value|length %}
+								{% for i in 0..value|length -1 %}
+									<a href="#" data-course-id="{{ value[i] }}" name="delCourse">{{ title[i]|default("") }}</a>
+									<br>
+								{% endfor %}
+							{% endif %}
 						{% else %}
-							<a href="#" data-course-id="{{ value }}" name="delCourse">{{ title }}</a>
+							<a href="#" data-course-id="{{ value }}" name="delCourse">{{  title[i]|default("") }}</a>
 						{% endif %}
 					</td>
 				{% endfor %}
@@ -43,14 +44,15 @@
 
 					{% set title = attribute(_context, title_key)|default("") %}
 					{% set value = attribute(_context, value_key)|default("") %}
-
 					{% if title is iterable and value is iterable %}
-						{% for index, item_title in title %}
-							<a href="#" data-course-id="{{ value }}" name="delCourse">{{ item_title|default("") }}</a>
-							<br>
-						{% endfor %}
+						{% if title|length == value|length %}
+							{% for i in 0..value|length -1 %}
+								<a href="#" data-course-id="{{ value[i] }}" name="delCourse">{{  title[i]|default("") }}</a>
+								<br>
+							{% endfor %}
+						{% endif %}
 					{% else %}
-						<a href="#" data-course-id="{{ value }}" name="delCourse">{{ title }}</a>
+						<a href="#" data-course-id="{{ value }}" name="delCourse">{{  title[i]|default("") }}</a>
 					{% endif %}
 				</td>
 			{% endfor %}

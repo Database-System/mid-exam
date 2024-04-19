@@ -9,13 +9,11 @@ function pageInit() {
   $(window).resize(function () {
     if ($(window).width() < 768) {
       $(".sidebar").addClass("sidebar-toggle");
-    }
-  });
-  $(window).resize(function () {
-    if ($(window).width() > 768) {
+    } else {
       $(".sidebar").removeClass("sidebar-toggle");
     }
   });
+
   $("#logout").on("click", function () {
     window.location.href = "/back/logout";
   });
@@ -63,48 +61,20 @@ function pageInit() {
       this.submit();
     }
   });
-  $(".calendar table tbody tr td, .calendar table tfoot tr td").each(
-    function () {
-      var spans = $(this).find("span");
-      if (spans.length === 1 && spans.text().trim() !== "") {
-        $(this).addClass("color-1");
-      } else if (spans.length > 1) {
-        $(this).addClass("color-4");
-      }
-    }
-  );
+  changeColor();
   buttonDisable();
-
-  $("button[data-course-id]").click(function () {
+  $("button[data-course-id]").on("click", function () {
     var courseCode = $(this).data("course-id");
     $(this).prop("disabled", true);
+    console.log(courseCode);
     enroll(courseCode);
   });
-  $('a[name="delCourse"]').click(function (event) {
-    event.preventDefault();
-
-    var courseId = $(this).data("course-id");
-    $.ajax({
-      url: "/back/dashboard",
-      type: "DELETE",
-      data: JSON.stringify({
-        CourseID: courseId,
-        NID: $(".info-item").find("span").eq(1).text(),
-      }),
-      success: function (response) {
-        if (response === "success") {
-          refreshCalendar();
-          refreshDoneTable();
-        } else {
-          alert("刪除失敗");
-        }
-      },
-    });
-  });
-  $(".nav-link").on("click", function (event) {
-    pageInit();
+  delete_handle();
+  $(".nav-link").click(function (event) {
     refreshCalendar();
     refreshDoneTable();
+    changeColor();
+    buttonDisable();
   });
 }
 function enroll(courseCode) {
@@ -141,7 +111,8 @@ function refreshCalendar() {
     type: "GET",
     success: function (data) {
       $(".calendar").html(data);
-      pageInit();
+      changeColor();
+      buttonDisable();
     },
     error: function () {
       console.error("Calendar could not be updated.");
@@ -154,7 +125,7 @@ function refreshDoneTable() {
     type: "GET",
     success: function (data) {
       $(".doneTable").html(data);
-      pageInit();
+      delete_handle();
     },
     error: function () {
       console.error("Calendar could not be updated.");
@@ -177,5 +148,44 @@ function buttonDisable() {
     if (courseIdsArray.includes(btnCourseId)) {
       $(this).prop("disabled", true);
     }
+    else{
+      $(this).prop("disabled", false);
+    }
+  });
+}
+function changeColor() {
+  $(".calendar table tbody tr td, .calendar table tfoot tr td").each(
+    function () {
+      var spans = $(this).find("span");
+      if (spans.length === 1 && spans.text().trim() !== "") {
+        $(this).addClass("color-1");
+      } else if (spans.length > 1) {
+        $(this).addClass("color-4");
+      }
+    }
+  );
+}
+function delete_handle(){
+  $('a[name="delCourse"]').on("click", function (event) {
+    event.preventDefault();
+    var courseId = $(this).data("course-id");
+    $.ajax({
+      url: "/back/dashboard",
+      type: "DELETE",
+      data: JSON.stringify({
+        CourseID: courseId,
+        NID: $(".info-item").find("span").eq(1).text(),
+      }),
+      success: function (response) {
+        if (response === "success") {
+          refreshDoneTable();
+          refreshCalendar();
+          console.log("刪除成功");
+        } else {
+          console.log(response);
+          alert("刪除失敗");
+        }
+      },
+    });
   });
 }
