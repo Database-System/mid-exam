@@ -221,15 +221,6 @@
 								</div>
 							</div>
 						</div>
-						<div class="row pt-2">
-							<div class="col-xl-12">
-								<p class="pt-xl-0 pt-4">從關注清單加選
-									{% if choiceResult1 is defined and choiceResult1 is not null %}
-										{{ dump(choiceResult1) }}
-									{% endif %}
-								</p>
-							</div>
-						</div>
 					</div>
 					<div id="selected-area" class="selected-class1">
 						{% if display is defined and display == true %}
@@ -298,7 +289,7 @@
 								</table>
 							</div>
 						{% else %}
-							<p>尚未選課</p>
+							<p>從關注清單加選</p>
 						{% endif %}
 					</div>
 				</div>
