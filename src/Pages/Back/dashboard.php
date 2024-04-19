@@ -181,13 +181,38 @@ class Dashboard
     private function handleDelete(){
         $data = json_decode(file_get_contents('php://input'), true);
         $COURSEID = intval($data["CourseID"]);
+        $confirm =intval($data["Confirm"] ?? 0)  ;
+        if($confirm==0){
+            if (!$this->controller->check_request($COURSEID)) {
+                die(json_encode(["confirm"=>2]));
+            }
+        }
         $user = $this->controller->check_User($data["NID"]);
         $ret = $this->controller->delete_TimeTable($COURSEID,$user["id"]);
         if(!$ret){
-            die("Can't delete from timetable");
+            die(json_encode("Can't delete from timetable"));
         }
-        die("success");
+        die(json_encode("success"));
     }
+    private function alarm_total_credits(){
+        if (!$this->controller->insert_check_Credits($_SESSION['Course_ID'],$_SESSION['Name'])) {
+            echo "<script type ='text/javascript'>
+                alert('無法加選，加選後學分將高於最高30學分');
+            </script>";
+            return false;
+        }
+
+        if (!$this->controller->remove_check_Credits($_SESSION['Course_ID'],$_SESSION['Name'])) {
+            echo "<script type ='text/javascript'>
+                alert('無法退選，退選後學分將低於最低9學分');
+            </script>";
+            return false;
+        }
+    }
+    private function alert_request_course(int $course_ID){
+        
+    }
+    
     private function renderPage(array $OPTION)
     {
         new twigLoader(__FILE__, false, $OPTION);
