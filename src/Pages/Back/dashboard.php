@@ -127,23 +127,20 @@ class Dashboard
     private function puttable()
     {
         $result = $this->controller->get_Courses_Time($_SESSION['userID']);
-        $ret = [];
-        $ret1 = [];
         foreach ($result as $row) {
             $weekday = intdiv($row['Time_Slot_ID'], 14);
             $unit = $row['Time_Slot_ID'] % 14 - 1;
-            $ret = $this->options["x" . $weekday . "y" . $unit];
-            $ret1 = $this->options["x" . $weekday . "y" . $unit . "-title"];
-            array_push($ret, $row['Course_ID']);
-            array_push($ret1, $row['Name']);
-            $this->options["x" . $weekday . "y" . $unit] = $ret;
-            $this->options["x" . $weekday . "y" . $unit . "-title"] = $ret1;
+
+            $this->options["x" . $weekday . "y" . $unit][] = $row['Course_ID'];
+            $this->options["x" . $weekday . "y" . $unit . "-title"][] = $row['Name'];
         }
+        //die(var_dump($this->options["x" . 2 . "y" . 3], $this->options["x" . 2 . "y" . 3 . "-title"]));
     }
     private function handleDelete(){
         $data = json_decode(file_get_contents('php://input'), true);
+        $COURSEID = intval($data["CourseID"]);
         $user = $this->controller->check_User($data["NID"]);
-        $ret = $this->controller->delete_TimeTable($data["CourseID"],$user["id"]);
+        $ret = $this->controller->delete_TimeTable($COURSEID,$user["id"]);
         if(!$ret){
             die("Can't delete from timetable");
         }
