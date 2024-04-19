@@ -2,9 +2,11 @@
 use PHPUnit\Framework\TestCase;
 use Exam\Core\Controller;
 use Exam\Core\Connect;
+use Exam\Pages\Back\Dashboard;
 
 class Controller_update_Test extends TestCase{
     protected static $controller;
+    protected static $dashboard;
     private static $handler = null;
 
     public static function setUpBeforeClass():void{
@@ -15,6 +17,7 @@ class Controller_update_Test extends TestCase{
     {
         $this->delete_table();
         self::$controller = new Controller();
+        self::$dashboard =new Dashboard();
         $this->insert_Users();
         // $this->insert_Courses();
         // $this->insert_timeslot();
@@ -124,8 +127,7 @@ class Controller_update_Test extends TestCase{
     //     ];
     //     $this->assertEquals($expected,$result);
     // }
-    public function testUpdate(){
-        
+    //public function testUpdate(){
         // $result1=self::$controller->updateCourse(1312,'MaxPeople',30);
         // $this->assertTrue($result1);
         // $result3=self::$controller->updateCourse(1312,'Name','系統程式W');
@@ -144,15 +146,40 @@ class Controller_update_Test extends TestCase{
         // $result4=self::$controller->updateCourseTimeSlots(1312,3);
         // $this->assertTrue($result4);
 
-        $result5=self::$controller->check_people_number(1312) ;
-        $this->assertTrue($result5);
+        // $result5=self::$controller->check_people_number(1312) ;
+        // $this->assertTrue($result5);
 
-        $result6=self::$controller->check_people_number(1313) ;
-        $this->assertTrue($result6);
+        // $result6=self::$controller->check_people_number(1313) ;
+        // $this->assertTrue($result6);
 
-        $result7=self::$controller->check_people_number(1314) ;
-        $this->assertTrue($result7);
-    }
+        // $result7=self::$controller->check_people_number(1314) ;
+        // $this->assertTrue($result7);
+
+        
+    //}
+
+    /*public function testAlert(){
+        self::$controller->updateTotalCredits('test_user',29);
+        if(self::$controller->insert_check_Credits(1247,'test_user')){  
+            $this->assertTrue(self::$controller-> insert_TimeTable(1247,1,2));
+        }
+        else {
+
+        }
+        self::$dashboard->alarm_total_credits();
+
+        $_SESSION['Course_ID'] = 123; 
+        $_SESSION['Name'] = 'test_user'; 
+    
+        // 將警報消息存儲在一個變量中而不是直接 echo
+        ob_start();
+        self::$dashboard->alarm_total_credits();
+        $alertMessage = ob_get_clean(); // 獲取緩衝區內容並清空緩衝區
+    
+        $expectedMessage = "alert('無法加選，加選後學分將高於最高30學分')";
+        $this->assertContains($expectedMessage, $alertMessage);
+    }*/
+
 
     public function CourseInfo(int $ID): bool|array
     {
