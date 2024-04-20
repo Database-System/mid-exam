@@ -17,6 +17,7 @@ class Dashboard
         $this->controller = new Controller();
         Utils::isLogin();
         $this->userdata_preload($_SESSION['userID']);
+        $this->controller->Update_User_TotalCerdits($_SESSION['userID']);
         $this->options["total"] = $this->controller->get_total_credits($_SESSION['userID']);
         // $this->options["display"] = true;
         $this->options["activeTab"] = "search";

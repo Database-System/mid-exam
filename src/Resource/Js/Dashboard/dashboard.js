@@ -61,6 +61,7 @@ function pageInit() {
       this.submit();
     }
   });
+  getTotalCredit();
   changeColor();
   buttonDisable();
   $("button[data-course-id]").on("click", function () {
@@ -73,9 +74,14 @@ function pageInit() {
   insert_course_2();
   delete_handle();
   $(".nav-link").click(function (event) {
-    // refreshcheckcourse();
+    countCheckcourse((data) => {
+      if (data > 0) {
+        refreshcheckcourse();
+      } else {
+        refreshDoneTable();
+      }
+    });
     refreshCalendar();
-    refreshDoneTable();
     changeColor();
     buttonDisable();
   });
@@ -93,6 +99,7 @@ function enroll(courseCode) {
     success: function (temp) {
       console.log(temp);
       refreshCalendar();
+      getTotalCredit();
     },
   });
 }
@@ -113,9 +120,14 @@ function insert_course_2() {
       }),
       success: function (temp) {
         console.log(temp);
-        refreshcheckcourse();
+        countCheckcourse((data) => {
+          if (data > 0) {
+            refreshcheckcourse();
+          } else {
+            refreshDoneTable();
+          }
+        });
         refreshCalendar();
-        refreshDoneTable();
       },
     });
   });
@@ -151,7 +163,7 @@ function refreshDoneTable() {
     url: "/back/getDoneTable",
     type: "GET",
     success: function (data) {
-      $(".doneTable").html(data);
+      $("#select-result").html(data);
       delete_handle();
     },
     error: function () {
@@ -165,7 +177,7 @@ function refreshcheckcourse() {
     url: "/back/getcheckcourse",
     type: "GET",
     success: function (data) {
-      $(".checktable").html(data);
+      $("#select-result").html(data);
       insert_course_2();
       Delete_course();
     },
@@ -173,7 +185,6 @@ function refreshcheckcourse() {
       console.error("getcheckcourse could not be updated.");
     },
   });
-
 }
 
 function buttonDisable() {
@@ -190,8 +201,7 @@ function buttonDisable() {
     var btnCourseId = $(this).data("course-id").toString();
     if (courseIdsArray.includes(btnCourseId)) {
       $(this).prop("disabled", true);
-    }
-    else {
+    } else {
       $(this).prop("disabled", false);
     }
   });
@@ -216,7 +226,7 @@ function Delete_course() {
     $.ajax({
       url: "/back/dashboard",
       type: "DELETE1",
-      dataType: 'json',
+      dataType: "json",
       data: JSON.stringify({
         CourseID: deletecourseCode,
         NID: $(".info-item").find("span").eq(1).text(),
@@ -224,9 +234,17 @@ function Delete_course() {
       success: function (response) {
         console.log(response);
         if (response === "success") {
-          refreshDoneTable();
+          countCheckcourse((data) => {
+            if (data > 0) {
+              refreshcheckcourse();
+            } else {
+              refreshDoneTable();
+            }
+          });
+          // refreshDoneTable();
           refreshCalendar();
-          refreshcheckcourse();
+          // refreshcheckcourse();
+          getTotalCredit();
           console.log("delete success");
         } else {
           console.log(response);
@@ -244,7 +262,7 @@ function delete_handle() {
     $.ajax({
       url: "/back/dashboard",
       type: "DELETE",
-      dataType: 'json',
+      dataType: "json",
       data: JSON.stringify({
         CourseID: courseId,
         NID: $(".info-item").find("span").eq(1).text(),
@@ -253,26 +271,27 @@ function delete_handle() {
         if (response === "success") {
           refreshDoneTable();
           refreshCalendar();
+          getTotalCredit();
           console.log("刪除成功");
         } else {
           console.log(response.confirm);
           if (response.confirm == 2) {
-
             if (confirm("注意!這是必修課程，確定要退選嗎")) {
               $.ajax({
                 url: "/back/dashboard",
                 type: "DELETE",
-                dataType: 'json',
+                dataType: "json",
                 data: JSON.stringify({
                   CourseID: courseId,
                   NID: $(".info-item").find("span").eq(1).text(),
-                  Confirm: 1
+                  Confirm: 1,
                 }),
                 success: function (response) {
                   console.log(response);
                   if (response === "success") {
                     refreshDoneTable();
                     refreshCalendar();
+                    getTotalCredit();
                     console.log("刪除成功");
                   } else {
                     console.log(response);
@@ -283,15 +302,52 @@ function delete_handle() {
             } else {
               window.location.href = "/back/dashboard?activeTab=selected";
             }
-          }
-          else {
+          } else {
             alert("刪除失敗");
           }
         }
       },
       error: function (jqXHR, textStatus, error) {
         console.error("Type: " + textStatus + "\n" + error);
-      }
+      },
     });
   });
+}
+function getTotalCredit() {
+  $.ajax({
+    url: "/back/api",
+    type: "PATCH",
+    dataType: "json",
+    data: JSON.stringify({
+      NID: $(".info-item").find("span").eq(1).text(),
+      function: "getTotalCreadits",
+    }),
+    contentType: "application/json",
+    success: function (data) {
+      $("#total").text(data);
+    },
+    error: function (jqXHR, textStatus, error) {
+      console.error("Type: " + textStatus + "\n" + error);
+    },
+  });
+}
+function countCheckcourse(callback) {
+  let ret = 0;
+  $.ajax({
+    url: "/back/api",
+    type: "PATCH",
+    dataType: "json",
+    contentType: "application/json",
+    data: JSON.stringify({
+      NID: $(".info-item").find("span").eq(1).text(),
+      function: "countCheckcourse",
+    }),
+    success: function (data) {
+      callback(data);
+    },
+    error: function () {
+      console.error("Can't count check course.");
+    },
+  });
+  return ret;
 }

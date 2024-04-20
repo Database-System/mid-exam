@@ -28,7 +28,7 @@
 				<div class="info-item">
 					<span>已選學分:
 					</span>
-					<span>{{ total|default(0) }}</span>
+					<span id="total">{{ total|default(0) }}</span>
 				</div>
 				<button id="logout">登出</button>
 			</div>
@@ -223,7 +223,8 @@
 						</div>
 					</div>
 					<div id="selected-area" class="selected-class1">
-						{% if display is defined and display == true %}
+					<div id="select-result"></div>
+						{# {% if display is defined and display == true %}
 							<div class="d-flex justify-content-center mb-4 mt-2">
 								<table class="doneTable">
 									<thead>
@@ -313,7 +314,6 @@
 												<td>{{ course.type }}</td>
 												<td>{{ course.credits }}</td>
 												<td>
-													{# <button type="button" onclick="enroll('{{ course.courseCode }}')">關注</button> #}
 													<button type="button" data-deletecourse-id="{{ course.courseCode }}">退關注</button>
 													<button type="button" data-insertcourse-id="{{ course.courseCode }}">加選</button>
 
@@ -323,7 +323,7 @@
 									</tbody>
 								</table>
 							{% endif %}
-						{% endif %}
+						{% endif %} #}
 					</div>
 				</div>
 			</div>
