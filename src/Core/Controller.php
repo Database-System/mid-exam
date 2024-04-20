@@ -89,6 +89,9 @@ class Controller
                 if ($table == "CourseTimeSlots") $this->init_Course_data();
             }
         }
+        $this->update_currentpeople(69,1350);
+        $this->update_currentpeople(64,1334);
+        $this->update_currentpeople(74,1324);
     }    
 
     /**
@@ -1000,7 +1003,7 @@ class Controller
      */
     public function update_currentpeople(int $people, int $ID): bool
     {
-        $sql = "UPDATE Course SET `CurrentPeople` = `CurrentPeople` + ? WHERE `ID` = ?";
+        $sql = "UPDATE Course SET `CurrentPeople` = ? WHERE `ID` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$people, $ID]);
         if (!$ret) return false;
@@ -1291,5 +1294,17 @@ class Controller
         $ret = $stmt->execute([$check, $courseID, $user_id]);
         if (!$ret) return false;
         return true;
+    }
+
+    public function get_course_currentpeople(int $course_id): int
+    {
+        $sql = "SELECT CurrentPeople FROM Course WHERE ID = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$course_id]);
+        $result = $stmt->fetch();
+        if (!$ret) {
+            return false;
+        }
+        return $result['CurrentPeople'];
     }
 }

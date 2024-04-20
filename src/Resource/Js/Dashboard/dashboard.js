@@ -113,32 +113,38 @@ function Insert_check_course() {
         alert("學分超過上限");
         return;
       }
-      get_user_dept(data.courseID,(userDept)=>{
-        if(userDept!==data.dept){
+      get_user_dept(data.courseID, (userDept) => {
+        if (userDept !== data.dept) {
           alert("非本系課程");
           return;
         }
-        $(this).prop("disabled", true);
-        $.ajax({
-          type: "UPDATECOURSE",
-          url: "/back/dashboard",
-          contentType: "application/json",
-          data: JSON.stringify({
-            CourseID: data.CourseID,
-            NID: $(".info-item").find("span").eq(1).text(),
-            check: 2,
-          }),
-          success: function (temp) {
-            countCheckcourse((data) => {
-              if (data > 0) {
-                refreshcheckcourse();
-              } else {
-                refreshDoneTable();
-              }
-            });
-            refreshCalendar();
-            getTotalCredit();
-          },
+        get_course_currentpeople(insertcourseCode, (currentpeople) => {
+          if (currentpeople+1 > data.MaxPeople) {
+            alert("人數已滿");
+            return;
+          }
+          $(this).prop("disabled", true);
+          $.ajax({
+            type: "UPDATECOURSE",
+            url: "/back/dashboard",
+            contentType: "application/json",
+            data: JSON.stringify({
+              CourseID: data.CourseID,
+              NID: $(".info-item").find("span").eq(1).text(),
+              check: 2,
+            }),
+            success: function (temp) {
+              countCheckcourse((data) => {
+                if (data > 0) {
+                  refreshcheckcourse();
+                } else {
+                  refreshDoneTable();
+                }
+              });
+              refreshCalendar();
+              getTotalCredit();
+            },
+          });
         });
       });
     });
@@ -391,7 +397,7 @@ function get_course_credit(courseID, callback) {
     },
   });
 }
-function get_user_dept(courseID,callback){
+function get_user_dept(courseID, callback) {
   $.ajax({
     url: "/back/api",
     type: "POST",
@@ -406,6 +412,26 @@ function get_user_dept(courseID,callback){
     },
     error: function () {
       console.error("Can't get user dept.");
+    },
+  });
+}
+function get_course_currentpeople(courseID, callback) {
+  $.ajax({
+    url: "/back/api",
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    data: JSON.stringify({
+      courseID: courseID,
+      function: "get_course_currentpeople",
+    }),
+    success: function (data) {
+      callback(data);
+      console.log(data);
+    },
+    error: function (jqXHR, textStatus, error) {
+      console.error("Can't get current people.");
+      console.error(+"Type: " + textStatus + "\n" + error);
     },
   });
 }
