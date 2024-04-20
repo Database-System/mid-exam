@@ -300,7 +300,7 @@ function delete_handle() {
                 },
               });
             } else {
-              window.location.href = "/back/dashboard?activeTab=selected";
+              refreshDoneTable();
             }
           } else {
             alert("刪除失敗");
