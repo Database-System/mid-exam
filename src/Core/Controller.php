@@ -1298,7 +1298,16 @@ class Controller
         if (!$ret) return false;
         return true;
     }
-
+    
+    /**
+     * get_course_currentpeople
+     *
+     * 利用課程ID
+     * 取得該課程的人數
+     * 
+     * @param  int $course_id 課程ID
+     * @return int
+     */
     public function get_course_currentpeople(int $course_id): int
     {
         $sql = "SELECT CurrentPeople FROM Course WHERE ID = ?";
@@ -1310,7 +1319,16 @@ class Controller
         }
         return $result['CurrentPeople'];
     }
-
+    
+    /**
+     * get_course_Name
+     *
+     * 利用課程ID
+     * 取得該課程的名稱
+     * 
+     * @param  int $course_id
+     * @return string
+     */
     public function get_course_Name(int $course_id): string
     {
         $sql = "SELECT Name FROM Course WHERE ID = ?";
