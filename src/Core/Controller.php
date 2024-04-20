@@ -815,6 +815,22 @@ class Controller
             return false;
         return $stmt->fetchall();
     }
+    
+    /**
+     * get_course_info
+     *  獲取單獨課程資訊
+     * @param  int $courseID
+     * @return bool|array
+     */
+    public function get_course_info(int $courseID): bool|array
+    {
+        $sql = "SELECT * FROM Course WHERE ID = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$courseID]);
+        if (!$ret)
+            return false;
+        return $stmt->fetch();
+    }
 
     /**
      * updateCourse

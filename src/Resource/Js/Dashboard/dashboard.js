@@ -113,28 +113,33 @@ function Insert_check_course() {
         alert("學分超過上限");
         return;
       }
-      console.log(data);
-      $(this).prop("disabled", true);
-      $.ajax({
-        type: "UPDATECOURSE",
-        url: "/back/dashboard",
-        contentType: "application/json",
-        data: JSON.stringify({
-          CourseID: data.CourseID,
-          NID: $(".info-item").find("span").eq(1).text(),
-          check: 2,
-        }),
-        success: function (temp) {
-          countCheckcourse((data) => {
-            if (data > 0) {
-              refreshcheckcourse();
-            } else {
-              refreshDoneTable();
-            }
-          });
-          refreshCalendar();
-          getTotalCredit();
-        },
+      get_user_dept(data.courseID,(userDept)=>{
+        if(userDept!==data.dept){
+          alert("非本系課程");
+          return;
+        }
+        $(this).prop("disabled", true);
+        $.ajax({
+          type: "UPDATECOURSE",
+          url: "/back/dashboard",
+          contentType: "application/json",
+          data: JSON.stringify({
+            CourseID: data.CourseID,
+            NID: $(".info-item").find("span").eq(1).text(),
+            check: 2,
+          }),
+          success: function (temp) {
+            countCheckcourse((data) => {
+              if (data > 0) {
+                refreshcheckcourse();
+              } else {
+                refreshDoneTable();
+              }
+            });
+            refreshCalendar();
+            getTotalCredit();
+          },
+        });
       });
     });
   });
@@ -268,7 +273,7 @@ function delete_handle() {
     var courseId = $(this).data("course-id");
     get_course_credit(courseId, (data) => {
       let total_credit = parseInt($("#total").text());
-      console.log(total_credit);
+      // console.log(data);
       if (total_credit - data.Credits < 9) {
         alert("學分低於下限");
         return;
@@ -277,6 +282,7 @@ function delete_handle() {
         url: "/back/dashboard",
         type: "DELETE",
         dataType: "json",
+        contentType: "application/json",
         data: JSON.stringify({
           CourseID: data.CourseID,
           NID: $(".info-item").find("span").eq(1).text(),
@@ -359,8 +365,9 @@ function countCheckcourse(callback) {
     success: function (data) {
       callback(data);
     },
-    error: function () {
+    error: function (jqXHR, textStatus, error) {
       console.error("Can't count check course.");
+      console.error("Type: " + textStatus + "\n" + error);
     },
   });
 }
@@ -376,9 +383,29 @@ function get_course_credit(courseID, callback) {
     }),
     success: function (data) {
       callback(data);
+      // console.log(data);
+    },
+    error: function (jqXHR, textStatus, error) {
+      console.error("Can't get course credit.");
+      console.error(+"Type: " + textStatus + "\n" + error);
+    },
+  });
+}
+function get_user_dept(courseID,callback){
+  $.ajax({
+    url: "/back/api",
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    data: JSON.stringify({
+      courseID: courseID,
+      function: "get_user_dept",
+    }),
+    success: function (data) {
+      callback(data);
     },
     error: function () {
-      console.error("Can't count check course.");
+      console.error("Can't get user dept.");
     },
   });
 }
