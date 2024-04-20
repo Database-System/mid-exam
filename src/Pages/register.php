@@ -32,6 +32,7 @@ class Register
                 $controller->Update_User_dept($user, $dept);
                 $controller->Update_User_clsname($user, $cls_name);
                 $controller->Insert_Request_Course($user, $dept, $cls_name);
+                //$controller->updateTotalCredits($user,29);
                 $controller->Update_User_TotalCerdits($user);
                 header('Location: /login');
             }

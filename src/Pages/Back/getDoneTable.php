@@ -24,7 +24,8 @@ class GetDoneTable
     }
     private function puttable()
     {
-        $result = $this->controller->get_Courses_Time($_SESSION['userID']);
+
+        $result = $this->controller->Courses_Time_check($_SESSION['userID'],2);
         foreach ($result as $row) {
             $weekday = intdiv($row['Time_Slot_ID'], 14);
             $unit = $row['Time_Slot_ID'] % 14 - 1;
