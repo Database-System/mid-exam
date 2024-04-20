@@ -865,9 +865,12 @@ class Controller
 
     /**
      * Update_User_dept
+     * 
+     * 利用使用者名稱與系所
+     * 搜尋該使用者名稱
      *
-     * @param  string $username
-     * @param  string $dept
+     * @param  string $username 使用者名稱
+     * @param  string $dept    系所
      * @return bool
      */
     public function Update_User_dept(string $username, string $dept): bool
@@ -1306,5 +1309,17 @@ class Controller
             return false;
         }
         return $result['CurrentPeople'];
+    }
+
+    public function get_course_Name(int $course_id): string
+    {
+        $sql = "SELECT Name FROM Course WHERE ID = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$course_id]);
+        $result = $stmt->fetch();
+        if (!$ret) {
+            return false;
+        }
+        return $result['Name'];
     }
 }

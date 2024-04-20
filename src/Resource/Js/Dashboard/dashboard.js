@@ -119,31 +119,37 @@ function Insert_check_course() {
           return;
         }
         get_course_currentpeople(insertcourseCode, (currentpeople) => {
-          if (currentpeople+1 > data.MaxPeople) {
+          if (currentpeople + 1 > data.MaxPeople) {
             alert("人數已滿");
             return;
           }
-          $(this).prop("disabled", true);
-          $.ajax({
-            type: "UPDATECOURSE",
-            url: "/back/dashboard",
-            contentType: "application/json",
-            data: JSON.stringify({
-              CourseID: data.CourseID,
-              NID: $(".info-item").find("span").eq(1).text(),
-              check: 2,
-            }),
-            success: function (temp) {
-              countCheckcourse((data) => {
-                if (data > 0) {
-                  refreshcheckcourse();
-                } else {
-                  refreshDoneTable();
-                }
-              });
-              refreshCalendar();
-              getTotalCredit();
-            },
+          get_course_Name(insertcourseCode, (checkName) => {
+            if (checkName === data.Name) {
+              alert("已選過此課程");
+              return;
+            }
+            $(this).prop("disabled", true);
+            $.ajax({
+              type: "UPDATECOURSE",
+              url: "/back/dashboard",
+              contentType: "application/json",
+              data: JSON.stringify({
+                CourseID: data.CourseID,
+                NID: $(".info-item").find("span").eq(1).text(),
+                check: 2,
+              }),
+              success: function (temp) {
+                countCheckcourse((data) => {
+                  if (data > 0) {
+                    refreshcheckcourse();
+                  } else {
+                    refreshDoneTable();
+                  }
+                });
+                refreshCalendar();
+                getTotalCredit();
+              },
+            });
           });
         });
       });
@@ -424,6 +430,26 @@ function get_course_currentpeople(courseID, callback) {
     data: JSON.stringify({
       courseID: courseID,
       function: "get_course_currentpeople",
+    }),
+    success: function (data) {
+      callback(data);
+      console.log(data);
+    },
+    error: function (jqXHR, textStatus, error) {
+      console.error("Can't get current people.");
+      console.error(+"Type: " + textStatus + "\n" + error);
+    },
+  });
+}
+function get_course_Name(courseID, callback) {
+  $.ajax({
+    url: "/back/api",
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    data: JSON.stringify({
+      courseID: courseID,
+      function: "get_course_Name",
     }),
     success: function (data) {
       callback(data);

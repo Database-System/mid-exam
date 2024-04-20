@@ -45,6 +45,12 @@ class Api
         die(json_encode($ret));
     }
 
+    private function get_course_Name(int $courseID)
+    {
+        $ret = $this->controller->get_course_Name($courseID);
+        die(json_encode($ret,JSON_UNESCAPED_UNICODE));
+    }
+
     private function get_user_dept()
     {
         $ret = $this->controller->check_User($_SESSION['userID']);
@@ -81,6 +87,11 @@ class Api
                 $courseID = $data['courseID'] ?? "0";
                 $courseID = intval($courseID);
                 $this->get_course_currentpeople($courseID);
+                break;
+            case "get_course_Name":
+                $courseID = $data['courseID'] ?? "0";
+                $courseID = intval($courseID);
+                $this->get_course_Name($courseID);
                 break;
             default:
                 die(json_encode("Function not found"));
