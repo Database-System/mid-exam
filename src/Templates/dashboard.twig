@@ -254,7 +254,7 @@
 																{% endfor %}
 															{% endif %}
 														{% else %}
-															<a href="#" data-course-id="{{ value }}" name="delCourse">{{  title[i]|default("") }}</a>
+															<a href="#" data-course-id="{{ value }}" name="delCourse">{{  title|default("") }}</a>
 														{% endif %}
 													</td>
 												{% endfor %}
@@ -280,7 +280,7 @@
 															{% endfor %}
 														{% endif %}
 													{% else %}
-														<a href="#" data-course-id="{{ value }}" name="delCourse">{{  title[i]|default("") }}</a>
+														<a href="#" data-course-id="{{ value }}" name="delCourse">{{  title|default("") }}</a>
 													{% endif %}
 												</td>
 											{% endfor %}
@@ -291,7 +291,7 @@
 						{% else %}
 							<p>從關注清單加選</p>
 							{% if choiceResult is defined and choiceResult is not null %}
-								<table>
+								<table class="checktable">
 									<thead>
 										<tr>
 											<th>課程代碼</th>

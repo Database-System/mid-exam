@@ -15,7 +15,6 @@ class GetDoneTable
     {
         $this->controller = new Controller();
         Utils::isLogin();
-        // $this->checkout();
         $this->puttable();
         $this->renderPage($this->options);
     }
@@ -33,30 +32,5 @@ class GetDoneTable
             $this->options["x" . $weekday . "y" . $unit][] = $row['Course_ID'];
             $this->options["x" . $weekday . "y" . $unit . "-title"][] = $row['Name'];
         }
-    }
-    private function checkout()
-    {
-        $result = $this->controller->Courses_Time_check($_SESSION['userID'],1);
-        if($result==null){
-            $this->options["display"] = true;
-            return ;
-        }
-        else{
-            $this->options["display"] = false;
-        }
-        $course = $this->controller->get_Courses_Time_check1($_SESSION['userID'],1);
-        $allCoursesInfo = [];
-        foreach($course as $CoursesInfo){
-            $CoursesInfo = [
-                'courseCode' => $CoursesInfo['ID'],
-                'department' => $CoursesInfo['dept'],
-                'subject' => $CoursesInfo['Name'],
-                'class' => $CoursesInfo['cls_name'],
-                'type' => $CoursesInfo['request'] == 0 ? '¿ï­×' : '¥²­×',
-                'credits' => $CoursesInfo['Credits']
-            ];
-            $allCoursesInfo[] = $CoursesInfo;
-        }
-        $this->options["choiceResult"] = $allCoursesInfo;
     }
 }

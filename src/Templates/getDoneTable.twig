@@ -27,7 +27,7 @@
 								{% endfor %}
 							{% endif %}
 						{% else %}
-							<a href="#" data-course-id="{{ value }}" name="delCourse">{{  title[i]|default("") }}</a>
+							<a href="#" data-course-id="{{ value }}" name="delCourse">{{  title|default("") }}</a>
 						{% endif %}
 					</td>
 				{% endfor %}
@@ -52,7 +52,7 @@
 							{% endfor %}
 						{% endif %}
 					{% else %}
-						<a href="#" data-course-id="{{ value }}" name="delCourse">{{  title[i]|default("") }}</a>
+						<a href="#" data-course-id="{{ value }}" name="delCourse">{{  title|default("") }}</a>
 					{% endif %}
 				</td>
 			{% endfor %}

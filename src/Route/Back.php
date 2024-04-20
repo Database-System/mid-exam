@@ -43,6 +43,7 @@ class Back
         self::addRoute("/logout", "logout");
         self::addRoute("/getCalendar", "getCalendar");
         self::addRoute("/getDoneTable", "getDoneTable");
+        self::addRoute("/getcheckcourse", "getcheckcourse");
     }
     public function __construct(string $url)
     {

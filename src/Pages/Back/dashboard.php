@@ -24,14 +24,36 @@ class Dashboard
         else if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $this->parse_arg();
             $this->updateActiveTab();
-            $this->checkout();
         }
-        else if($_SERVER["REQUEST_METHOD"] == "DELETE") $this->handleDelete();
-        else if($_SERVER["REQUEST_METHOD"] == "UPDATECOURSE") $this->handlePut2();
-        else if($_SERVER["REQUEST_METHOD"] == "DELETECOURSE") $this->handleDelete();
+        else if ($_SERVER["REQUEST_METHOD"] == "DELETE1") $this->handleDelete1();
+        else if ($_SERVER["REQUEST_METHOD"] == "DELETE") $this->handleDelete();
+        else if ($_SERVER["REQUEST_METHOD"] == "UPDATECOURSE") $this->handlePut2();
+        
         $this->checkout();
         $this->puttable();
         $this->renderPage($this->options);
+    }
+    private function checkout()
+    {
+        $result=$this->controller->Courses_Time_check($_SESSION['userID'],1);
+        if(!isset($result)||$result==false){
+            $this->options["display"] = true;
+            return;
+        }
+        $course = $this->controller->get_Courses_Time_check1($_SESSION['userID'],1);
+        $allCoursesInfo = [];
+        foreach($course as $CoursesInfo){
+            $CoursesInfo = [
+                'courseCode' => $CoursesInfo['ID'],
+                'department' => $CoursesInfo['dept'],
+                'subject' => $CoursesInfo['Name'],
+                'class' => $CoursesInfo['cls_name'],
+                'type' => $CoursesInfo['request'] == 0 ? '選修' : '必修',
+                'credits' => $CoursesInfo['Credits']
+            ];
+            $allCoursesInfo[] = $CoursesInfo;
+        }
+        $this->options["choiceResult"] = $allCoursesInfo;
     }
     private function parse_arg()
     {
@@ -126,7 +148,6 @@ class Dashboard
             die(json_encode("Can't insert to timetable"));
         }
         die(json_encode("Success"));
-        // die(var_dump($data));
     }
     private function handlePut2()
     {
@@ -137,7 +158,6 @@ class Dashboard
             die(json_encode("Can't insert to timetable"));
         }
         die(json_encode("Success"));
-        // die(var_dump($data));
     }
     private function puttable()
     {
@@ -149,70 +169,58 @@ class Dashboard
             $this->options["x" . $weekday . "y" . $unit][] = $row['Course_ID'];
             $this->options["x" . $weekday . "y" . $unit . "-title"][] = $row['Name'];
         }
-        //die(var_dump($this->options["x" . 2 . "y" . 3], $this->options["x" . 2 . "y" . 3 . "-title"]));
     }
 
-    private function checkout()
+    private function handleDelete()
     {
-        $result = $this->controller->Courses_Time_check($_SESSION['userID'],1);
-        if($result==null){
-            $this->options["display"] = true;
-            return ;
-        }
-        else{
-            $this->options["display"] = false;
-        }
-        $course = $this->controller->get_Courses_Time_check1($_SESSION['userID'],1);
-        $allCoursesInfo = [];
-        foreach($course as $CoursesInfo){
-            $CoursesInfo = [
-                'courseCode' => $CoursesInfo['ID'],
-                'department' => $CoursesInfo['dept'],
-                'subject' => $CoursesInfo['Name'],
-                'class' => $CoursesInfo['cls_name'],
-                'type' => $CoursesInfo['request'] == 0 ? '選修' : '必修',
-                'credits' => $CoursesInfo['Credits']
-            ];
-            $allCoursesInfo[] = $CoursesInfo;
-        }
-        $this->options["choiceResult"] = $allCoursesInfo;
-    }
-
-    private function handleDelete(){
         $data = json_decode(file_get_contents('php://input'), true);
         $COURSEID = intval($data["CourseID"]);
-        $confirm =intval($data["Confirm"] ?? 0)  ;
-        if($confirm==0){
+        $confirm = intval($data["Confirm"] ?? 0);
+        if ($confirm == 0) {
             if (!$this->controller->check_request($COURSEID)) {
-                die(json_encode(["confirm"=>2]));
+                die(json_encode(["confirm" => 2]));
             }
         }
         $user = $this->controller->check_User($data["NID"]);
-        $ret = $this->controller->delete_TimeTable($COURSEID,$user["id"]);
-        if(!$ret){
+        $ret = $this->controller->delete_TimeTable($COURSEID, $user["id"]);
+        if (!$ret) {
             die(json_encode("Can't delete from timetable"));
         }
         die(json_encode("success"));
     }
-    private function alarm_total_credits(){
-        if (!$this->controller->insert_check_Credits($_SESSION['Course_ID'],$_SESSION['Name'])) {
-            echo "<script type ='text/javascript'>
-                alert('無法加選，加選後學分將高於最高30學分');
-            </script>";
-            return false;
-        }
 
-        if (!$this->controller->remove_check_Credits($_SESSION['Course_ID'],$_SESSION['Name'])) {
-            echo "<script type ='text/javascript'>
-                alert('無法退選，退選後學分將低於最低9學分');
-            </script>";
-            return false;
+    private function handleDelete1()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $COURSEID = intval($data["CourseID"]);
+        $user = $this->controller->check_User($data["NID"]);
+        $ret = $this->controller->delete_TimeTable($COURSEID, $user["id"]);
+        if (!$ret) {
+            die(json_encode("Can't delete from timetable"));
         }
-    }
-    private function alert_request_course(int $course_ID){
-        
+        die(json_encode("success"));
     }
     
+    // private function alarm_total_credits()
+    // {
+    //     if (!$this->controller->insert_check_Credits($_SESSION['Course_ID'], $_SESSION['Name'])) {
+    //         echo "<script type ='text/javascript'>
+    //             alert('無法加選，加選後學分將高於最高30學分');
+    //         </script>";
+    //         return false;
+    //     }
+
+    //     if (!$this->controller->remove_check_Credits($_SESSION['Course_ID'], $_SESSION['Name'])) {
+    //         echo "<script type ='text/javascript'>
+    //             alert('無法退選，退選後學分將低於最低9學分');
+    //         </script>";
+    //         return false;
+    //     }
+    // }
+    // private function alert_request_course(int $course_ID)
+    // {
+    // }
+
     private function renderPage(array $OPTION)
     {
         new twigLoader(__FILE__, false, $OPTION);
