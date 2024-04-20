@@ -45,6 +45,19 @@ class Api
         die(json_encode($ret));
     }
 
+    private function get_course_Name(int $courseID)
+    {
+        $response= "success";
+        $getcoures = $this->controller->get_Courses_Time_check1($_SESSION['userID'],2);
+        $ret = $this->controller->get_course_Name($courseID);
+        foreach ($getcoures as $row){
+            if($row['Name'] == $ret){
+                $response= "fail";
+            }
+        }
+        die(json_encode($response));
+    }
+
     private function get_user_dept()
     {
         $ret = $this->controller->check_User($_SESSION['userID']);
@@ -81,6 +94,11 @@ class Api
                 $courseID = $data['courseID'] ?? "0";
                 $courseID = intval($courseID);
                 $this->get_course_currentpeople($courseID);
+                break;
+            case "get_course_Name":
+                $courseID = $data['courseID'] ?? "0";
+                $courseID = intval($courseID);
+                $this->get_course_Name($courseID);
                 break;
             default:
                 die(json_encode("Function not found"));
