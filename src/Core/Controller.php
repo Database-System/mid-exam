@@ -159,10 +159,10 @@ class Controller
      *
      * 轉換星期幾的中文到數字
      * 
-     * @param  mixed $chinese 星期幾
-     * @return void
+     * @param  string $chinese 星期幾
+     * @return int|string
      */
-    private function chineseToNumber($chinese)
+    private function chineseToNumber(string $chinese): int|string
     {
         $numbers = [
             '一' => 1, '二' => 2, '三' => 3, '四' => 4,
@@ -178,10 +178,10 @@ class Controller
      * 利用課程系所代碼
      * 找尋該課程系所
      * 
-     * @param  mixed $dept_id 課程系所代碼
-     * @return string
+     * @param  string $dept_id 課程系所代碼
+     * @return string|NULL
      */
-    private function search_dept($dept_id): string|NULL
+    private function search_dept(string $dept_id): string|NULL
     {
 
         $dept = [
@@ -326,7 +326,7 @@ class Controller
      * 利用課程ID
      * 檢查該課程是否存在
      * 
-     * @param  mixed $ID
+     * @param  int $ID
      * @return bool
      */
     private function checkIfIdExists(int $ID): bool
@@ -409,8 +409,8 @@ class Controller
      * 利用使用者名稱與密碼
      * 插入使用者
      * 
-     * @param  mixed $user 使用者名稱
-     * @param  mixed $password 密碼
+     * @param  string $user 使用者名稱
+     * @param  string $password 密碼
      * @return bool|array
      */
     public function insert_User(string $user, string $password): bool|array
@@ -470,8 +470,8 @@ class Controller
      * 
      * @param  int $ID
      * @param  string $Name
-     * @param  string $cls_name
-     * @param  string $dept
+     * @param  mixed $cls_name
+     * @param  mixed $dept
      * @param  int $request
      * @param  int $Credits
      * @param  int $MaxPeople
@@ -676,9 +676,9 @@ class Controller
      * 利用星期、開始時間、結束時間
      * 刪除該時間段
      * 
-     * @param  mixed $day 星期
-     * @param  mixed $start_time 開始時間
-     * @param  mixed $end_time 結束時間
+     * @param  string $day 星期
+     * @param  string $start_time 開始時間
+     * @param  string $end_time 結束時間
      * @return bool
      */
     public function delete_TimeSlot(string $day, string $start_time, string $end_time): bool
@@ -847,8 +847,8 @@ class Controller
     /**
      * Update_User_dept
      *
-     * @param  mixed $username
-     * @param  mixed $dept
+     * @param  string $username
+     * @param  string $dept
      * @return bool
      */
     public function Update_User_dept(string $username, string $dept): bool
@@ -1038,7 +1038,7 @@ class Controller
      * 利用系所
      * 來去搜索資料裡有包含該系所的課程
      * 
-     * @param  string $dept 系所
+     * @param  mixed $dept 系所
      * @return bool|array
      */
     public function search_Courses_By_Dept(?string $dept): bool|array
