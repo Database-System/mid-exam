@@ -39,6 +39,12 @@ class Api
         $counter = count($ret);
         die(json_encode($counter));
     }
+
+    private function get_course_currentpeople(int $courseID){
+        $ret = $this->controller->get_course_currentpeople($courseID);
+        die(json_encode($ret));
+    }
+
     private function get_user_dept()
     {
         $ret = $this->controller->check_User($_SESSION['userID']);
@@ -51,7 +57,8 @@ class Api
             "CourseID" => $ret["ID"],
             "Credits" => $ret["Credits"],
             "dept" => $ret["dept"],
-            "Name"  => $ret["Name"]
+            "Name"  => $ret["Name"],
+            "MaxPeople" => $ret["MaxPeople"],
         ],JSON_UNESCAPED_UNICODE));
     }
     private function parsePost()
@@ -69,6 +76,11 @@ class Api
                 break;
             case "get_user_dept":
                 $this->get_user_dept();
+                break;
+            case "get_course_currentpeople":
+                $courseID = $data['courseID'] ?? "0";
+                $courseID = intval($courseID);
+                $this->get_course_currentpeople($courseID);
                 break;
             default:
                 die(json_encode("Function not found"));
