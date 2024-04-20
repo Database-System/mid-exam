@@ -47,8 +47,15 @@ class Api
 
     private function get_course_Name(int $courseID)
     {
+        $response= "success";
+        $getcoures = $this->controller->get_Courses_Time_check1($_SESSION['userID'],2);
         $ret = $this->controller->get_course_Name($courseID);
-        die(json_encode($ret,JSON_UNESCAPED_UNICODE));
+        foreach ($getcoures as $row){
+            if($row['Name'] == $ret){
+                $response= "fail";
+            }
+        }
+        die(json_encode($response));
     }
 
     private function get_user_dept()

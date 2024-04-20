@@ -123,8 +123,8 @@ function Insert_check_course() {
             alert("人數已滿");
             return;
           }
-          get_course_Name(insertcourseCode, (checkName) => {
-            if (checkName === data.Name) {
+          get_course_Name(insertcourseCode, (respone) => {
+            if (respone === "fail") {
               alert("已選過此課程");
               return;
             }
