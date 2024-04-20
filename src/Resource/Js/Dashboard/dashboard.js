@@ -128,6 +128,7 @@ function insert_course_2() {
           }
         });
         refreshCalendar();
+        getTotalCredit();
       },
     });
   });

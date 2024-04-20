@@ -591,7 +591,8 @@ class Controller
     {
         $calcTotalCreditsSql = "SELECT course_ID 
                                 FROM TimeTable
-                                WHERE user_id in (SELECT id FROM Users WHERE username = ?)";
+                                WHERE user_id in (SELECT id FROM Users WHERE username = ?)
+                                AND `check`=2";
         $calcStmt = $this->handler->prepare($calcTotalCreditsSql);
         $calcStmt->execute([$username]);
         $result = $calcStmt->fetchAll();
