@@ -1340,4 +1340,29 @@ class Controller
         }
         return $result['Name'];
     }
+    
+    /**
+     * check_TimeSlot_Cursh
+     *
+     * 利用課程ID與使用者名稱
+     * 檢查該課程時間是否與已選課程時間衝突
+     * 
+     * @param  int $courseID 課程ID
+     * @param  string $username 使用者名稱
+     * @return bool
+     */
+    public function check_TimeSlot_Cursh(int $courseID, string $username): bool   //true=不衝突，false=衝突
+    {
+        $newCourse = $this->get_Courses_Timeslot($courseID);
+        $result = $this->Courses_Time_check($username,2);
+         
+        foreach ($newCourse as $newSlot) {
+            foreach ($result as $row) {
+                if($newSlot['Time_Slot_ID']==$row['Time_Slot_ID']){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

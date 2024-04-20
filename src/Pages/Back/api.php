@@ -58,6 +58,16 @@ class Api
         die(json_encode($response));
     }
 
+    private function get_course_timeslot(int $courseID)
+    {
+        $response= "success_course";
+        $ret = $this->controller->check_TimeSlot_Cursh($courseID,$_SESSION['userID']);
+        if(!$ret){
+            $response="fail_course";
+        }
+        die(json_encode($response));
+    }
+
     private function get_user_dept()
     {
         $ret = $this->controller->check_User($_SESSION['userID']);
@@ -99,6 +109,11 @@ class Api
                 $courseID = $data['courseID'] ?? "0";
                 $courseID = intval($courseID);
                 $this->get_course_Name($courseID);
+                break;
+            case "get_course_timeslot";
+                $courseID = $data['courseID'] ?? "0";
+                $courseID = intval($courseID);
+                $this->get_course_timeslot($courseID);
                 break;
             default:
                 die(json_encode("Function not found"));
