@@ -128,27 +128,33 @@ function Insert_check_course() {
               alert("已選過此課程");
               return;
             }
-            $(this).prop("disabled", true);
-            $.ajax({
-              type: "UPDATECOURSE",
-              url: "/back/dashboard",
-              contentType: "application/json",
-              data: JSON.stringify({
-                CourseID: data.CourseID,
-                NID: $(".info-item").find("span").eq(1).text(),
-                check: 2,
-              }),
-              success: function (temp) {
-                countCheckcourse((data) => {
-                  if (data > 0) {
-                    refreshcheckcourse();
-                  } else {
-                    refreshDoneTable();
-                  }
-                });
-                refreshCalendar();
-                getTotalCredit();
-              },
+            get_course_timeslot(insertcourseCode, (respone) => {
+              if (respone === "fail_course") {
+                alert("此課程衝堂");
+                return;
+              }
+              $(this).prop("disabled", true);
+              $.ajax({
+                type: "UPDATECOURSE",
+                url: "/back/dashboard",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  CourseID: data.CourseID,
+                  NID: $(".info-item").find("span").eq(1).text(),
+                  check: 2,
+                }),
+                success: function (temp) {
+                  countCheckcourse((data) => {
+                    if (data > 0) {
+                      refreshcheckcourse();
+                    } else {
+                      refreshDoneTable();
+                    }
+                  });
+                  refreshCalendar();
+                  getTotalCredit();
+                },
+              });
             });
           });
         });
@@ -450,6 +456,26 @@ function get_course_Name(courseID, callback) {
     data: JSON.stringify({
       courseID: courseID,
       function: "get_course_Name",
+    }),
+    success: function (data) {
+      callback(data);
+      console.log(data);
+    },
+    error: function (jqXHR, textStatus, error) {
+      console.error("Can't get current people.");
+      console.error(+"Type: " + textStatus + "\n" + error);
+    },
+  });
+}
+function get_course_timeslot(courseID, callback) {
+  $.ajax({
+    url: "/back/api",
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    data: JSON.stringify({
+      courseID: courseID,
+      function: "get_course_timeslot",
     }),
     success: function (data) {
       callback(data);
