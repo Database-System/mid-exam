@@ -394,14 +394,15 @@ class Controller
     //     if (!$this->insert_check_Credits($course_ID, $username)) {
     //         return false;
     //     }
- 
+
     //     if (!$this->check_people_number($course_ID)) {
     //         return false;
     //     }
- 
+
     //     return $this->insert_TimeTable($course_ID, $user_id,$check);
     // }
-    public function check_request(int $course_ID){
+    public function check_request(int $course_ID)
+    {
         $sql = "SELECT request From Course WHERE ID = ?";
         $stmt = $this->handler->prepare($sql);
         $stmt->execute([$course_ID]);
@@ -409,14 +410,14 @@ class Controller
         $row = $stmt->fetch();
         $course_request = $row['request'];
 
-        if ($course_request==1) {
-            return false;//是必修
+        if ($course_request == 1) {
+            return false; //是必修
         }
         return true;
     }
 
-    public function insert_check_Credits(int $course_ID, string $username):bool
-    {    
+    public function insert_check_Credits(int $course_ID, string $username): bool
+    {
         $totalCreditsAfterAdd = $this->get_total_credits($username) + $this->Course_credits($course_ID);
         if ($totalCreditsAfterAdd > 30) {
             return false;
@@ -424,18 +425,18 @@ class Controller
 
         return true;
     }
-    
-    public function remove_check_Credits(int $course_ID, string $username):bool
+
+    public function remove_check_Credits(int $course_ID, string $username): bool
     {
         $totalCreditsAfterRemove =  $this->get_total_credits($username) - $this->Course_credits($course_ID);
-        
+
         if ($totalCreditsAfterRemove < 9) {
             return false;
         }
         return true;
     }
 
-    public function Course_credits(int $course_ID):int
+    public function Course_credits(int $course_ID): int
     {
         $sql = "SELECT Credits FROM Course WHERE ID = ?";
         $stmt = $this->handler->prepare($sql);
@@ -443,10 +444,11 @@ class Controller
         $row = $stmt->fetch();
         return $row['Credits'];
     }
-    public function updateTotalCredits(string $username, int $totalCredits) { //直接插入學分
+    public function updateTotalCredits(string $username, int $totalCredits)
+    { //直接插入學分
         $sql = "UPDATE Users SET Total_credits = ? WHERE username = ?";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$totalCredits,$username]);
+        $ret = $stmt->execute([$totalCredits, $username]);
         if (!$ret) return false;
         return true;
     }
@@ -771,6 +773,42 @@ class Controller
         $sql = "UPDATE TimeTable SET `check` = ? WHERE `course_ID` = ?";
         $stmt = $this->handler->prepare($sql);
         $ret = $stmt->execute([$check, $courseID]);
+        if (!$ret) return false;
+        return true;
+    }
+
+    public function Courses_Time_check(string $username, int $check_NUM): bool|array
+    {
+        $user = $this->check_User($username);
+        $sql = "SELECT CourseTimeSlots.Course_ID,CourseTimeSlots.Time_Slot_ID,Course.Name 
+                FROM CourseTimeSlots,Course
+                WHERE CourseTimeSlots.course_ID in(SELECT course_ID FROM TimeTable WHERE user_id = ? AND `check` = ?) 
+                AND CourseTimeSlots.Course_ID = Course.ID";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$user['id'], $check_NUM]);
+        if (!$ret) {
+            return false;
+        }
+        return $stmt->fetchall();
+    }
+
+    public function get_Courses_Time_check1(string $username, int $check_NUM): bool|array
+    {
+        $user = $this->check_User($username);
+        $sql = "SELECT * From Course Where ID in (SELECT Course_ID FROM TimeTable WHERE user_id = ? AND `check` = ?)";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$user['id'], $check_NUM]);
+        if (!$ret) {
+            return false;
+        }
+        return $stmt->fetchall();
+    }
+
+    public function Update_TimeTable(int $courseID, int $user_id, int $check): bool
+    {
+        $sql = "UPDATE TimeTable SET `check` = ? WHERE `course_ID` = ? AND `user_id` = ?";
+        $stmt = $this->handler->prepare($sql);
+        $ret = $stmt->execute([$check, $courseID, $user_id]);
         if (!$ret) return false;
         return true;
     }

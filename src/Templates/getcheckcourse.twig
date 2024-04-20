@@ -1,0 +1,35 @@
+﻿<div id="select-result">
+	{% if choiceResult is defined and choiceResult is not null %}
+		<table class="checktable">
+			<thead>
+				<tr>
+					<th>課程代碼</th>
+					<th>系所</th>
+					<th>科目</th>
+					<th>班級</th>
+					<th>選修/必修</th>
+					<th>學分</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for course in choiceResult %}
+					<tr>
+						<td>{{ course.courseCode }}</td>
+						<td>{{ course.department }}</td>
+						<td>{{ course.subject }}</td>
+						<td>{{ course.class }}</td>
+						<td>{{ course.type }}</td>
+						<td>{{ course.credits }}</td>
+						<td>
+							{# <button type="button" onclick="enroll('{{ course.courseCode }}')">關注</button> #}
+							<button type="button" data-deletecourse-id="{{ course.courseCode }}">退關注</button>
+							<button type="button" data-insertcourse-id="{{ course.courseCode }}">加選</button>
+
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+</div>

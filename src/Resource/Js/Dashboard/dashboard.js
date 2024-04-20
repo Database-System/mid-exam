@@ -61,6 +61,7 @@ function pageInit() {
       this.submit();
     }
   });
+  getTotalCredit();
   changeColor();
   buttonDisable();
   $("button[data-course-id]").on("click", function () {
@@ -69,10 +70,18 @@ function pageInit() {
     console.log(courseCode);
     enroll(courseCode);
   });
+  Delete_course();
+  insert_course_2();
   delete_handle();
   $(".nav-link").click(function (event) {
+    countCheckcourse((data) => {
+      if (data > 0) {
+        refreshcheckcourse();
+      } else {
+        refreshDoneTable();
+      }
+    });
     refreshCalendar();
-    refreshDoneTable();
     changeColor();
     buttonDisable();
   });
@@ -90,7 +99,37 @@ function enroll(courseCode) {
     success: function (temp) {
       console.log(temp);
       refreshCalendar();
+      getTotalCredit();
     },
+  });
+}
+
+function insert_course_2() {
+  $("button[data-insertcourse-id]").on("click", function () {
+    var insertcourseCode = $(this).data("insertcourse-id");
+    $(this).prop("disabled", true);
+    console.log(insertcourseCode);
+    $.ajax({
+      type: "UPDATECOURSE",
+      url: "/back/dashboard",
+      contentType: "application/json",
+      data: JSON.stringify({
+        CourseID: insertcourseCode,
+        NID: $(".info-item").find("span").eq(1).text(),
+        check: 2,
+      }),
+      success: function (temp) {
+        console.log(temp);
+        countCheckcourse((data) => {
+          if (data > 0) {
+            refreshcheckcourse();
+          } else {
+            refreshDoneTable();
+          }
+        });
+        refreshCalendar();
+      },
+    });
   });
 }
 
@@ -124,11 +163,26 @@ function refreshDoneTable() {
     url: "/back/getDoneTable",
     type: "GET",
     success: function (data) {
-      $(".doneTable").html(data);
+      $("#select-result").html(data);
       delete_handle();
     },
     error: function () {
       console.error("Calendar could not be updated.");
+    },
+  });
+}
+
+function refreshcheckcourse() {
+  $.ajax({
+    url: "/back/getcheckcourse",
+    type: "GET",
+    success: function (data) {
+      $("#select-result").html(data);
+      insert_course_2();
+      Delete_course();
+    },
+    error: function () {
+      console.error("getcheckcourse could not be updated.");
     },
   });
 }
@@ -147,8 +201,7 @@ function buttonDisable() {
     var btnCourseId = $(this).data("course-id").toString();
     if (courseIdsArray.includes(btnCourseId)) {
       $(this).prop("disabled", true);
-    }
-    else {
+    } else {
       $(this).prop("disabled", false);
     }
   });
@@ -165,6 +218,43 @@ function changeColor() {
     }
   );
 }
+
+function Delete_course() {
+  $("button[data-deletecourse-id]").on("click", function () {
+    var deletecourseCode = $(this).data("deletecourse-id");
+    $(this).prop("disabled", true);
+    $.ajax({
+      url: "/back/dashboard",
+      type: "DELETE1",
+      dataType: "json",
+      data: JSON.stringify({
+        CourseID: deletecourseCode,
+        NID: $(".info-item").find("span").eq(1).text(),
+      }),
+      success: function (response) {
+        console.log(response);
+        if (response === "success") {
+          countCheckcourse((data) => {
+            if (data > 0) {
+              refreshcheckcourse();
+            } else {
+              refreshDoneTable();
+            }
+          });
+          // refreshDoneTable();
+          refreshCalendar();
+          // refreshcheckcourse();
+          getTotalCredit();
+          console.log("delete success");
+        } else {
+          console.log(response);
+          alert("刪除失敗");
+        }
+      },
+    });
+  });
+}
+
 function delete_handle() {
   $('a[name="delCourse"]').on("click", function (event) {
     event.preventDefault();
@@ -172,7 +262,7 @@ function delete_handle() {
     $.ajax({
       url: "/back/dashboard",
       type: "DELETE",
-      dataType: 'json',
+      dataType: "json",
       data: JSON.stringify({
         CourseID: courseId,
         NID: $(".info-item").find("span").eq(1).text(),
@@ -181,26 +271,27 @@ function delete_handle() {
         if (response === "success") {
           refreshDoneTable();
           refreshCalendar();
+          getTotalCredit();
           console.log("刪除成功");
         } else {
           console.log(response.confirm);
           if (response.confirm == 2) {
-
             if (confirm("注意!這是必修課程，確定要退選嗎")) {
               $.ajax({
                 url: "/back/dashboard",
                 type: "DELETE",
-                dataType: 'json',
+                dataType: "json",
                 data: JSON.stringify({
                   CourseID: courseId,
                   NID: $(".info-item").find("span").eq(1).text(),
-                  Confirm: 1
+                  Confirm: 1,
                 }),
                 success: function (response) {
                   console.log(response);
                   if (response === "success") {
                     refreshDoneTable();
                     refreshCalendar();
+                    getTotalCredit();
                     console.log("刪除成功");
                   } else {
                     console.log(response);
@@ -211,15 +302,52 @@ function delete_handle() {
             } else {
               refreshDoneTable();
             }
-          }
-          else {
+          } else {
             alert("刪除失敗");
           }
         }
       },
       error: function (jqXHR, textStatus, error) {
         console.error("Type: " + textStatus + "\n" + error);
-      }
+      },
     });
   });
+}
+function getTotalCredit() {
+  $.ajax({
+    url: "/back/api",
+    type: "PATCH",
+    dataType: "json",
+    data: JSON.stringify({
+      NID: $(".info-item").find("span").eq(1).text(),
+      function: "getTotalCreadits",
+    }),
+    contentType: "application/json",
+    success: function (data) {
+      $("#total").text(data);
+    },
+    error: function (jqXHR, textStatus, error) {
+      console.error("Type: " + textStatus + "\n" + error);
+    },
+  });
+}
+function countCheckcourse(callback) {
+  let ret = 0;
+  $.ajax({
+    url: "/back/api",
+    type: "PATCH",
+    dataType: "json",
+    contentType: "application/json",
+    data: JSON.stringify({
+      NID: $(".info-item").find("span").eq(1).text(),
+      function: "countCheckcourse",
+    }),
+    success: function (data) {
+      callback(data);
+    },
+    error: function () {
+      console.error("Can't count check course.");
+    },
+  });
+  return ret;
 }
