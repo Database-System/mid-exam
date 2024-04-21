@@ -63,18 +63,20 @@
 								<th scope="row">{{ i+1 }}</th>
 								{% for j in 0..6 %}
 									{% set title_key = 'x' ~ j ~ 'y' ~ i ~ '-title' %}
+									{% set check_key = 'x' ~ j ~ 'y' ~ i ~ '-check' %}
 									{% set value_key = 'x' ~ j ~ 'y' ~ i %}
 									<td id="{{ value_key }}">
 
 										{% set title = attribute(_context, title_key) | default("") %}
 										{% set value = attribute(_context, value_key) | default("") %}
+										{% set check = attribute(_context, check_key) | default("") %}
 
 										{% if title is iterable and value is iterable %}
 											{% for index, item_title in title %}
-												<span title="{{ item_title }}">{{ attribute(value, index)|default("") }}</span>
+												<span title="{{ item_title }}" data-check="{{ attribute(check, index)|default("") }}">{{ attribute(value, index)|default("") }}</span>
 											{% endfor %}
 										{% else %}
-											<span title="{{ title }}">{{ value }}</span>
+											<span title="{{ title }}" data-check="{{ attribute(check, index)|default("") }}">{{ value }}</span>
 										{% endif %}
 									</td>
 								{% endfor %}
@@ -86,18 +88,20 @@
 							<th scope="row" class="text-center">14</th>
 							{% for j in 0..6 %}
 								{% set title_key = 'x' ~ j ~ 'y' ~ '13-title' %}
+								{% set check_key = 'x' ~ j ~ 'y' ~ '13-check' %}
 								{% set value_key = 'x' ~ j ~ 'y' ~ '13' %}
 								<td id="{{ value_key }}">
 
 									{% set title = attribute(_context, title_key) | default("") %}
 									{% set value = attribute(_context, value_key) | default("") %}
+									{% set value = attribute(_context, value_key) | default("") %}
 
 									{% if title is iterable and value is iterable %}
 										{% for index, item_title in title %}
-											<span title="{{ item_title }}">{{ attribute(value, index)|default("") }}</span>
+											<span title="{{ item_title }}" data-check="{{ attribute(check, index)|default("") }}">{{ attribute(value, index)|default("") }}</span>
 										{% endfor %}
 									{% else %}
-										<span title="{{ title }}">{{ value }}</span>
+										<span title="{{ title }}" data-check="{{ attribute(check, index)|default("") }}">{{ value }}</span>
 									{% endif %}
 								</td>
 							{% endfor %}
@@ -215,115 +219,13 @@
 							<div class="col-xl-6">
 								<p class="pt-xl-0 pt-4">訊息區：</p>
 								<div class="result1">
-									{% if choicecheck is defined and choicecheck is not null %}
-										
-									{% endif %}
+									{% if choicecheck is defined and choicecheck is not null %}{% endif %}
 								</div>
 							</div>
 						</div>
 					</div>
 					<div id="selected-area" class="selected-class1">
-					<div id="select-result"></div>
-						{# {% if display is defined and display == true %}
-							<div class="d-flex justify-content-center mb-4 mt-2">
-								<table class="doneTable">
-									<thead>
-										<tr class="text-center">
-											<th scope="row"></th>
-											{% set days = ['星期一', '星期二','星期三','星期四','星期五','星期六','星期日'] %}
-											{% for day in days %}
-												<th scope="col">{{ day }}</th>
-											{% endfor %}
-										</tr>
-									</thead>
-									<tbody>
-										{% for i in 0..12 %}
-											<tr>
-												<th scope="row" class="text-center">{{ i+1 }}</th>
-												{% for j in 0..6 %}
-													<td class="text-center">
-														{% set title_key = 'x' ~ j ~ 'y' ~ i ~ '-title' %}
-														{% set value_key = 'x' ~ j ~ 'y' ~ i %}
-
-														{% set title = attribute(_context, title_key)|default("") %}
-														{% set value = attribute(_context, value_key)|default("") %}
-														{% if title is iterable and value is iterable %}
-															{% if title|length == value|length %}
-																{% for i in 0..value|length -1 %}
-																	<a href="#" data-course-id="{{ value[i] }}" name="delCourse">{{  title[i]|default("") }}</a>
-																	<br>
-																{% endfor %}
-															{% endif %}
-														{% else %}
-															<a href="#" data-course-id="{{ value }}" name="delCourse">{{  title|default("") }}</a>
-														{% endif %}
-													</td>
-												{% endfor %}
-											</tr>
-										{% endfor %}
-									</tbody>
-									<tfoot>
-										<tr>
-											<th scope="row" class="text-center">14</th>
-											{% for j in 0..6 %}
-												<td class="text-center">
-													{% set title_key = 'x' ~ j ~ 'y' ~ '13-title' %}
-													{% set value_key = 'x' ~ j ~ 'y' ~ '13' %}
-
-													{% set title = attribute(_context, title_key)|default("") %}
-													{% set value = attribute(_context, value_key)|default("") %}
-													<span>{{ dump(value[0]) }}</span>
-													{% if title is iterable and value is iterable %}
-														{% if title|length == value|length %}
-															{% for i in 0..value|length -1 %}
-																<a href="#" data-course-id="{{ value[i] }}" name="delCourse">{{  title[i]|default("") }}</a>
-																<br>
-															{% endfor %}
-														{% endif %}
-													{% else %}
-														<a href="#" data-course-id="{{ value }}" name="delCourse">{{  title|default("") }}</a>
-													{% endif %}
-												</td>
-											{% endfor %}
-										</tr>
-									</tfoot>
-								</table>
-							</div>
-						{% else %}
-							<p>從關注清單加選</p>
-							{% if choiceResult is defined and choiceResult is not null %}
-								<table class="checktable">
-									<thead>
-										<tr>
-											<th>課程代碼</th>
-											<th>系所</th>
-											<th>科目</th>
-											<th>班級</th>
-											<th>選修/必修</th>
-											<th>學分</th>
-											<th>操作</th>
-										</tr>
-									</thead>
-									<tbody>
-										{% for course in choiceResult %}
-											<tr>
-												<td>{{ course.courseCode }}</td>
-												<td>{{ course.department }}</td>
-												<td>{{ course.subject }}</td>
-												<td>{{ course.class }}</td>
-												<td>{{ course.type }}</td>
-												<td>{{ course.credits }}</td>
-												<td>
-													<button type="button" data-deletecourse-id="{{ course.courseCode }}">退關注</button>
-													<button type="button" data-insertcourse-id="{{ course.courseCode }}">加選</button>
-
-												</td>
-											</tr>
-										{% endfor %}
-									</tbody>
-								</table>
-							{% endif %}
-						{% endif %} #}
+						<div id="select-result"></div>
 					</div>
 				</div>
 			</div>

@@ -163,12 +163,13 @@ class Dashboard
     private function puttable()
     {
         $result = $this->controller->get_Courses_Time($_SESSION['userID']);
+        // die(var_dump($result));
         foreach ($result as $row) {
             $weekday = intdiv($row['Time_Slot_ID'], 14);
             $unit = $row['Time_Slot_ID'] % 14 - 1;
-
             $this->options["x" . $weekday . "y" . $unit][] = $row['Course_ID'];
             $this->options["x" . $weekday . "y" . $unit . "-title"][] = $row['Name'];
+            $this->options["x" . $weekday . "y" . $unit . "-check"][] = $row['check_status'];
         }
     }
 
