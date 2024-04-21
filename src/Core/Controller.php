@@ -71,8 +71,8 @@ class Controller
         if (!isset($this->handler))
             die("Can't get DB handler");
         $this->init_Table();
-    }    
-    
+    }
+
     /**
      * init_Table
      *
@@ -89,10 +89,10 @@ class Controller
                 if ($table == "CourseTimeSlots") $this->init_Course_data();
             }
         }
-        $this->update_currentpeople(69,1350);
-        $this->update_currentpeople(64,1334);
-        $this->update_currentpeople(74,1324);
-    }    
+        $this->update_currentpeople(69, 1350);
+        $this->update_currentpeople(64, 1334);
+        $this->update_currentpeople(74, 1324);
+    }
 
     /**
      * init_Course_data
@@ -156,7 +156,7 @@ class Controller
             }
         }
     }
-    
+
     /**
      * chineseToNumber
      *
@@ -174,7 +174,7 @@ class Controller
 
         return isset($numbers[$chinese]) ? $numbers[$chinese] : 'Unknown';
     }
-    
+
     /**
      * search_dept
      * 
@@ -322,7 +322,7 @@ class Controller
             return NULL;
         }
     }
-    
+
     /**
      * checkIfIdExists
      *
@@ -390,7 +390,7 @@ class Controller
             }
         }
     }
-        
+
     /**
      * table_Exists
      *
@@ -405,7 +405,7 @@ class Controller
         $stmt = $this->handler->query("SHOW TABLES LIKE '$table'");
         return !($stmt->rowCount() == 0);
     }
-    
+
     /**
      * insert_User
      *
@@ -425,7 +425,7 @@ class Controller
             return false;
         return $stmt->fetch();
     }
-        
+
     /**
      * check_User
      *
@@ -444,7 +444,7 @@ class Controller
             return false;
         return $stmt->fetch();
     }
-    
+
     /**
      * insert_TimeSlot
      *
@@ -464,7 +464,7 @@ class Controller
         if (!$ret) return false;
         return true;
     }
-    
+
     /**
      * insert_Course
      *
@@ -488,7 +488,7 @@ class Controller
         if (!$ret) return false;
         return true;
     }
-    
+
     /**
      * insert_CourseTimeSlots
      *
@@ -526,7 +526,7 @@ class Controller
 
     //     return $this->insert_TimeTable($course_ID, $user_id,$check);
     // }    
-    
+
     /**
      * check_request
      *
@@ -536,7 +536,7 @@ class Controller
      * @param  int $course_ID 課程ID
      * @return bool
      */
-    public function check_request(int $course_ID) : bool
+    public function check_request(int $course_ID): bool
     {
         $sql = "SELECT request From Course WHERE ID = ?";
         $stmt = $this->handler->prepare($sql);
@@ -550,7 +550,7 @@ class Controller
         }
         return true;
     }
-    
+
     /**
      * insert_check_Credits
      *
@@ -570,7 +570,7 @@ class Controller
 
         return true;
     }
-    
+
     /**
      * remove_check_Credits
      *
@@ -590,7 +590,7 @@ class Controller
         }
         return true;
     }
-    
+
     /**
      * Course_credits
      *
@@ -619,7 +619,7 @@ class Controller
      * @param  int $totalCredits
      * @return bool
      */
-    public function updateTotalCredits(string $username, int $totalCredits) : bool
+    public function updateTotalCredits(string $username, int $totalCredits): bool
     { //直接插入學分
         $sql = "UPDATE Users SET Total_credits = ? WHERE username = ?";
         $stmt = $this->handler->prepare($sql);
@@ -637,7 +637,7 @@ class Controller
      * @param  int $course_ID 課程ID
      * @return bool
      */
-    public function check_people_number(int $course_ID) : bool
+    public function check_people_number(int $course_ID): bool
     {
         $sql = "SELECT CurrentPeople,MaxPeople From Course WHERE ID = ?";
         $stmt = $this->handler->prepare($sql);
@@ -652,7 +652,7 @@ class Controller
         }
         return true;
     }
-    
+
     /**
      * insert_TimeTable
      *
@@ -664,7 +664,7 @@ class Controller
      * @param  int $check 0:未選課 1:關注課程 2:已選課
      * @return bool
      */
-    public function insert_TimeTable(int $course_ID, int $uid, int $check) : bool
+    public function insert_TimeTable(int $course_ID, int $uid, int $check): bool
     {
         $sql = "INSERT INTO TimeTable (`course_ID`,`user_id`,`check`) VALUES (?,?,?)";
         $stmt = $this->handler->prepare($sql);
@@ -672,7 +672,7 @@ class Controller
         if (!$ret) return false;
         return true;
     }
-    
+
     /**
      * delete_TimeSlot
      *
@@ -692,7 +692,7 @@ class Controller
         if (!$ret) return false;
         return true;
     }
-    
+
     /**
      * delete_Course
      *
@@ -711,7 +711,7 @@ class Controller
         if (!$ret) return false;
         return true;
     }
-    
+
     /**
      * delete_TimeTable
      *
@@ -730,7 +730,7 @@ class Controller
         if (!$ret) return false;
         return true;
     }
-    
+
     /**
      * delete_CourseTimeSlots
      *
@@ -818,7 +818,7 @@ class Controller
             return false;
         return $stmt->fetchall();
     }
-    
+
     /**
      * get_course_info
      *  獲取單獨課程資訊
@@ -1159,12 +1159,17 @@ class Controller
     public function get_Courses_Time(string $username): bool|array
     {
         $user = $this->check_User($username);
-        $sql = "SELECT CourseTimeSlots.Course_ID,CourseTimeSlots.Time_Slot_ID,Course.Name 
-                FROM CourseTimeSlots,Course
-                WHERE CourseTimeSlots.course_ID in(SELECT course_ID FROM TimeTable WHERE user_id = ?) 
-                AND CourseTimeSlots.Course_ID = Course.ID";
+        // $sql = "SELECT CourseTimeSlots.Course_ID,CourseTimeSlots.Time_Slot_ID,Course.Name 
+        //         FROM CourseTimeSlots,Course
+        //         WHERE CourseTimeSlots.course_ID in(SELECT course_ID FROM TimeTable WHERE user_id = ?) 
+        //         AND CourseTimeSlots.Course_ID = Course.ID";
+        $sql = "SELECT CourseTimeSlots.Course_ID, CourseTimeSlots.Time_Slot_ID, Course.Name,
+            (SELECT `check` FROM TimeTable WHERE TimeTable.course_ID = CourseTimeSlots.Course_ID AND TimeTable.user_id = ?) AS check_status
+            FROM CourseTimeSlots
+            INNER JOIN Course ON CourseTimeSlots.Course_ID = Course.ID
+            WHERE CourseTimeSlots.Course_ID IN (SELECT course_ID FROM TimeTable WHERE user_id = ?)";
         $stmt = $this->handler->prepare($sql);
-        $ret = $stmt->execute([$user['id']]);
+        $ret = $stmt->execute([$user['id'],$user['id']]);
         if (!$ret) {
             return false;
         }
@@ -1298,7 +1303,7 @@ class Controller
         if (!$ret) return false;
         return true;
     }
-    
+
     /**
      * get_course_currentpeople
      *
@@ -1319,7 +1324,7 @@ class Controller
         }
         return $result['CurrentPeople'];
     }
-    
+
     /**
      * get_course_Name
      *
@@ -1340,7 +1345,7 @@ class Controller
         }
         return $result['Name'];
     }
-    
+
     /**
      * check_TimeSlot_Cursh
      *
@@ -1354,11 +1359,11 @@ class Controller
     public function check_TimeSlot_Cursh(int $courseID, string $username): bool   //true=不衝突，false=衝突
     {
         $newCourse = $this->get_Courses_Timeslot($courseID);
-        $result = $this->Courses_Time_check($username,2);
-         
+        $result = $this->Courses_Time_check($username, 2);
+
         foreach ($newCourse as $newSlot) {
             foreach ($result as $row) {
-                if($newSlot['Time_Slot_ID']==$row['Time_Slot_ID']){
+                if ($newSlot['Time_Slot_ID'] == $row['Time_Slot_ID']) {
                     return false;
                 }
             }

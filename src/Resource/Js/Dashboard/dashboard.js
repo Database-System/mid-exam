@@ -241,7 +241,8 @@ function changeColor() {
     function () {
       var spans = $(this).find("span");
       if (spans.length === 1 && spans.text().trim() !== "") {
-        $(this).addClass("color-1");
+        if(spans.data("check")===1) $(this).addClass("color-1");
+        else if(spans.data("check")===2) $(this).addClass("color-2");
       } else if (spans.length > 1) {
         $(this).addClass("color-4");
       }
